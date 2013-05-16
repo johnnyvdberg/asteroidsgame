@@ -1,4 +1,3 @@
-
 Asshole Asteroids
 ICT LAB Project
 ---------------------------
@@ -11,4 +10,4 @@ Martijn Heurter
 ---------------------------
 
 
-This is a bullshit readme file. We need accutal content.
+This is a bullshit readme file. We need actual content.
