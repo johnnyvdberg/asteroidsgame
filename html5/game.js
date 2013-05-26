@@ -35,9 +35,6 @@
   var then;
   var keysDown = {};
   
-  addEventListener("keydown", function (e) { keysDown[e.keyCode] = true; }, false);
-  addEventListener("keyup", function (e) { delete keysDown[e.keyCode]; }, false);
-  
   var gamePlanetReset = function () {
 	  planet.x = 120 + (Math.random() * (canvas.width - 240));
 	  planet.y = 120 + (Math.random() * (canvas.height - 240));
@@ -51,6 +48,8 @@
 	  ass.y = canvas.height /2;
 	  canvasxc = canvas.width/2;
 	  canvasyc = canvas.height/2;
+	  addEventListener("keydown", function (e) { keysDown[e.keyCode] = true; }, false);
+      addEventListener("keyup", function (e) { delete keysDown[e.keyCode]; }, false);
   };
 
   var gameUpdate = function (modifier) {
@@ -101,11 +100,12 @@ function gameLoadImages(){
 
 function gameBegin(){
 	// start
-	canvasShow();
-	gameReset();
+	gamePlanetReset();
 	gameStart();
 	then = Date.now();
 	timer = setInterval(gameMain, 1);
+	gameMain();
+	canvasShow();
 }
 
 function drawImageRotated(img,x,y,w,h,r){
