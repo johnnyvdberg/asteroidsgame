@@ -1,4 +1,4 @@
-  var canvas; var ctx; 
+  var canvas; var ctx;
 
   var ass = {
 	  speed: 956,
@@ -38,7 +38,7 @@
   addEventListener("keydown", function (e) { keysDown[e.keyCode] = true; }, false);
   addEventListener("keyup", function (e) { delete keysDown[e.keyCode]; }, false);
   
-  var reset = function () {
+  var gamePlanetReset = function () {
 	  planet.x = 120 + (Math.random() * (canvas.width - 240));
 	  planet.y = 120 + (Math.random() * (canvas.height - 240));
 	  planet.x = planet.x-canvasxc;
@@ -46,14 +46,14 @@
 	  planet.size = 0;
   };
   
-  var start = function () {
+  var gameStart = function () {
 	  ass.x = canvas.width /2;
 	  ass.y = canvas.height /2;
 	  canvasxc = canvas.width/2;
 	  canvasyc = canvas.height/2;
   };
 
-  var update = function (modifier) {
+  var gameUpdate = function (modifier) {
 	  if (37 in keysDown) { //left
 		  ass.x -= ass.speed * modifier;
 		  par.x += par.speed * modifier;
@@ -80,11 +80,11 @@
 		  && planet.y <= (ass.y + 140)
 	  ) {
 		  ++planetsDestroyed;
-		  reset();
+		  gamePlanetReset();
 	  }
 	  
 	  planet.size += 2*modifier;
-	  if(planet.size>2){ reset(); }
+	  if(planet.size>2){ gamePlanetReset(); }
   };
   
 // preload images
@@ -100,15 +100,12 @@ function gameLoadImages(){
 }
 
 function gameBegin(){
-	canvas = document.createElement("canvas");
-	canvas.width=1280; canvas.height=720;
-	ctx = canvas.getContext("2d");
-	document.body.appendChild(canvas);
 	// start
-	reset();
-	start();
+	canvasShow();
+	gameReset();
+	gameStart();
 	then = Date.now();
-	setInterval(main, 1);
+	timer = setInterval(gameMain, 1);
 }
 
 function drawImageRotated(img,x,y,w,h,r){
@@ -129,17 +126,12 @@ function drawScaled(img,x,y,w,h,s){
 	ctx.restore();	
 }
 
-var render = function() {
+var gameRender = function() {
     ctx.drawImage(bgImage, 0, 0);
     ctx.drawImage(starImage, par.x, par.y);
-	ctx.drawImage(starImage, par2.x, par2.y);
-	
-	drawScaled(planetImage,canvasxc+(planet.x*planet.size),canvasyc+(planet.y*planet.size),planet.w,planet.h,planet.size);
-	
+	ctx.drawImage(starImage, par2.x, par2.y);	
+	drawScaled(planetImage,canvasxc+(planet.x*planet.size),canvasyc+(planet.y*planet.size),planet.w,planet.h,planet.size);	
 	drawImageRotated(assImage,ass.x,ass.y,ass.w,ass.h,ass.angle*6.28318531);
-
-	
-
 	ctx.fillStyle = "rgb(250, 250, 250)";
 	ctx.font = "24px Arial";
 	ctx.textAlign = "left";
@@ -148,11 +140,11 @@ var render = function() {
 	ctx.fillText("FPS: " + fps, 32, 64);
 }
 
-var main = function () {
+var gameMain = function () {
 	var now = Date.now();
 	var delta = (now - then)/1000;
-	update(delta);
-	render();
+	gameUpdate(delta);
+	gameRender();
 	then = now;	
 	fpscounter += delta; fpscount++;
 	if(fpscounter>1){ fpscounter -= 1; fps = fpscount; fpscount = 0; }
