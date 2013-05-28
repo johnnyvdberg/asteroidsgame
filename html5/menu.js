@@ -10,7 +10,7 @@ var soundNames = [
 	  { id: 'hover2', url:'sounds/menu/hoversound.mp3'},
 	  { id: 'hover3', url:'sounds/menu/hoversound.mp3'},
 	  { id: 'hover4', url:'sounds/menu/hoversound.mp3'}
-	]
+	];
 	
 var hoverIndicator = {
   showing: 0, // % 0-100
@@ -23,12 +23,21 @@ function menuLoad(){
 	menuimg = loader.addImage('images/menu/mainmenu.png');
 	loader.addCompletionListener(function(){ sharedLoad(); });
 	loader.start();
-	// initialize the sound manager 
+	// sound
+	soundManager.useFlashBlock = false; 
+	soundManager.useHTML5Audio = true; 
+	soundManager.preferFlash = false;
 	soundManager.setup({
 		url: 'soundmanager2/swf/',
-		// preferFlash: false,
+		useHTML5Audio: true,
+		preferFlash: false,
 		onready: function() { loadSounds(); },
-		ontimeout: function() { l('error loading soundmanager.'); }
+		ontimeout: function(status) { 
+		  l('Loading flash error: The status is ' + status.success + ', the error type is ' + status.error.type);
+		  soundManager.useHTML5Audio = true; 
+          soundManager.preferFlash = false; 
+          soundManager.reboot(); 
+		}
 	});
 }
 
