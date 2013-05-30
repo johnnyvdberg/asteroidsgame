@@ -26,16 +26,16 @@ window.onload = function(){
 		this.location = {x: W/2, y: H/2};
 		
 		//Radius range 10-30
-		this.radius = 40+Math.random()*20;
+		this.radius = 40+Math.random()*40;
 		
 		//Life range = 20-30
-		this.life = 100+Math.random()*10;
+		this.life = 10+(Math.random()*100);
 		this.remaining_life = this.life;
 		
 		//Colors
-		this.r = Math.round(Math.random()*255);
-		this.g = Math.round(Math.random()*255);
-		this.b = Math.round(Math.random()*255);
+		this.r = Math.round((Math.random()*125)+125);
+		this.g = Math.round(Math.random()*25);
+		this.b = Math.round(Math.random()*25);
 	}
 	
 	function draw()
@@ -47,6 +47,7 @@ window.onload = function(){
 		for(var i = 0; i < particles.length;i++)
 		{
 			var p = particles[i];
+			if(p!=null){
 			context.beginPath();
 			
 			//Change opacity according to ttl
@@ -79,7 +80,8 @@ window.onload = function(){
 			if(p.remaining_life < 0 || p.radius < 0)
 			{
 				//New particle replacing the dead one
-				particles[i] = new particle();
+				particles[i] = null;
+			}
 			}
 		}
 	}
