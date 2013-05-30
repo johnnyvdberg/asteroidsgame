@@ -1,3 +1,5 @@
+var demWidth = window.innerWidth;
+var demHeight = window.innerHeight;
 var menuimg;
 var timer = null; 
 var mousePos = null;
@@ -20,7 +22,15 @@ var hoverIndicator = {
 
 function menuLoad(){
 	var loader = new PxLoader();
-	menuimg = loader.addImage('images/menu/mainmenu.png');
+	menuBgImg = loader.addImage('images/menu/bg.jpg');
+	
+	menuTitleImg = loader.addImage('images/menu/title.png');
+	menuArcadeImg = loader.addImage('images/menu/arcade.png');
+	menuTimeattackImg = loader.addImage('images/menu/timeattack.png');
+	menuSlingshotImg = loader.addImage('images/menu/slingshot.png');
+	menuOptionsImg = loader.addImage('images/menu/options.png');
+	menuQuitImg = loader.addImage('images/menu/quit.png');
+	
 	loader.addCompletionListener(function(){ sharedLoad(); });
 	loader.start();
 	// sound
@@ -53,7 +63,7 @@ function sharedLoad(){ // laad de 2 dingen teglijk, wacht tot ze bijden klaar zi
 
 function menuLoaded(){
 	canvas = document.createElement("canvas");
-	canvas.width= window.innerWidth; canvas.height= window.innerHeight; // we should maybe build this to suit resizing
+	canvas.width= demWidth; canvas.height= demHeight; // we should maybe build this to suit resizing
 	ctx = canvas.getContext("2d");
 	timer = setInterval("menuUpdate();",5);	
 	menuUpdate();
@@ -112,7 +122,15 @@ function menuUpdate(){
 		}
 		menuMove(delta);
 	}
-    ctx.drawImage(menuimg, 0, 0);
+    ctx.drawImage(menuBgImg, 0, 0);
+	
+	ctx.drawImage(menuTitleImg, 20, 20);
+	
+	ctx.drawImage(menuArcadeImg, demWidth - 145, demHeight - 300);
+	ctx.drawImage(menuTimeattackImg, demWidth - 230, demHeight - 260);
+	ctx.drawImage(menuSlingshotImg, demWidth - 195, demHeight - 220);
+	ctx.drawImage(menuOptionsImg, demWidth - 160, demHeight - 140);
+	ctx.drawImage(menuQuitImg, demWidth - 100, demHeight - 100);
 	// draw menu item	
 	ctx.beginPath();
 	ctx.rect(790, hoverIndicator.cy, 234, 35);
