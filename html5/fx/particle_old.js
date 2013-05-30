@@ -3,7 +3,7 @@ window.onload = function(){
 	var context = canvas.getContext("2d");
 	
 	//Make canvas occupy the full page
-	var W = 800, H = 600;
+	var W = window.innerWidth, H = window.innerHeight;
 	canvas.width = W;
 	canvas.height = H;
 	
@@ -11,7 +11,7 @@ window.onload = function(){
 	
 	//Lets create some particles now
 	var particle_count = 100;
-	for(var i = 0; i< particle_count;i++)
+	for(var i = 0; i<particle_count.length;i++)
 	{
 		particles.push(new particle());
 	}
@@ -26,10 +26,10 @@ window.onload = function(){
 		this.location = {x: W/2, y: H/2};
 		
 		//Radius range 10-30
-		this.radius = 20+Math.random()*20;
+		this.radius = 10+Math.random()*20;
 		
 		//Life range = 20-30
-		this.life = 40+Math.random()*10;
+		this.life = 20+Math.random()*10;
 		this.remaining_life = this.life;
 		
 		//Colors
@@ -41,7 +41,7 @@ window.onload = function(){
 	function draw()
 	{
 		//Painting the canvas black
-		context.fillStyle = 'black';
+		context.fillStyle = "black";
 		context.fillRect(0,0,W,H);
 		
 		for(var i = 0; i < particles.length;i++)
@@ -54,15 +54,10 @@ window.onload = function(){
 			//context.fillStyle = "rgba(255,255,255," + p.opacity + ")";
 			
 			//Random color
-			var gradient = context.createRadialGradient(p.location.x, p.location.y, 0, p.location.x, p.location.y, p.radius);
-			//gradient.addColorStop(0, "rgba(" + p.r + "," + p.g + "," + p.b + "," + p.opacity + ")");
-			//gradient.addColorStop(0.5, "rgba("+p.r+", "+p.g+", "+p.b+", "+p.opacity+")");
-			//gradient.addColorStop(1, "rgba("+p.r+", "+p.g+", "+p.b+", 0)");
-			gradient.addColorStop(0, '#F4F201');
-			gradient.addColorStop(0.8, '#E4C700');
-			gradient.addColorStop(1, 'rgba(228,199,0,0)');
-			
-			
+			var gradient = ctx.createRadialGradient(p.location.x, p.location.y, 0, p.location.x, p.location.y, p.radius);
+			gradient.addColorStop(0, "rgba("+p.r+", "+p.g+", "+p.b+", "+p.opacity+")");
+			gradient.addColorStop(0.5, "rgba("+p.r+", "+p.g+", "+p.b+", "+p.opacity+")");
+			gradient.addColorStop(1, "rgba("+p.r+", "+p.g+", "+p.b+", 0)");
 			context.fillStyle = gradient;
 			context.arc(p.location.x, p.location.y, p.radius, Math.PI*2, false);
 			context.fill();
@@ -82,5 +77,5 @@ window.onload = function(){
 		}
 	}
 	
-	setInterval(draw,20);
+	setInterval(draw,33);
 }
