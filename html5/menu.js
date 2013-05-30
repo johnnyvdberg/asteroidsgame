@@ -67,7 +67,7 @@ function sharedLoad(){ // laad de 2 dingen teglijk, wacht tot ze bijden klaar zi
 };
 
 function menuLoaded(){
-    l('wins');
+	l('done');
 	canvas = document.createElement("canvas");
 	canvas.width= demWidth; canvas.height= demHeight; // we should maybe build this to suit resizing
 	ctx = canvas.getContext("2d");
@@ -88,7 +88,7 @@ function menuPlayMusic(){
 
 function menuPlayClick(){
     soundManager.setVolume('click',100);
-    soundManager.play('click',{ onfinish: function() { menuPlayMusic(); } });	
+    soundManager.play('click',{ onfinish: function() { } });	
 }
 
 function menuPlayHoverSound(i){
@@ -114,13 +114,13 @@ function menuUpdate(){
 	then = now;
 	if(mousePos!=undefined){
 	  	if((mousePos.y>(demHeight - 300)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 260))){ // arcade mode
-			menuHover(demHeight - 300, delta); if(mouseDown){ menuArcadeMode(); }
+			menuHover(demHeight - 300, delta);  if(mouseDown){ menuArcadeMode(); }
 	  	}else if((mousePos.y>(demHeight - 260)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 220))){  // time attack
-			menuHover(demHeight - 260, delta);	
+			menuHover(demHeight - 260, delta); 
 	  	}else if((mousePos.y>(demHeight - 220)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 180))){ // slingshot
 			menuHover(demHeight - 220, delta);	
 	  	}else if((mousePos.y>(demHeight - 140)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 100))){ // option
-			menuHover(demHeight - 140, delta);	
+			menuHover(demHeight - 140, delta);	if(mouseDown){ menuHighscore(); }
 	  	}else if((mousePos.y>(demHeight - 100)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 60))){ // quit
 			menuHover(demHeight - 100, delta);	
 	  	}else{
@@ -203,6 +203,13 @@ function menuArcadeMode(){
     canvasHide();	
     stopTimer();
     setTimeout("gameLoadImages();",1000); // show off loader 1 second longer, remove later
+}
+
+function menuHighscore(){
+	menuPlayClick();
+    canvasHide();	
+    stopTimer();
+    setTimeout("highscoreLoad();",1000); // show off loader 1 second longer, remove later
 }
 
 function loadSounds(){
