@@ -1,3 +1,5 @@
+var parralaxToggle = false;
+
 var demWidth = window.innerWidth;
 var demHeight = window.innerHeight;
 var panXMode = true;
@@ -132,7 +134,10 @@ function menuUpdate(){
 		menuMove(delta);
 	}
     ctx.drawImage(menuBgImg, 0 + panBgX, 0 + panBgY);
-	ctx.drawImage(menuBg2Img, 0 + panBgX2, 0 + panBgY2);
+	
+	if(parralaxToggle == true){
+		ctx.drawImage(menuBg2Img, 0 + panBgX2, 0 + panBgY2);
+	}
 	
 	if(panXMode == true){
 		panBgX = panBgX - 0.50;
