@@ -53,7 +53,7 @@ function sharedLoad(){ // laad de 2 dingen teglijk, wacht tot ze bijden klaar zi
 
 function menuLoaded(){
 	canvas = document.createElement("canvas");
-	canvas.width=1280; canvas.height=800; // we should maybe build this to suit resizing
+	canvas.width= window.innerWidth; canvas.height= window.innerHeight; // we should maybe build this to suit resizing
 	ctx = canvas.getContext("2d");
 	timer = setInterval("menuUpdate();",5);	
 	menuUpdate();
