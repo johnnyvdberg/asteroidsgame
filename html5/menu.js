@@ -1,3 +1,9 @@
+var demWidth = window.innerWidth;
+var demHeight = window.innerHeight;
+var panXMode = true;
+var panYMode = true;
+var panBgX = 0;
+var panBgY = 0;
 var menuimg;
 var timer = null; 
 var mousePos = null;
@@ -20,23 +26,32 @@ var hoverIndicator = {
 
 function menuLoad(){
 	var loader = new PxLoader();
-	menuimg = loader.addImage('images/menu/mainmenu.png');
+	menuBgImg = loader.addImage('images/menu/bg.png');
+	
+	menuTitleImg = loader.addImage('images/menu/title.png');
+	menuArcadeImg = loader.addImage('images/menu/arcade.png');
+	menuTimeattackImg = loader.addImage('images/menu/timeattack.png');
+	menuSlingshotImg = loader.addImage('images/menu/slingshot.png');
+	menuOptionsImg = loader.addImage('images/menu/options.png');
+	menuQuitImg = loader.addImage('images/menu/quit.png');
+	
 	loader.addCompletionListener(function(){ sharedLoad(); });
 	loader.start();
 	// sound
-	soundManager.useFlashBlock = false; 
-	soundManager.useHTML5Audio = true; 
-	soundManager.preferFlash = false;
+	//soundManager.useFlashBlock = false; 
+	//soundManager.useHTML5Audio = true; 
+	//soundManager.preferFlash = false;
 	soundManager.setup({
-		url: 'soundmanager2/swf/',
+		url: 'soundmanager2/swf/', 
 		useHTML5Audio: true,
-		preferFlash: false,
+		//preferFlash: false,
 		onready: function() { loadSounds(); },
 		ontimeout: function(status) { 
-		  l('Loading flash error: The status is ' + status.success + ', the error type is ' + status.error.type);
+		  //l('Loading flash error: The status is ' + status.success + ', the error type is ' + status.error.type);
 		  soundManager.useHTML5Audio = true; 
           soundManager.preferFlash = false; 
           soundManager.reboot(); 
+		  l('Reboot html5 only');
 		}
 	});
 }
@@ -52,8 +67,9 @@ function sharedLoad(){ // laad de 2 dingen teglijk, wacht tot ze bijden klaar zi
 };
 
 function menuLoaded(){
+    l('wins');
 	canvas = document.createElement("canvas");
-	canvas.width=1280; canvas.height=800; // we should maybe build this to suit resizing
+	canvas.width= demWidth; canvas.height= demHeight; // we should maybe build this to suit resizing
 	ctx = canvas.getContext("2d");
 	timer = setInterval("menuUpdate();",5);	
 	menuUpdate();
@@ -97,25 +113,58 @@ function menuUpdate(){
 	var delta = (now - then);
 	then = now;
 	if(mousePos!=undefined){
-	  	if((mousePos.y>475) && (mousePos.x>789) && (mousePos.x<1024) && (mousePos.y<511)){ // arcade mode
-			menuHover(475, delta); if(mouseDown){ menuArcadeMode(); }
-	  	}else if((mousePos.y>512) && (mousePos.x>789) && (mousePos.x<1024) && (mousePos.y<548)){  // time attack
-			menuHover(512, delta);	
-	  	}else if((mousePos.y>555) && (mousePos.x>789) && (mousePos.x<1024) && (mousePos.y<590)){ // slingshot
-			menuHover(555, delta);	
-	  	}else if((mousePos.y>659) && (mousePos.x>789) && (mousePos.x<1024) && (mousePos.y<695)){ // option
-			menuHover(659, delta);	
-	  	}else if((mousePos.y>699) && (mousePos.x>789) && (mousePos.x<1024) && (mousePos.y<735)){ // quit
-			menuHover(699, delta);	
+	  	if((mousePos.y>(demHeight - 300)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 260))){ // arcade mode
+			menuHover(demHeight - 300, delta); if(mouseDown){ menuArcadeMode(); }
+	  	}else if((mousePos.y>(demHeight - 260)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 220))){  // time attack
+			menuHover(demHeight - 260, delta);	
+	  	}else if((mousePos.y>(demHeight - 220)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 180))){ // slingshot
+			menuHover(demHeight - 220, delta);	
+	  	}else if((mousePos.y>(demHeight - 140)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 100))){ // option
+			menuHover(demHeight - 140, delta);	
+	  	}else if((mousePos.y>(demHeight - 100)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 60))){ // quit
+			menuHover(demHeight - 100, delta);	
 	  	}else{
 		    menuHoverOut(delta);	
 		}
 		menuMove(delta);
 	}
-    ctx.drawImage(menuimg, 0, 0);
+    ctx.drawImage(menuBgImg, 0 + panBgX, 0 + panBgY);
+	
+	if(panXMode == true){
+		panBgX = panBgX - 0.5;
+		if(-panBgX > (4096 - demWidth)){
+			panXMode = false;
+		}
+	}else{
+		panBgX = panBgX + 1;
+		if(panBgX > 0){
+			panXMode = true;
+		}
+	}
+	
+	if(panYMode == true){
+		panBgY = panBgY - 1;
+		if(-panBgY > (4096 - demHeight)){
+			panYMode = false;
+		}
+	}else{
+		panBgY = panBgY + 0.5;
+		if(panBgY > 0){
+			panYMode = true;
+		}
+	}
+	
+	ctx.drawImage(menuTitleImg, 20, 20);
+	
+	ctx.drawImage(menuArcadeImg, demWidth - 140, demHeight - 300);
+	ctx.drawImage(menuTimeattackImg, demWidth - 225, demHeight - 260);
+	ctx.drawImage(menuSlingshotImg, demWidth - 190, demHeight - 220);
+	ctx.drawImage(menuOptionsImg, demWidth - 155, demHeight - 140);
+	ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
+	
 	// draw menu item	
 	ctx.beginPath();
-	ctx.rect(790, hoverIndicator.cy, 234, 35);
+	ctx.rect(demWidth - 235, hoverIndicator.cy, 234, 35);
 	ctx.fillStyle = "rgba(255,255,255,"+(hoverIndicator.showing/1000)+")";
 	ctx.fill();
 }
