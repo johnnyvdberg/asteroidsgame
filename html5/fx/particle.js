@@ -10,7 +10,7 @@ window.onload = function(){
 	var particles = [];
 	
 	//Lets create some particles now
-	var particle_count = 100;
+	var particle_count = 300;
 	for(var i = 0; i< particle_count;i++)
 	{
 		particles.push(new particle());
@@ -20,16 +20,16 @@ window.onload = function(){
 	{
 		//Speed, life, location, life, colors
 		//Speed range = -2.5 to 2.5
-		this.speed = {x: -2.5+Math.random()*5, y: -2.5+Math.random()*5}
+		this.speed = {x: -5+Math.random()*10, y: -5+Math.random()*10}
 		
 		//Location = center of the screen
 		this.location = {x: W/2, y: H/2};
 		
 		//Radius range 10-30
-		this.radius = 20+Math.random()*20;
+		this.radius = 40+Math.random()*20;
 		
 		//Life range = 20-30
-		this.life = 40+Math.random()*10;
+		this.life = 100+Math.random()*10;
 		this.remaining_life = this.life;
 		
 		//Colors
@@ -55,13 +55,15 @@ window.onload = function(){
 			
 			//Random color
 			var gradient = context.createRadialGradient(p.location.x, p.location.y, 0, p.location.x, p.location.y, p.radius);
+			
+			////Not working
 			//gradient.addColorStop(0, "rgba(" + p.r + "," + p.g + "," + p.b + "," + p.opacity + ")");
 			//gradient.addColorStop(0.5, "rgba("+p.r+", "+p.g+", "+p.b+", "+p.opacity+")");
 			//gradient.addColorStop(1, "rgba("+p.r+", "+p.g+", "+p.b+", 0)");
-			gradient.addColorStop(0, '#F4F201');
-			gradient.addColorStop(0.8, '#E4C700');
-			gradient.addColorStop(1, 'rgba(228,199,0,0)');
 			
+			gradient.addColorStop(0, 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ', ' + '100)');
+			//gradient.addColorStop(1, 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ', ' + p.opacity + ')');
+			gradient.addColorStop(1, "rgba("+p.r+", "+p.g+", "+p.b+", 0)");
 			
 			context.fillStyle = gradient;
 			context.arc(p.location.x, p.location.y, p.radius, Math.PI*2, false);
@@ -82,5 +84,5 @@ window.onload = function(){
 		}
 	}
 	
-	setInterval(draw,20);
+	setInterval(draw,33);
 }
