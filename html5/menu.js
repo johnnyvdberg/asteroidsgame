@@ -4,6 +4,8 @@ var panXMode = true;
 var panYMode = true;
 var panBgX = 0;
 var panBgY = 0;
+var panBgX2 = 0;
+var panBgY2 = 0;
 var menuimg;
 var timer = null; 
 var mousePos = null;
@@ -27,6 +29,7 @@ var hoverIndicator = {
 function menuLoad(){
 	var loader = new PxLoader();
 	menuBgImg = loader.addImage('images/menu/bg.png');
+	menuBg2Img = loader.addImage('images/menu/bg2.png');
 	
 	menuTitleImg = loader.addImage('images/menu/title.png');
 	menuArcadeImg = loader.addImage('images/menu/arcade.png');
@@ -82,7 +85,7 @@ function menuLoaded(){
 }
 
 function menuPlayMusic(){
-    soundManager.setVolume('menumusic',10);
+    soundManager.setVolume('menumusic',40);
     soundManager.play('menumusic',{ onfinish: function() { menuPlayMusic(); } });	
 }
 
@@ -95,7 +98,7 @@ function menuPlayHoverSound(i){
 	if(soundManager.getSoundById('hover'+i).playState==1){
 	  if(i<4){ menuPlayHoverSound(i+1); }  
 	}else{
-      soundManager.setVolume('hover'+i,90);
+      soundManager.setVolume('hover'+i,60);
       soundManager.play('hover'+i,{ onfinish: function() { } });
 	}
 }
@@ -129,26 +132,31 @@ function menuUpdate(){
 		menuMove(delta);
 	}
     ctx.drawImage(menuBgImg, 0 + panBgX, 0 + panBgY);
+	ctx.drawImage(menuBg2Img, 0 + panBgX2, 0 + panBgY2);
 	
 	if(panXMode == true){
-		panBgX = panBgX - 0.25;
+		panBgX = panBgX - 0.50;
+		panBgX2 = panBgX2 - 0.25;
 		if(-panBgX > (4096 - demWidth)){
 			panXMode = false;
 		}
 	}else{
-		panBgX = panBgX + 0.5;
+		panBgX = panBgX + 1;
+		panBgX2 = panBgX2 + 0.5;
 		if(panBgX > 0){
 			panXMode = true;
 		}
 	}
 	
 	if(panYMode == true){
-		panBgY = panBgY - 0.5;
+		panBgY = panBgY - 1;
+		panBgY2 = panBgY2 - 0.5;
 		if(-panBgY > (4096 - demHeight)){
 			panYMode = false;
 		}
 	}else{
-		panBgY = panBgY + 0.25;
+		panBgY = panBgY + 0.50;
+		panBgY2 = panBgY2 + 0.25;
 		if(panBgY > 0){
 			panYMode = true;
 		}
