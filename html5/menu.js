@@ -1,5 +1,9 @@
 var demWidth = window.innerWidth;
 var demHeight = window.innerHeight;
+var panXMode = true;
+var panYMode = true;
+var panBgX = 0;
+var panBgY = 0;
 var menuimg;
 var timer = null; 
 var mousePos = null;
@@ -22,7 +26,7 @@ var hoverIndicator = {
 
 function menuLoad(){
 	var loader = new PxLoader();
-	menuBgImg = loader.addImage('images/menu/bg.jpg');
+	menuBgImg = loader.addImage('images/menu/bg.png');
 	
 	menuTitleImg = loader.addImage('images/menu/title.png');
 	menuArcadeImg = loader.addImage('images/menu/arcade.png');
@@ -122,7 +126,31 @@ function menuUpdate(){
 		}
 		menuMove(delta);
 	}
-    ctx.drawImage(menuBgImg, 0, 0);
+    ctx.drawImage(menuBgImg, 0 + panBgX, 0 + panBgY);
+	
+	if(panXMode == true){
+		panBgX = panBgX - 0.5;
+		if(-panBgX > (4096 - demWidth)){
+			panXMode = false;
+		}
+	}else{
+		panBgX = panBgX + 1;
+		if(panBgX > 0){
+			panXMode = true;
+		}
+	}
+	
+	if(panYMode == true){
+		panBgY = panBgY - 1;
+		if(-panBgY > (4096 - demHeight)){
+			panYMode = false;
+		}
+	}else{
+		panBgY = panBgY + 0.5;
+		if(panBgY > 0){
+			panYMode = true;
+		}
+	}
 	
 	ctx.drawImage(menuTitleImg, 20, 20);
 	
