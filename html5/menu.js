@@ -38,19 +38,20 @@ function menuLoad(){
 	loader.addCompletionListener(function(){ sharedLoad(); });
 	loader.start();
 	// sound
-	soundManager.useFlashBlock = false; 
-	soundManager.useHTML5Audio = true; 
-	soundManager.preferFlash = false;
+	//soundManager.useFlashBlock = false; 
+	//soundManager.useHTML5Audio = true; 
+	//soundManager.preferFlash = false;
 	soundManager.setup({
-		url: 'soundmanager2/swf/',
+		url: 'soundmanager2/swf/', 
 		useHTML5Audio: true,
-		preferFlash: false,
+		//preferFlash: false,
 		onready: function() { loadSounds(); },
 		ontimeout: function(status) { 
-		  l('Loading flash error: The status is ' + status.success + ', the error type is ' + status.error.type);
+		  //l('Loading flash error: The status is ' + status.success + ', the error type is ' + status.error.type);
 		  soundManager.useHTML5Audio = true; 
           soundManager.preferFlash = false; 
           soundManager.reboot(); 
+		  l('Reboot html5 only');
 		}
 	});
 }
@@ -66,6 +67,7 @@ function sharedLoad(){ // laad de 2 dingen teglijk, wacht tot ze bijden klaar zi
 };
 
 function menuLoaded(){
+    l('wins');
 	canvas = document.createElement("canvas");
 	canvas.width= demWidth; canvas.height= demHeight; // we should maybe build this to suit resizing
 	ctx = canvas.getContext("2d");
