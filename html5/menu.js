@@ -107,16 +107,16 @@ function menuUpdate(){
 	var delta = (now - then);
 	then = now;
 	if(mousePos!=undefined){
-	  	if((mousePos.y>475) && (mousePos.x>789) && (mousePos.x<1024) && (mousePos.y<511)){ // arcade mode
-			menuHover(475, delta); if(mouseDown){ menuArcadeMode(); }
-	  	}else if((mousePos.y>512) && (mousePos.x>789) && (mousePos.x<1024) && (mousePos.y<548)){  // time attack
-			menuHover(512, delta);	
-	  	}else if((mousePos.y>555) && (mousePos.x>789) && (mousePos.x<1024) && (mousePos.y<590)){ // slingshot
-			menuHover(555, delta);	
-	  	}else if((mousePos.y>659) && (mousePos.x>789) && (mousePos.x<1024) && (mousePos.y<695)){ // option
-			menuHover(659, delta);	
-	  	}else if((mousePos.y>699) && (mousePos.x>789) && (mousePos.x<1024) && (mousePos.y<735)){ // quit
-			menuHover(699, delta);	
+	  	if((mousePos.y>(demHeight - 300)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 260))){ // arcade mode
+			menuHover(demHeight - 300, delta); if(mouseDown){ menuArcadeMode(); }
+	  	}else if((mousePos.y>(demHeight - 260)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 220))){  // time attack
+			menuHover(demHeight - 260, delta);	
+	  	}else if((mousePos.y>(demHeight - 220)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 180))){ // slingshot
+			menuHover(demHeight - 220, delta);	
+	  	}else if((mousePos.y>(demHeight - 140)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 100))){ // option
+			menuHover(demHeight - 140, delta);	
+	  	}else if((mousePos.y>(demHeight - 100)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 60))){ // quit
+			menuHover(demHeight - 100, delta);	
 	  	}else{
 		    menuHoverOut(delta);	
 		}
@@ -126,14 +126,15 @@ function menuUpdate(){
 	
 	ctx.drawImage(menuTitleImg, 20, 20);
 	
-	ctx.drawImage(menuArcadeImg, demWidth - 145, demHeight - 300);
-	ctx.drawImage(menuTimeattackImg, demWidth - 230, demHeight - 260);
-	ctx.drawImage(menuSlingshotImg, demWidth - 195, demHeight - 220);
-	ctx.drawImage(menuOptionsImg, demWidth - 160, demHeight - 140);
-	ctx.drawImage(menuQuitImg, demWidth - 100, demHeight - 100);
+	ctx.drawImage(menuArcadeImg, demWidth - 140, demHeight - 300);
+	ctx.drawImage(menuTimeattackImg, demWidth - 225, demHeight - 260);
+	ctx.drawImage(menuSlingshotImg, demWidth - 190, demHeight - 220);
+	ctx.drawImage(menuOptionsImg, demWidth - 155, demHeight - 140);
+	ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
+	
 	// draw menu item	
 	ctx.beginPath();
-	ctx.rect(790, hoverIndicator.cy, 234, 35);
+	ctx.rect(demWidth - 235, hoverIndicator.cy, 234, 35);
 	ctx.fillStyle = "rgba(255,255,255,"+(hoverIndicator.showing/1000)+")";
 	ctx.fill();
 }
