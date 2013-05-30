@@ -131,24 +131,24 @@ function menuUpdate(){
     ctx.drawImage(menuBgImg, 0 + panBgX, 0 + panBgY);
 	
 	if(panXMode == true){
-		panBgX = panBgX - 0.5;
+		panBgX = panBgX - 0.25;
 		if(-panBgX > (4096 - demWidth)){
 			panXMode = false;
 		}
 	}else{
-		panBgX = panBgX + 1;
+		panBgX = panBgX + 0.5;
 		if(panBgX > 0){
 			panXMode = true;
 		}
 	}
 	
 	if(panYMode == true){
-		panBgY = panBgY - 1;
+		panBgY = panBgY - 0.5;
 		if(-panBgY > (4096 - demHeight)){
 			panYMode = false;
 		}
 	}else{
-		panBgY = panBgY + 0.5;
+		panBgY = panBgY + 0.25;
 		if(panBgY > 0){
 			panYMode = true;
 		}
