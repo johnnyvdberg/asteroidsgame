@@ -1,4 +1,6 @@
 var parralaxToggle = false;
+var menuAnimate = true;
+var menuMusic = true;
 
 var demWidth = window.innerWidth;
 var demHeight = window.innerHeight;
@@ -13,6 +15,7 @@ var timer = null;
 var mousePos = null;
 var soundManager;
 var mouseDown;
+var mouseDownAble = true;
 var soundNames = [
 	  { id: 'menumusic', url:'music/01-Vangelis-Heaven-and-Hell.mp3'},
 	  { id: 'click', url:'sounds/menu/clicksound.mp3'}, 
@@ -39,6 +42,12 @@ function menuLoad(){
 	menuSlingshotImg = loader.addImage('images/menu/slingshot.png');
 	menuOptionsImg = loader.addImage('images/menu/options.png');
 	menuQuitImg = loader.addImage('images/menu/quit.png');
+	
+	menuAnimateImg = loader.addImage('images/menu/animate.png');
+	menuMusicImg = loader.addImage('images/menu/music.png');
+	
+	menuCheckboxImg = loader.addImage('images/menu/checkbox.png');
+	menuCheckedImg = loader.addImage('images/menu/checked.png');
 	
 	loader.addCompletionListener(function(){ sharedLoad(); });
 	loader.start();
@@ -82,13 +91,18 @@ function menuLoaded(){
 	document.body.appendChild(canvas); 
 	menuPlayMusic();
 	canvas.addEventListener('mousemove', function(evt) { mousePos = getMousePos(canvas, evt); }, false);
-	canvas.addEventListener('mousedown', function(e) { mouseDown = true; },false); 
+	canvas.addEventListener('mousedown', function(e) {
+		if(mouseDownAble){ 
+			mouseDown = true;
+			setTimeout(function(){mouseDownAble = true;}, 500) 
+		}else{ setTimeout(function(){mouseDownAble = true;}, 100) }
+	},false); 
 	canvas.addEventListener('mouseup', function(e) { mouseDown = false; },false); 
 }
 
 function menuPlayMusic(){
     soundManager.setVolume('menumusic',40);
-    soundManager.play('menumusic',{ onfinish: function() { menuPlayMusic(); } });	
+    soundManager.play('menumusic',{ onfinish: function() { menuPlayMusic(); } });
 }
 
 function menuPlayClick(){
@@ -128,7 +142,11 @@ function menuUpdate(){
 			menuHover(demHeight - 140, delta);	if(mouseDown){ menuHighscore(); }
 	  	}else if((mousePos.y>(demHeight - 100)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 60))){ // quit
 			menuHover(demHeight - 100, delta);	
-	  	}else{
+	  	}else if((mousePos.y>(demHeight - 80)) && (mousePos.x>20) && (mousePos.x<46) && (mousePos.y<(demHeight - 54))){
+			if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; if(menuMusic){soundManager.setVolume('menumusic',40);}else{soundManager.setVolume('menumusic',0);}}
+		}else if((mousePos.y>(demHeight - 50)) && (mousePos.x>20) && (mousePos.x<46) && (mousePos.y<(demHeight - 24))){
+			if(mouseDown && mouseDownAble){ menuAnimate = !menuAnimate; mouseDownAble = false;}
+		}else{
 		    menuHoverOut(delta);	
 		}
 		menuMove(delta);
@@ -139,32 +157,34 @@ function menuUpdate(){
 		ctx.drawImage(menuBg2Img, 0 + panBgX2, 0 + panBgY2);
 	}
 	
-	if(panXMode == true){
-		panBgX = panBgX - 0.50;
-		panBgX2 = panBgX2 - 0.25;
-		if(-panBgX > (4096 - demWidth)){
-			panXMode = false;
-		}
-	}else{
-		panBgX = panBgX + 1;
-		panBgX2 = panBgX2 + 0.5;
-		if(panBgX > 0){
-			panXMode = true;
-		}
-	}
-	
-	if(panYMode == true){
-		panBgY = panBgY - 1;
-		panBgY2 = panBgY2 - 0.5;
-		if(-panBgY > (4096 - demHeight)){
-			panYMode = false;
-		}
-	}else{
-		panBgY = panBgY + 0.50;
-		panBgY2 = panBgY2 + 0.25;
-		if(panBgY > 0){
-			panYMode = true;
-		}
+	if(menuAnimate == true){
+			if(panXMode == true){
+				panBgX = panBgX - 0.50;
+				panBgX2 = panBgX2 - 0.25;
+				if(-panBgX > (4096 - demWidth)){
+					panXMode = false;
+				}
+			}else{
+				panBgX = panBgX + 1;
+				panBgX2 = panBgX2 + 0.5;
+				if(panBgX > 0){
+					panXMode = true;
+				}
+			}
+			
+			if(panYMode == true){
+				panBgY = panBgY - 1;
+				panBgY2 = panBgY2 - 0.5;
+				if(-panBgY > (4096 - demHeight)){
+					panYMode = false;
+				}
+			}else{
+				panBgY = panBgY + 0.50;
+				panBgY2 = panBgY2 + 0.25;
+				if(panBgY > 0){
+					panYMode = true;
+				}
+			}
 	}
 	
 	ctx.drawImage(menuTitleImg, 20, 20);
@@ -174,6 +194,20 @@ function menuUpdate(){
 	ctx.drawImage(menuSlingshotImg, demWidth - 190, demHeight - 220);
 	ctx.drawImage(menuOptionsImg, demWidth - 155, demHeight - 140);
 	ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
+	
+	ctx.drawImage(menuAnimateImg, 50, demHeight - 50);
+	ctx.drawImage(menuMusicImg, 50, demHeight - 80);
+	
+	if(menuMusic == true){
+		ctx.drawImage(menuCheckedImg, 20, demHeight - 80);
+	}else{
+		ctx.drawImage(menuCheckboxImg, 20, demHeight - 80);
+	}
+	if(menuAnimate == true){
+		ctx.drawImage(menuCheckedImg, 20, demHeight - 50);
+	}else{
+		ctx.drawImage(menuCheckboxImg, 20, demHeight - 50);
+	}
 	
 	// draw menu item	
 	ctx.beginPath();
