@@ -23,7 +23,7 @@ function getMousePos(canvas, evt) { var rect = canvas.getBoundingClientRect(); r
 function l(e){ console.log(e); }
 function supportsLocalStorage() { return ('localStorage' in window) && window['localStorage'] !== null; }
 function set(key,value){ if(supportsLocalStorage()){ localStorage["asshole.asstroids."+key] = value; }else{ return null; } }
-function get(key){ if(supportsLocalStorage()){ return localStorage["asshole.asstroids."+key]; }else{ return null; } }
+function get(key){ if(supportsLocalStorage()){ if(localStorage != null){ return localStorage["asshole.asstroids."+key]; }else{ return null; } }else{ return null; } }
 function stopTimer(){ if(timer!=null){ window.clearInterval(timer); timer = null; } } // stop updaten 
 
 function Init(){

@@ -14,7 +14,7 @@ var hoverIndicator = {
   showing: 0, // % 0-100
   cy : 0,
   ty : 0	
-}
+};
 
 function menuLoad(){
 	var loader = new PxLoader();
