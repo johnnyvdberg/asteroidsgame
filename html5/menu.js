@@ -1,16 +1,6 @@
 var parralaxToggle = false;
-
-if(getCookie("menuAnimate") != null){
-	var menuAnimate = getCookie("menuAnimate");
-}else{ var menuAnimate = true;}
- 
-if(getCookie("menuMusic") != null){
-	var menuMusic = getCookie("menuMusic");
-}else{ var menuMusic = true;}
-
-
-var demWidth = window.innerWidth;
-var demHeight = window.innerHeight;
+var menuAnimate = !(get("menuAnimate")=="false");
+var menuMusic = !(get("menuMusic")=="false");
 var panXMode = true;
 var panYMode = true;
 var panBgX = 0;
@@ -18,19 +8,7 @@ var panBgY = 0;
 var panBgX2 = 0;
 var panBgY2 = 0;
 var menuimg;
-var timer = null; 
-var mousePos = null;
-var soundManager;
-var mouseDown;
-var mouseDownAble = true;
-var soundNames = [
-	  { id: 'menumusic', url:'music/01-Vangelis-Heaven-and-Hell.mp3'},
-	  { id: 'click', url:'sounds/menu/clicksound.mp3'}, 
-	  { id: 'hover1', url:'sounds/menu/hoversound.mp3'},
-	  { id: 'hover2', url:'sounds/menu/hoversound.mp3'},
-	  { id: 'hover3', url:'sounds/menu/hoversound.mp3'},
-	  { id: 'hover4', url:'sounds/menu/hoversound.mp3'}
-	];
+
 	
 var hoverIndicator = {
   showing: 0, // % 0-100
@@ -56,61 +34,21 @@ function menuLoad(){
 	menuCheckboxImg = loader.addImage('images/menu/checkbox.png');
 	menuCheckedImg = loader.addImage('images/menu/checked.png');
 	
-	loader.addCompletionListener(function(){ sharedLoad(); });
+	loader.addCompletionListener(function(){ menuLoaded(); });
 	loader.start();
-	// sound
-	//soundManager.useFlashBlock = false; 
-	//soundManager.useHTML5Audio = true; 
-	//soundManager.preferFlash = false;
-	soundManager.setup({
-		url: 'soundmanager2/swf/', 
-		useHTML5Audio: true,
-		//preferFlash: false,
-		onready: function() { loadSounds(); },
-		ontimeout: function(status) { 
-		  //l('Loading flash error: The status is ' + status.success + ', the error type is ' + status.error.type);
-		  soundManager.useHTML5Audio = true; 
-          soundManager.preferFlash = false; 
-          soundManager.reboot(); 
-		  l('Reboot html5 only');
-		}
-	});
 }
 
-window.onload = function(e){
-    setTimeout("menuLoad()",1000); // show off loader 1 second longer, remove later
-};
-
-var tmpsl = 0;
-function sharedLoad(){ // laad de 2 dingen teglijk, wacht tot ze bijden klaar zijn
-    tmpsl++;
-    if(tmpsl>1){ menuLoaded(); }	
-};
-
 function menuLoaded(){
-	l('done');
-	canvas = document.createElement("canvas");
-	canvas.width= demWidth; canvas.height= demHeight; // we should maybe build this to suit resizing
-	ctx = canvas.getContext("2d");
-	timer = setInterval("menuUpdate();",5);	
-	menuUpdate();
 	then = Date.now();
-	document.body.appendChild(canvas); 
+	menuUpdate();
+	timer = setInterval("menuUpdate();",1);	
 	menuPlayMusic();
-	canvas.addEventListener('mousemove', function(evt) { mousePos = getMousePos(canvas, evt); }, false);
-	canvas.addEventListener('mousedown', function(e) {
-		if(mouseDownAble){ 
-			mouseDown = true;
-			setTimeout(function(){mouseDownAble = true;}, 500) 
-		}else{ setTimeout(function(){mouseDownAble = true;}, 100) }
-	},false); 
-	canvas.addEventListener('mouseup', function(e) { mouseDown = false; },false); 
+	canvasShow();
 }
 
 function musicLevel(){
-		if(menuMusic){ soundManager.setVolume('menumusic',40); }
-		else{ soundManager.setVolume('menumusic', 0);}
-	}
+	if(menuMusic){ soundManager.setVolume('menumusic',40); }else{ soundManager.setVolume('menumusic', 0); }
+}
 
 function menuPlayMusic(){
     musicLevel();
@@ -131,40 +69,6 @@ function menuPlayHoverSound(i){
 	}
 }
 
-
-function canvasHide(){ showLoader(); canvas.style.display = 'none'; }
-function canvasShow(){ hideLoader(); canvas.style.display = ''; }
-function hideLoader(){ document.body.style.backgroundImage = ''; }
-function showLoader(){ document.body.style.backgroundImage = 'images/menu/loader.gif'; }
-function getMousePos(canvas, evt) { var rect = canvas.getBoundingClientRect(); return { x: evt.clientX - rect.left, y: evt.clientY - rect.top }; }
-function l(e){ console.log(e); }
-
-function setCookie(c_name,value,exdays){
-	var exdate=new Date();
-	exdate.setDate(exdate.getDate() + exdays);
-	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-	document.cookie=c_name + "=" + c_value;
-}
-
-function getCookie(c_name){
-	var c_value = document.cookie;
-	var c_start = c_value.indexOf(" " + c_name + "=");
-	if (c_start == -1){
-  		c_start = c_value.indexOf(c_name + "=");
-  	}
-	if (c_start == -1){
-  		c_value = null;
-  	}else{
-  		c_start = c_value.indexOf("=", c_start) + 1;
-  		var c_end = c_value.indexOf(";", c_start);
-  		if (c_end == -1){
-			c_end = c_value.length;
-		}
-		c_value = unescape(c_value.substring(c_start,c_end));
-	}
-	return c_value;
-}
-
 function menuUpdate(){
     var now = Date.now();
 	var delta = (now - then);
@@ -181,9 +85,9 @@ function menuUpdate(){
 	  	}else if((mousePos.y>(demHeight - 100)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 60))){ // quit
 			menuHover(demHeight - 100, delta);	
 	  	}else if((mousePos.y>(demHeight - 80)) && (mousePos.x>20) && (mousePos.x<46) && (mousePos.y<(demHeight - 54))){ // toggle music
-			if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; musicLevel(); setCookie("menuMusic", menuMusic,365);}
+			if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; musicLevel(); set("menuMusic", menuMusic,365);}
 		}else if((mousePos.y>(demHeight - 50)) && (mousePos.x>20) && (mousePos.x<46) && (mousePos.y<(demHeight - 24))){ // toggle animation
-			if(mouseDown && mouseDownAble){ menuAnimate = !menuAnimate; mouseDownAble = false; setCookie("menuAnimate", menuAnimate,365);}
+			if(mouseDown && mouseDownAble){ menuAnimate = !menuAnimate; mouseDownAble = false; set("menuAnimate", menuAnimate,365);}
 		}else{
 		    menuHoverOut(delta);	
 		}
@@ -287,42 +191,12 @@ function menuArcadeMode(){
 	menuPlayClick();
     canvasHide();	
     stopTimer();
-    setTimeout("gameLoadImages();",1000); // show off loader 1 second longer, remove later
+    gameLoadImages();
 }
 
 function menuHighscore(){
 	menuPlayClick();
     canvasHide();	
     stopTimer();
-    setTimeout("highscoreLoad();",1000); // show off loader 1 second longer, remove later
+    highscoreLoad(); 
 }
-
-function loadSounds(){
-	var loader = new PxLoader(), 
-	i, len, url, n; 
-	n = 0;
-	 
-	// queue each sound for loading 
-	for(i=0, len = soundNames.length; i < len; i++) { 
-	 
-		// see if the browser can play m4a 
-		url = soundNames[i].url;
-		if (!soundManager.canPlayURL(url)) { 
-			continue; // can't be played 
-		} 
-		// queue the sound using the name as the SM2 id 
-		loader.addSound(soundNames[i].id, url); 
-	} 
-	len = soundNames.length;
-	 
-	// listen to load events 
-	loader.addProgressListener(function(e) { 
-	  n++;
-	  if(n>=len){ sharedLoad(); }  
-	}); 
-	 
-	loader.start(); 	
-}
-
-function stopTimer(){ if(timer!=null){ window.clearInterval(timer); timer = null; } } // stop updaten 
-
