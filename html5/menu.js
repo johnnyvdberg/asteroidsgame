@@ -1,6 +1,13 @@
 var parralaxToggle = false;
-var menuAnimate = true;
-var menuMusic = true;
+
+if(getCookie("menuAnimate") != null){
+	var menuAnimate = getCookie("menuAnimate");
+}else{ var menuAnimate = true;}
+ 
+if(getCookie("menuMusic") != null){
+	var menuMusic = getCookie("menuMusic");
+}else{ var menuMusic = true;}
+
 
 var demWidth = window.innerWidth;
 var demHeight = window.innerHeight;
@@ -100,8 +107,13 @@ function menuLoaded(){
 	canvas.addEventListener('mouseup', function(e) { mouseDown = false; },false); 
 }
 
+function musicLevel(){
+		if(menuMusic){ soundManager.setVolume('menumusic',40); }
+		else{ soundManager.setVolume('menumusic', 0);}
+	}
+
 function menuPlayMusic(){
-    soundManager.setVolume('menumusic',40);
+    musicLevel();
     soundManager.play('menumusic',{ onfinish: function() { menuPlayMusic(); } });
 }
 
@@ -127,6 +139,32 @@ function showLoader(){ document.body.style.backgroundImage = 'images/menu/loader
 function getMousePos(canvas, evt) { var rect = canvas.getBoundingClientRect(); return { x: evt.clientX - rect.left, y: evt.clientY - rect.top }; }
 function l(e){ console.log(e); }
 
+function setCookie(c_name,value,exdays){
+	var exdate=new Date();
+	exdate.setDate(exdate.getDate() + exdays);
+	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+	document.cookie=c_name + "=" + c_value;
+}
+
+function getCookie(c_name){
+	var c_value = document.cookie;
+	var c_start = c_value.indexOf(" " + c_name + "=");
+	if (c_start == -1){
+  		c_start = c_value.indexOf(c_name + "=");
+  	}
+	if (c_start == -1){
+  		c_value = null;
+  	}else{
+  		c_start = c_value.indexOf("=", c_start) + 1;
+  		var c_end = c_value.indexOf(";", c_start);
+  		if (c_end == -1){
+			c_end = c_value.length;
+		}
+		c_value = unescape(c_value.substring(c_start,c_end));
+	}
+	return c_value;
+}
+
 function menuUpdate(){
     var now = Date.now();
 	var delta = (now - then);
@@ -142,10 +180,10 @@ function menuUpdate(){
 			menuHover(demHeight - 140, delta);	if(mouseDown){ menuHighscore(); }
 	  	}else if((mousePos.y>(demHeight - 100)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 60))){ // quit
 			menuHover(demHeight - 100, delta);	
-	  	}else if((mousePos.y>(demHeight - 80)) && (mousePos.x>20) && (mousePos.x<46) && (mousePos.y<(demHeight - 54))){
-			if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; if(menuMusic){soundManager.setVolume('menumusic',40);}else{soundManager.setVolume('menumusic',0);}}
-		}else if((mousePos.y>(demHeight - 50)) && (mousePos.x>20) && (mousePos.x<46) && (mousePos.y<(demHeight - 24))){
-			if(mouseDown && mouseDownAble){ menuAnimate = !menuAnimate; mouseDownAble = false;}
+	  	}else if((mousePos.y>(demHeight - 80)) && (mousePos.x>20) && (mousePos.x<46) && (mousePos.y<(demHeight - 54))){ // toggle music
+			if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; musicLevel(); setCookie("menuMusic", menuMusic,365);}
+		}else if((mousePos.y>(demHeight - 50)) && (mousePos.x>20) && (mousePos.x<46) && (mousePos.y<(demHeight - 24))){ // toggle animation
+			if(mouseDown && mouseDownAble){ menuAnimate = !menuAnimate; mouseDownAble = false; setCookie("menuAnimate", menuAnimate,365);}
 		}else{
 		    menuHoverOut(delta);	
 		}
