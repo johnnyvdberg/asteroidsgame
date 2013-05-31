@@ -35,9 +35,10 @@ var canvasxc, canvasyc;
 var fps = 0; var fpscounter = 0; var fpscount = 0;
 var then;
 var keysDown = {};
+var detailedParticles = true;
 
 var particles = [];
-var particle_count = 300;
+var particle_count = 100;
 
 var gamePlanetReset = function () {
 	planet.x = -120+(canvas.width/2)+(Math.random()*240);
@@ -148,31 +149,45 @@ var gameRender = function(delta) {
 	for(var i = 0; i < particles.length;i++){
 		var p = particles[i];
 		if(p!=null){
-		  f = true;	
-		  ctx.beginPath();
-		  p.opacity = (p.remaining_life/p.life);
-		  //l(p.opacity);
-		  //var gradient = ctx.createRadialGradient(0, 0, 0, 10, 10, p.radius);			  
-		  //gradient.addColorStop(0, 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ', ' + '100)');
-		  //gradient.addColorStop(1, "rgba("+p.r+", "+p.g+", "+p.b+", 0)");
-		  ctx.strokeStyle = 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ','+ p.opacity +')';
-		  //ctx.strokeRect(p.location.x,p.location.y,p.radius,p.radius);
-		  ctx.beginPath();
-		  ctx.lineWidth = p.radius;
-		  ctx.lineCap = 'round';
-          ctx.moveTo(p.location.x,p.location.y);
-          ctx.lineTo(p.location.x+1,p.location.y+1);
-		  ctx.stroke();
-		  //ctx.fill();
-		  p.remaining_life -= (delta*50);
-		  p.radius += (delta*190);
-		  p.location.x += (p.speed.x*(delta*200));
-		  p.location.y += (p.speed.y*(delta*200));
+			f = true;
+			p.opacity = (p.remaining_life/p.life);
+			//Werkt alleen cool in Chrome
+			if(detailedParticles)
+			{
+				//l(p.opacity);
+				var gradient = ctx.createRadialGradient(p.location.x, p.location.y, 0, p.location.x, p.location.y, p.radius);			  
+				gradient.addColorStop(0, 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ', ' + '1)');
+				gradient.addColorStop(0.5, "rgba("+p.r+", "+p.g+", "+p.b+","+p.opacity+")");
+				gradient.addColorStop(1, "rgba("+p.r+", "+p.g+", "+p.b+", 0)");
+				//ctx.strokeStyle = 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ','+ p.opacity +')';
+				//ctx.strokeRect(p.location.x,p.location.y,p.radius,p.radius);
+				ctx.beginPath();
+		  
+				ctx.fillStyle = gradient;
+				ctx.arc(p.location.x, p.location.y, p.radius, Math.PI*2, false);
+				ctx.fill();
+				ctx.closePath();
+			}
+			else
+			{
+				ctx.strokeStyle = 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ','+ p.opacity +')';
+				ctx.beginPath();
+				ctx.lineWidth = p.radius;
+				ctx.lineCap = 'round';
+				ctx.moveTo(p.location.x,p.location.y);
+				ctx.lineTo(p.location.x+1,p.location.y+1);
+				ctx.stroke();
+				ctx.closePath();
+			}
+		  p.remaining_life -= (delta*5);
+		  p.radius += (delta*25);
+		  p.location.x += (p.speed.x*(delta*50));
+		  p.location.y += (p.speed.y*(delta*50));
 		  if(p.remaining_life < 0 || p.radius > 400){ particles[i] = null; } 
 		}
 	}
 	if((f!=true) && (particles.length>0)){ particles = Array(); }
-	// asturoid
+	// asteroid
 	drawImageRotated(assImage,ass.x,ass.y,ass.w,ass.h,ass.angle*6.28318531);
 	// close planet
 	if((planet.size>=(1.7))&&(planet.alive)){ drawScaled(planetImage, canvasxc+((planet.x-canvasxc)*planet.size),  canvasyc+((planet.y-canvasyc)*planet.size), planet.w,planet.h,planet.size);		
