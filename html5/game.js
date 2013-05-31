@@ -165,10 +165,10 @@ var gameRender = function(delta) {
 		  ctx.stroke();
 		  //ctx.fill();
 		  p.remaining_life -= (delta*5);
-		  p.radius -= (delta*25);
+		  p.radius += (delta*25);
 		  p.location.x += (p.speed.x*(delta*50));
 		  p.location.y += (p.speed.y*(delta*50));
-		  if(p.remaining_life < 0 || p.radius < 0){ particles[i] = null; } 
+		  if(p.remaining_life < 0 || p.radius > 400){ particles[i] = null; } 
 		}
 	}
 	if((f!=true) && (particles.length>0)){ particles = Array(); }
