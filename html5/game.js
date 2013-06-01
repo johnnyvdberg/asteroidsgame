@@ -35,7 +35,7 @@ var canvasxc, canvasyc;
 var fps = 0; var fpscounter = 0; var fpscount = 0;
 var then;
 var keysDown = {};
-var detailedParticles = false;
+var detailedParticles = true;
 
 var particles = [];
 var particle_count = 500;
@@ -121,67 +121,69 @@ var gameUpdate = function (modifier) {
 };
 
 var gameRender = function(delta) {
+
+	 //ctx.globalCompositeOperation = "source-over";
     ctx.drawImage(bgImage, 0, 0);
     ctx.drawImage(starImage, par.x, par.y);
-	ctx.drawImage(starImage, par2.x, par2.y);	
-	// far planet
-	if((planet.size<(1.7))&&(planet.alive)){ drawScaled(planetImage, canvasxc+((planet.x-canvasxc)*planet.size), canvasyc+((planet.y-canvasyc)*planet.size),    planet.w,planet.h,planet.size); }
+ ctx.drawImage(starImage, par2.x, par2.y); 
+ // far planet
+ if((planet.size<(1.7))&&(planet.alive)){ drawScaled(planetImage, canvasxc+((planet.x-canvasxc)*planet.size), canvasyc+((planet.y-canvasyc)*planet.size),    planet.w,planet.h,planet.size); }
     // particles
-	var f = false;
-	for(var i = 0; i < particles.length;i++){
-		var p = particles[i];
-		if(p!=null){
-			f = true;
-			p.opacity = (p.remaining_life/p.life);
-			//Werkt alleen cool in Chrome
-			if(detailedParticles)
-			{
-				//l(p.opacity);
-				var gradient = ctx.createRadialGradient(p.location.x, p.location.y, 0, p.location.x, p.location.y, p.radius);			  
-				gradient.addColorStop(0, 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ', ' + '1)');
-				//gradient.addColorStop(0.5, "rgba("+p.r+", "+p.g+", "+p.b+","+p.opacity+")");
-				gradient.addColorStop(1, "rgba("+p.r+", "+p.g+", "+p.b+", 0)");
-				//ctx.strokeStyle = 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ','+ p.opacity +')';
-				//ctx.strokeRect(p.location.x,p.location.y,p.radius,p.radius);
-				ctx.beginPath();
-		  
-				ctx.fillStyle = gradient;
-				ctx.arc(p.location.x, p.location.y, p.radius, Math.PI*2, false);
-				ctx.fill();
-				ctx.closePath();
-			}
-			else
-			{
-				ctx.strokeStyle = 'rgb(' + p.r + ', ' + p.g + ', ' + p.b + ')';
-				ctx.beginPath();
-				ctx.lineWidth = p.radius;
-				ctx.lineCap = 'round';
-				ctx.moveTo(p.location.x,p.location.y);
-				ctx.lineTo(p.location.x+1,p.location.y+1);
-				ctx.stroke();
-				ctx.closePath();
-			}
-		  p.remaining_life -= (delta*70);
-		  p.radius -= (delta*10);
-		  p.location.x += (p.speed.x*(delta*120));
-		  p.location.y += (p.speed.y*(delta*120));
-		  if(p.remaining_life < 0 || p.radius > 400){ particles[i] = null; } 
-		}
-	}
-	if((f!=true) && (particles.length>0)){ particles = Array(); }
-	// asteroid
-	drawImageRotated(assImage,ass.x,ass.y,ass.w,ass.h,ass.angle*6.28318531);
-	// close planet
-	if((planet.size>=(1.7))&&(planet.alive)){ drawScaled(planetImage, canvasxc+((planet.x-canvasxc)*planet.size),  canvasyc+((planet.y-canvasyc)*planet.size), planet.w,planet.h,planet.size);		
-	}
+ var f = false;
+ for(var i = 0; i < particles.length;i++){
+  var p = particles[i];
+  if(p!=null){
+   f = true;
+   p.opacity = (p.remaining_life/p.life);
+   //Werkt alleen cool in Chrome
+   if(detailedParticles)
+   {
+    //l(p.opacity);
+    var gradient = ctx.createRadialGradient(p.location.x, p.location.y, 0, p.location.x, p.location.y, p.radius);     
+    gradient.addColorStop(0, 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ', ' + '1)');
+    //gradient.addColorStop(0.5, "rgba("+p.r+", "+p.g+", "+p.b+","+p.opacity+")");
+    gradient.addColorStop(1, "rgba("+p.r+", "+p.g+", "+p.b+", 0)");
+    //ctx.strokeStyle = 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ','+ p.opacity +')';
+    //ctx.strokeRect(p.location.x,p.location.y,p.radius,p.radius);
+    ctx.beginPath();
+    
+    ctx.fillStyle = gradient;
+    ctx.arc(p.location.x, p.location.y, p.radius, Math.PI*2, false);
+    ctx.fill();
+    ctx.closePath();
+   }
+   else
+   {
+    ctx.strokeStyle = 'rgb(' + p.r + ', ' + p.g + ', ' + p.b +')';
+    ctx.beginPath();
+    ctx.lineWidth = p.radius;
+    ctx.lineCap = 'round';
+    ctx.moveTo(p.location.x,p.location.y);
+    ctx.lineTo(p.location.x+1,p.location.y+1);
+    ctx.stroke();
+    ctx.closePath();
+   }
+    p.remaining_life -= (delta*70);
+    p.radius += (delta*10);
+    p.location.x += (p.speed.x*(delta*120));
+    p.location.y += (p.speed.y*(delta*120));
+    if(p.remaining_life < 0 || p.radius > 400){ particles[i] = null; } 
+  }
+ }
+ if((f!=true) && (particles.length>0)){ particles = Array(); }
+ // asteroid
+ drawImageRotated(assImage,ass.x,ass.y,ass.w,ass.h,ass.angle*6.28318531);
+ // close planet
+ if((planet.size>=(1.7))&&(planet.alive)){ drawScaled(planetImage, canvasxc+((planet.x-canvasxc)*planet.size),  canvasyc+((planet.y-canvasyc)*planet.size), planet.w,planet.h,planet.size);  
+ }
 
-	
-	ctx.fillStyle = "rgb(250, 250, 250)";
-	ctx.font = "24px Arial";
-	ctx.textAlign = "left";
-	ctx.textBaseline = "top";
-	ctx.fillText("Planets annihilated: " + planetsDestroyed, 32, 32);
-	ctx.fillText("FPS: " + fps, 32, 64);
+ 
+ ctx.fillStyle = "rgb(250, 250, 250)";
+ ctx.font = "24px Arial";
+ ctx.textAlign = "left";
+ ctx.textBaseline = "top";
+ ctx.fillText("Planets annihilated: " + planetsDestroyed, 32, 32);
+ ctx.fillText("FPS: " + fps, 32, 64);
 }
 	
 function particle(x,y,dx,dy)
