@@ -38,7 +38,7 @@ var keysDown = {};
 var detailedParticles = true;
 
 var particles = [];
-var particle_count = 500;
+var particle_count = 2000;
 
 var gamePlanetReset = function () {
 	planet.x = -120+(canvas.width/2)+(Math.random()*240);
@@ -57,13 +57,14 @@ var gameStart = function () {
 };
 
 // preload images
-var loader, assImage, planetImage, starImage, bgImage;
+var loader, assImage, planetImage, starImage, bgImage, parImage;
 function gameLoadImages(){
 	var loader = new PxLoader();
 	assImage = loader.addImage('images/game/ass.png'); 
 	planetImage = loader.addImage('images/game/planet.png'); 
 	starImage = loader.addImage('images/game/star.png');
 	bgImage = loader.addImage('images/game/bg.jpg');
+	parImage = loader.addImage('images/game/1.png');
 	loader.addCompletionListener(function(){ gameBegin(); });
 	loader.start();
 }
@@ -124,8 +125,8 @@ var gameRender = function(delta) {
 
 	 //ctx.globalCompositeOperation = "source-over";
     ctx.drawImage(bgImage, 0, 0);
-    ctx.drawImage(starImage, par.x, par.y);
- ctx.drawImage(starImage, par2.x, par2.y); 
+    //ctx.drawImage(starImage, par.x, par.y);
+    //ctx.drawImage(starImage, par2.x, par2.y); 
  // far planet
  if((planet.size<(1.7))&&(planet.alive)){ drawScaled(planetImage, canvasxc+((planet.x-canvasxc)*planet.size), canvasyc+((planet.y-canvasyc)*planet.size),    planet.w,planet.h,planet.size); }
     // particles
@@ -139,18 +140,19 @@ var gameRender = function(delta) {
    if(detailedParticles)
    {
     //l(p.opacity);
-    var gradient = ctx.createRadialGradient(p.location.x, p.location.y, 0, p.location.x, p.location.y, p.radius);     
-    gradient.addColorStop(0, 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ', ' + '1)');
+    //var gradient = ctx.createRadialGradient(p.location.x, p.location.y, 0, p.location.x, p.location.y, p.radius);     
+    //gradient.addColorStop(0, 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ', ' + '1)');
     //gradient.addColorStop(0.5, "rgba("+p.r+", "+p.g+", "+p.b+","+p.opacity+")");
-    gradient.addColorStop(1, "rgba("+p.r+", "+p.g+", "+p.b+", 0)");
+    //gradient.addColorStop(1, "rgba("+p.r+", "+p.g+", "+p.b+", 0)");
     //ctx.strokeStyle = 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ','+ p.opacity +')';
     //ctx.strokeRect(p.location.x,p.location.y,p.radius,p.radius);
-    ctx.beginPath();
+    //ctx.beginPath();
     
-    ctx.fillStyle = gradient;
-    ctx.arc(p.location.x, p.location.y, p.radius, Math.PI*2, false);
-    ctx.fill();
-    ctx.closePath();
+    //ctx.fillStyle = gradient;
+    //ctx.arc(p.location.x, p.location.y, p.radius, Math.PI*2, false);
+    //ctx.fill();
+    //ctx.closePath();
+	ctx.drawImage(parImage,p.location.x,p.location.y);
    }
    else
    {
