@@ -35,10 +35,10 @@ var canvasxc, canvasyc;
 var fps = 0; var fpscounter = 0; var fpscount = 0;
 var then;
 var keysDown = {};
-var detailedParticles = true;
+var detailedParticles = false;
 
 var particles = [];
-var particle_count = 100;
+var particle_count = 500;
 
 var gamePlanetReset = function () {
 	planet.x = -120+(canvas.width/2)+(Math.random()*240);
@@ -152,7 +152,7 @@ var gameRender = function(delta) {
 			}
 			else
 			{
-				ctx.strokeStyle = 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ','+ p.opacity +')';
+				ctx.strokeStyle = 'rgb(' + p.r + ', ' + p.g + ', ' + p.b + ')';
 				ctx.beginPath();
 				ctx.lineWidth = p.radius;
 				ctx.lineCap = 'round';
@@ -161,10 +161,10 @@ var gameRender = function(delta) {
 				ctx.stroke();
 				ctx.closePath();
 			}
-		  p.remaining_life -= (delta*5);
-		  p.radius += (delta*25);
-		  p.location.x += (p.speed.x*(delta*50));
-		  p.location.y += (p.speed.y*(delta*50));
+		  p.remaining_life -= (delta*70);
+		  p.radius -= (delta*10);
+		  p.location.x += (p.speed.x*(delta*120));
+		  p.location.y += (p.speed.y*(delta*120));
 		  if(p.remaining_life < 0 || p.radius > 400){ particles[i] = null; } 
 		}
 	}
@@ -193,7 +193,7 @@ function particle(x,y,dx,dy)
 	
 	this.speed = {x:  tmpdx, y: tmpdy }
 	this.location = {x: x, y: y};
-	this.radius = 20+Math.random()*20;
+	this.radius = 1+Math.random()*20;
 	this.life = 10+(Math.random()*20);
 	this.remaining_life = this.life;
 	//Colors
