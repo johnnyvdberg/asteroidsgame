@@ -1,4 +1,4 @@
-var parralaxToggle = false;
+var parralaxToggle = true;
 var menuAnimate = !(get("menuAnimate")=="false");
 var menuMusic = !(get("menuMusic")=="false");
 var panXMode = true;
@@ -95,12 +95,12 @@ function menuUpdate(){
 	}
     ctx.drawImage(menuBgImg, 0 + panBgX, 0 + panBgY);
 	
-	if(parralaxToggle == true){
+	if(parralaxToggle){
 		ctx.drawImage(menuBg2Img, 0 + panBgX2, 0 + panBgY2);
 	}
 	
-	if(menuAnimate == true){
-			if(panXMode == true){
+	if(menuAnimate){
+			if(panXMode){
 				panBgX = panBgX - 0.50;
 				panBgX2 = panBgX2 - 0.25;
 				if(-panBgX > (4096 - demWidth)){
@@ -114,7 +114,7 @@ function menuUpdate(){
 				}
 			}
 			
-			if(panYMode == true){
+			if(panYMode){
 				panBgY = panBgY - 1;
 				panBgY2 = panBgY2 - 0.5;
 				if(-panBgY > (4096 - demHeight)){
@@ -140,12 +140,12 @@ function menuUpdate(){
 	ctx.drawImage(menuAnimateImg, 50, demHeight - 50);
 	ctx.drawImage(menuMusicImg, 50, demHeight - 80);
 	
-	if(menuMusic == true){
+	if(menuMusic){
 		ctx.drawImage(menuCheckedImg, 20, demHeight - 80);
 	}else{
 		ctx.drawImage(menuCheckboxImg, 20, demHeight - 80);
 	}
-	if(menuAnimate == true){
+	if(menuAnimate){
 		ctx.drawImage(menuCheckedImg, 20, demHeight - 50);
 	}else{
 		ctx.drawImage(menuCheckboxImg, 20, demHeight - 50);
