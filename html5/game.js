@@ -139,7 +139,7 @@ var gameRender = function(delta) {
 				//l(p.opacity);
 				var gradient = ctx.createRadialGradient(p.location.x, p.location.y, 0, p.location.x, p.location.y, p.radius);			  
 				gradient.addColorStop(0, 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ', ' + '1)');
-				gradient.addColorStop(0.5, "rgba("+p.r+", "+p.g+", "+p.b+","+p.opacity+")");
+				//gradient.addColorStop(0.5, "rgba("+p.r+", "+p.g+", "+p.b+","+p.opacity+")");
 				gradient.addColorStop(1, "rgba("+p.r+", "+p.g+", "+p.b+", 0)");
 				//ctx.strokeStyle = 'rgba(' + p.r + ', ' + p.g + ', ' + p.b + ','+ p.opacity +')';
 				//ctx.strokeRect(p.location.x,p.location.y,p.radius,p.radius);
