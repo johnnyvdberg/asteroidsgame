@@ -38,7 +38,7 @@ var keysDown = {};
 var detailedParticles = true;
 
 var particles = [];
-var particle_count = 2000;
+var particle_count = 1000;
 
 var gamePlanetReset = function () {
 	planet.x = -120+(canvas.width/2)+(Math.random()*240);
