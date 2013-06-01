@@ -8,7 +8,6 @@ var panBgY = 0;
 var panBgX2 = 0;
 var panBgY2 = 0;
 var menuimg;
-var menuBgAngle = 0;
 	
 var hoverIndicator = {
   showing: 0, // % 0-100
@@ -93,37 +92,39 @@ function menuUpdate(){
 		}
 		menuMove(delta);
 	}
-    ctx.drawImageRotated(menuBgImg, 0 + panBgX, 0 + panBgY, 4096, 4096, menuBgAngle*6.28318531);
-	menuBgAngle += 0.001*delta;
+	
+	ctx.drawImage(menuBgImg, 0 + panBgX, 0 + panBgY);
 	
 	if(parralaxToggle){
 		ctx.drawImage(menuBg2Img, 0 + panBgX2, 0 + panBgY2);
 	}
 	
 	if(menuAnimate){
+		
+		
 			if(panXMode){
-				panBgX = panBgX - 0.50;
-				panBgX2 = panBgX2 - 0.25;
+				panBgX = panBgX - 0.050 * delta;
+				panBgX2 = panBgX2 - 0.025 * delta;
 				if(-panBgX > (4096 - demWidth)){
 					panXMode = false;
 				}
 			}else{
-				panBgX = panBgX + 1;
-				panBgX2 = panBgX2 + 0.5;
+				panBgX = panBgX + 0.1 * delta;
+				panBgX2 = panBgX2 + 0.05 * delta;
 				if(panBgX > 0){
 					panXMode = true;
 				}
 			}
 			
 			if(panYMode){
-				panBgY = panBgY - 1;
-				panBgY2 = panBgY2 - 0.5;
+				panBgY = panBgY - 0.1 * delta;
+				panBgY2 = panBgY2 - 0.05 * delta;
 				if(-panBgY > (4096 - demHeight)){
 					panYMode = false;
 				}
 			}else{
-				panBgY = panBgY + 0.50;
-				panBgY2 = panBgY2 + 0.25;
+				panBgY = panBgY + 0.050 * delta;
+				panBgY2 = panBgY2 + 0.025 * delta;
 				if(panBgY > 0){
 					panYMode = true;
 				}
