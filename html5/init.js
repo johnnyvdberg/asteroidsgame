@@ -84,4 +84,22 @@ function loadSounds(){
 	loader.start(); 	
 }
 
+function drawImageRotated(img,x,y,w,h,r){
+	ctx.save();
+	ctx.translate(x+(w/2),y+(h/2));
+	ctx.rotate(r);
+	ctx.translate((-(w/2)),(-(h/2)));
+	ctx.drawImage(img,0,0);
+	ctx.restore();	
+}
+
+function drawScaled(img,x,y,w,h,s){
+	ctx.save();
+	ctx.translate(x+(w/2),y+(h/2));
+	ctx.scale(s,s);
+	ctx.translate((-(w/2)),(-(h/2)));
+	ctx.drawImage(img,0,0);
+	ctx.restore();	
+}
+
 window.onload = function(e){ Init(); }

@@ -1,4 +1,4 @@
-var parralaxToggle = true;
+var parralaxToggle = false;
 var menuAnimate = !(get("menuAnimate")=="false");
 var menuMusic = !(get("menuMusic")=="false");
 var panXMode = true;
@@ -8,7 +8,7 @@ var panBgY = 0;
 var panBgX2 = 0;
 var panBgY2 = 0;
 var menuimg;
-
+var menuBgAngle = 0;
 	
 var hoverIndicator = {
   showing: 0, // % 0-100
@@ -93,7 +93,8 @@ function menuUpdate(){
 		}
 		menuMove(delta);
 	}
-    ctx.drawImage(menuBgImg, 0 + panBgX, 0 + panBgY);
+    ctx.drawImageRotated(menuBgImg, 0 + panBgX, 0 + panBgY, 4096, 4096, menuBgAngle*6.28318531);
+	menuBgAngle += 0.001*delta;
 	
 	if(parralaxToggle){
 		ctx.drawImage(menuBg2Img, 0 + panBgX2, 0 + panBgY2);
