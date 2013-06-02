@@ -184,7 +184,9 @@ var gameRender = function(delta) {
  }
  if((f!=true) && (particles.length>0)){ particles = Array(); }
  // chunks
- planet.exploding += (delta*10);
+ 
+ 
+ planet.exploding += (delta*15);
  if((planet.alive==false) && (planet.exploding>0) && (planet.exploding<5)){
 	drawExplodingPlanet(); 
  }
