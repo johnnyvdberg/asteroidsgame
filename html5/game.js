@@ -15,7 +15,8 @@ var planet = {
 	size: 0,
 	w:120,
 	h:120,
-	alive: true
+	alive: true,
+	exploding: -1
 };
 
 var par = {
@@ -45,6 +46,7 @@ var gamePlanetReset = function () {
 	planet.y = (canvas.height/2);
 	planet.size = 0;
 	planet.alive = true;
+	planet.exploding = -1;
 };
 
 var gameStart = function () {
@@ -57,7 +59,7 @@ var gameStart = function () {
 };
 
 // preload images
-var loader, assImage, planetImage, starImage, bgImage, parImage;
+var loader, assImage, planetImage, starImage, bgImage, parImage, explodeImage;
 function gameLoadImages(){
 	var loader = new PxLoader();
 	assImage = loader.addImage('images/game/ass.png'); 
@@ -65,6 +67,7 @@ function gameLoadImages(){
 	starImage = loader.addImage('images/game/star.png');
 	bgImage = loader.addImage('images/game/bg.jpg');
 	parImage = loader.addImage('images/game/1.png');
+	explodeImage = loader.addImage('images/game/explode.png');
 	loader.addCompletionListener(function(){ gameBegin(); });
 	loader.start();
 }
@@ -114,12 +117,19 @@ var gameUpdate = function (modifier) {
 			  ++planetsDestroyed;
 			  planet.alive = false;
 			  for(var i = 0; i< particle_count;i++){ particles.push(new particle(planet.x+60,planet.y+60,dx,dy)); }
+			  planet.exploding = 0;
 			  setTimeout("gamePlanetReset();",5000);
 		  }
 		}
 	 }
 	
 };
+
+function drawExplodingPlanet(){
+  var i = Math.round(planet.exploding);	
+  ctx.drawImage(explodeImage,0,i*240,240,240,planet.x-60,planet.y-60,240,240);	
+	
+}
 
 var gameRender = function(delta) {
 
@@ -173,6 +183,12 @@ var gameRender = function(delta) {
   }
  }
  if((f!=true) && (particles.length>0)){ particles = Array(); }
+ // chunks
+ planet.exploding += (delta*10);
+ if((planet.alive==false) && (planet.exploding>0) && (planet.exploding<5)){
+	drawExplodingPlanet(); 
+ }
+ 
  // asteroid
  drawImageRotated(assImage,ass.x,ass.y,ass.w,ass.h,ass.angle*6.28318531);
  // close planet
@@ -191,7 +207,7 @@ var gameRender = function(delta) {
 function particle(x,y,dx,dy)
 {
 	var r = (Math.random()*Math.PI*2);
-	var s = Math.random();
+	var s = Math.random()+0.2;
 	var tmpdx = dx+(Math.cos(r)*5)*s;
 	var tmpdy = (Math.sin(r)*5)*s;
 	
