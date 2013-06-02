@@ -30,19 +30,25 @@ function stopTimer(){ if(timer!=null){ window.clearInterval(timer); timer = null
 function cmp(ymax, ymin, xmax, xmin){ if(mousePos.y>ymax && mousePos.y<ymin && mousePos.x>xmax && mousePos.x<xmin){return true;}else{return false;} } //Cursor position
 
 function Init(){
+	
     canvas = document.createElement("canvas");
-	canvas.width= demWidth; canvas.height= demHeight; // we should maybe build this to suit resizing
+	canvas.width= demWidth; 
+	canvas.height= demHeight;
 	canvas.style.display = "none";
 	ctx = canvas.getContext("2d");
 	document.body.appendChild(canvas);
+	
 	canvas.addEventListener('mousemove', function(evt) { mousePos = getMousePos(canvas, evt); }, false);
+	
 	canvas.addEventListener('mousedown', function(e) {
 		if(mouseDownAble){ 
 			mouseDown = true;
 			setTimeout(function(){mouseDownAble = true;}, 500) 
 		}else{ setTimeout(function(){mouseDownAble = true;}, 100) }
-	},false); 
-	canvas.addEventListener('mouseup', function(e) { mouseDown = false; },false); 	
+	},false);
+	
+	canvas.addEventListener('mouseup', function(e) { mouseDown = false; },false); 
+		
 	// load sound
     var tries = 0;
 	soundManager.setup({
@@ -59,6 +65,7 @@ function Init(){
 		  if(tries==1){ l('failed, loading without sound.'); loadSounds(); }
 		}
 	});
+	
 }
 
 
