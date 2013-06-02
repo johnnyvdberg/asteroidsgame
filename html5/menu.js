@@ -1,12 +1,9 @@
-var parralaxToggle = false;
 var menuAnimate = !(get("menuAnimate")=="false");
 var menuMusic = !(get("menuMusic")=="false");
 var panXMode = true;
 var panYMode = true;
 var panBgX = 0;
 var panBgY = 0;
-var panBgX2 = 0;
-var panBgY2 = 0;
 var menuimg;
 	
 var hoverIndicator = {
@@ -14,36 +11,6 @@ var hoverIndicator = {
   cy : 0,
   ty : 0	
 };
-
-function menuLoad(){
-	var loader = new PxLoader();
-	menuBgImg = loader.addImage('images/menu/bg.png');
-	menuBg2Img = loader.addImage('images/menu/bg2.png');
-	
-	menuTitleImg = loader.addImage('images/menu/title.png');
-	menuArcadeImg = loader.addImage('images/menu/arcade.png');
-	menuTimeattackImg = loader.addImage('images/menu/timeattack.png');
-	menuSlingshotImg = loader.addImage('images/menu/slingshot.png');
-	menuOptionsImg = loader.addImage('images/menu/options.png');
-	menuQuitImg = loader.addImage('images/menu/quit.png');
-	
-	menuAnimateImg = loader.addImage('images/menu/animate.png');
-	menuMusicImg = loader.addImage('images/menu/music.png');
-	
-	menuCheckboxImg = loader.addImage('images/menu/checkbox.png');
-	menuCheckedImg = loader.addImage('images/menu/checked.png');
-	
-	loader.addCompletionListener(function(){ menuLoaded(); });
-	loader.start();
-}
-
-function menuLoaded(){
-	then = Date.now();
-	menuUpdate();
-	timer = setInterval("menuUpdate();",1);	
-	menuPlayMusic();
-	canvasShow();
-}
 
 function musicLevel(){
 	if(menuMusic){ soundManager.setVolume('menumusic',40); }else{ soundManager.setVolume('menumusic', 0); }
@@ -72,88 +39,54 @@ function menuUpdate(){
     var now = Date.now();
 	var delta = (now - then);
 	then = now;
+	
 	if(mousePos!=undefined){
-	  	if((mousePos.y>(demHeight - 300)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 260))){ // arcade mode
-			menuHover(demHeight - 300, delta);  if(mouseDown){ menuArcadeMode(); }
-	  	}else if((mousePos.y>(demHeight - 260)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 220))){  // time attack
-			menuHover(demHeight - 260, delta); 
-	  	}else if((mousePos.y>(demHeight - 220)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 180))){ // slingshot
-			menuHover(demHeight - 220, delta);	
-	  	}else if((mousePos.y>(demHeight - 140)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 100))){ // option
-			menuHover(demHeight - 140, delta);	if(mouseDown){ menuHighscore(); }
-	  	}else if((mousePos.y>(demHeight - 100)) && (mousePos.x>(demWidth - 235)) && (mousePos.x<(demWidth)) && (mousePos.y<(demHeight - 60))){ // quit
-			menuHover(demHeight - 100, delta);	
-	  	}else if((mousePos.y>(demHeight - 80)) && (mousePos.x>20) && (mousePos.x<46) && (mousePos.y<(demHeight - 54))){ // toggle music
-			if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; musicLevel(); set("menuMusic", menuMusic,365);}
-		}else if((mousePos.y>(demHeight - 50)) && (mousePos.x>20) && (mousePos.x<46) && (mousePos.y<(demHeight - 24))){ // toggle animation
-			if(mouseDown && mouseDownAble){ menuAnimate = !menuAnimate; mouseDownAble = false; set("menuAnimate", menuAnimate,365);}
-		}else{
-		    menuHoverOut(delta);	
-		}
+	  	if(cmp(demHeight-300, demHeight-260, demWidth-235, demWidth)){ 	
+			 menuHover(demHeight - 300, delta);  if(mouseDown){ menuArcadeMode(); }																				}// arcade mode
+			 
+	  	else if(cmp(demHeight-260, demHeight-220, demWidth-235, demWidth)){ 
+			menuHover(demHeight - 260, delta); 																													}// time attack
+			
+		else if(cmp(demHeight-220, demHeight-180, demWidth-235, demWidth)){ 	
+			menuHover(demHeight - 220, delta);																													}// slingshot
+			
+	  	else if(cmp(demHeight-140, demHeight-100, demWidth-235, demWidth)){ 	
+			menuHover(demHeight - 140, delta);	if(mouseDown){ menuHighscore(); }																				}// option
+			
+	  	else if(cmp(demHeight-100, demHeight-60, demWidth-235, demWidth)){ 		
+			menuHover(demHeight - 100, delta);																													}// quit
+					
+	  	else if(cmp(demHeight-80, demHeight-54, 20, 46)){
+			if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; musicLevel(); set("menuMusic", menuMusic,365);}						}// toggle music
+			
+		else if(cmp(demHeight-50, demHeight-24, 20, 46)){ 						
+			if(mouseDown && mouseDownAble){ menuAnimate = !menuAnimate; mouseDownAble = false; set("menuAnimate", menuAnimate,365);}							}// toggle animation
+		
+		else{menuHoverOut(delta);}
 		menuMove(delta);
 	}
 	
-	ctx.drawImage(menuBgImg, 0 + panBgX, 0 + panBgY);
-	
-	if(parralaxToggle){
-		ctx.drawImage(menuBg2Img, 0 + panBgX2, 0 + panBgY2);
-	}
-	
+	//Pan the background
 	if(menuAnimate){
-		
-		
-			if(panXMode){
-				panBgX = panBgX - 0.050 * delta;
-				panBgX2 = panBgX2 - 0.025 * delta;
-				if(-panBgX > (4096 - demWidth)){
-					panXMode = false;
-				}
-			}else{
-				panBgX = panBgX + 0.1 * delta;
-				panBgX2 = panBgX2 + 0.05 * delta;
-				if(panBgX > 0){
-					panXMode = true;
-				}
-			}
-			
-			if(panYMode){
-				panBgY = panBgY - 0.1 * delta;
-				panBgY2 = panBgY2 - 0.05 * delta;
-				if(-panBgY > (4096 - demHeight)){
-					panYMode = false;
-				}
-			}else{
-				panBgY = panBgY + 0.050 * delta;
-				panBgY2 = panBgY2 + 0.025 * delta;
-				if(panBgY > 0){
-					panYMode = true;
-				}
-			}
+		if(panXMode){ panBgX = panBgX - 0.050 * delta; if(-panBgX > (4096 - demWidth)){ panXMode = false; } }else{ panBgX = panBgX + 0.1 * delta; if(panBgX > 0){ panXMode = true; } }
+		if(panYMode){ panBgY = panBgY - 0.1 * delta; if(-panBgY > (4096 - demHeight)){ panYMode = false; } }else{ panBgY = panBgY + 0.050 * delta; if(panBgY > 0){ panYMode = true; } }
 	}
 	
+	ctx.drawImage(menuBgImg, 0 + panBgX, 0 + panBgY);
 	ctx.drawImage(menuTitleImg, 20, 20);
-	
 	ctx.drawImage(menuArcadeImg, demWidth - 140, demHeight - 300);
 	ctx.drawImage(menuTimeattackImg, demWidth - 225, demHeight - 260);
 	ctx.drawImage(menuSlingshotImg, demWidth - 190, demHeight - 220);
 	ctx.drawImage(menuOptionsImg, demWidth - 155, demHeight - 140);
 	ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
-	
 	ctx.drawImage(menuAnimateImg, 50, demHeight - 50);
 	ctx.drawImage(menuMusicImg, 50, demHeight - 80);
 	
-	if(menuMusic){
-		ctx.drawImage(menuCheckedImg, 20, demHeight - 80);
-	}else{
-		ctx.drawImage(menuCheckboxImg, 20, demHeight - 80);
-	}
-	if(menuAnimate){
-		ctx.drawImage(menuCheckedImg, 20, demHeight - 50);
-	}else{
-		ctx.drawImage(menuCheckboxImg, 20, demHeight - 50);
-	}
+	// Toggle music and animation
+	if(menuMusic){ ctx.drawImage(menuCheckedImg, 20, demHeight - 80); }else{ ctx.drawImage(menuCheckboxImg, 20, demHeight - 80); }
+	if(menuAnimate){ ctx.drawImage(menuCheckedImg, 20, demHeight - 50); }else{ ctx.drawImage(menuCheckboxImg, 20, demHeight - 50); }
 	
-	// draw menu item	
+	// draw menu item
 	ctx.beginPath();
 	ctx.rect(demWidth - 235, hoverIndicator.cy, 234, 35);
 	ctx.fillStyle = "rgba(255,255,255,"+(hoverIndicator.showing/1000)+")";
@@ -202,3 +135,40 @@ function menuHighscore(){
     stopTimer();
     highscoreLoad(); 
 }
+
+
+
+//LOAD & PLAY
+function menuLoad(){
+	var loader = new PxLoader();
+	menuBgImg = loader.addImage('images/menu/bg.png');
+	menuBg2Img = loader.addImage('images/menu/bg2.png');
+	
+	menuTitleImg = loader.addImage('images/menu/title.png');
+	menuArcadeImg = loader.addImage('images/menu/arcade.png');
+	menuTimeattackImg = loader.addImage('images/menu/timeattack.png');
+	menuSlingshotImg = loader.addImage('images/menu/slingshot.png');
+	menuOptionsImg = loader.addImage('images/menu/options.png');
+	menuQuitImg = loader.addImage('images/menu/quit.png');
+	
+	menuAnimateImg = loader.addImage('images/menu/animate.png');
+	menuMusicImg = loader.addImage('images/menu/music.png');
+	
+	menuCheckboxImg = loader.addImage('images/menu/checkbox.png');
+	menuCheckedImg = loader.addImage('images/menu/checked.png');
+	
+	loader.addCompletionListener(function(){ menuLoaded(); });
+	loader.start();
+}
+
+
+function menuLoaded(){
+	then = Date.now();
+	menuUpdate();
+	timer = setInterval("menuUpdate();",1);	
+	menuPlayMusic();
+	canvasShow();
+}
+
+
+

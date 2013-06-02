@@ -25,6 +25,7 @@ function supportsLocalStorage() { return ('localStorage' in window) && window['l
 function set(key,value){ if(supportsLocalStorage()){ localStorage["asshole.asstroids."+key] = value; }else{ return null; } }
 function get(key){ if(supportsLocalStorage()){ if(localStorage != null){ return localStorage["asshole.asstroids."+key]; }else{ return null; } }else{ return null; } }
 function stopTimer(){ if(timer!=null){ window.clearInterval(timer); timer = null; } } // stop updaten 
+function cmp(ymax, ymin, xmax, xmin){ if(mousePos.y>ymax && mousePos.y<ymin && mousePos.x>xmax && mousePos.x<xmin){return true;}else{return false;} } //Cursor position
 
 function Init(){
     canvas = document.createElement("canvas");
