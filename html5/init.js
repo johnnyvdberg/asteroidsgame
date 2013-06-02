@@ -5,6 +5,8 @@ var mouseDown;
 var mouseDownAble = true;
 var demWidth = window.innerWidth;
 var demHeight = window.innerHeight;
+var now;
+var delta;
 var soundNames = [
 	  { id: 'menumusic', url:'music/01-Vangelis-Heaven-and-Hell.mp3'},
 	  { id: 'click', url:'sounds/menu/clicksound.mp3'}, 
@@ -101,6 +103,12 @@ function drawScaled(img,x,y,w,h,s){
 	ctx.translate((-(w/2)),(-(h/2)));
 	ctx.drawImage(img,0,0);
 	ctx.restore();	
+}
+
+function getDelta(){
+	now = Date.now();
+	delta = (now - then);
+	then = now;
 }
 
 window.onload = function(e){ Init(); }
