@@ -1,0 +1,16 @@
+Wat moet er gebeuren
+
+Game:
+- Arcade mode moet speelbaar worden
+- Geluidseffecten voor asteroid en planeet explosies
+- Particles minder shitty maken
+- Gevoel van beweging inbouwen
+
+Menu:
+- Muziek playlist
+- Leaderboard moet werken
+
+Leaderboard:
+- Leaderboard moet werken, tenminste lokaal
+Overig:
+- Documentatie op Git zetten
