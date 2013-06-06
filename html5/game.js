@@ -1,4 +1,5 @@
 var canvas; var ctx;
+var gameMusic = true;
 
 var ass = {
 	speed: 956,
@@ -78,6 +79,7 @@ function gameBegin(){
 	gameStart();
 	then = Date.now();
 	timer = setInterval(gameMain, 1);
+	InitPlaylist(2); // 1 = menu, 2 is game;
 	gameMain();
 	canvasShow();
 }

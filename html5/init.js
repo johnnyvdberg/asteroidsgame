@@ -1,6 +1,11 @@
 var timer = null; 
 var mousePos = null;
 var soundManager;
+var currentMusicIndex = -1;
+var currentPlaylist = Array();
+var playMusic = true;
+var musicType; // 1 = menu, 2 = game
+
 var mouseDown;
 var mouseDownAble = true;
 var demWidth = window.innerWidth;
@@ -8,7 +13,18 @@ var demHeight = window.innerHeight;
 var now;
 var delta;
 var soundNames = [
-	  { id: 'menumusic', url:'music/01-Vangelis-Heaven-and-Hell.mp3'},
+      // menumusic
+	  { id: 'menu0', url:'music/menu/206-vangelis-dream_in_an_open_place.mp3'},
+	  { id: 'menu1', url:'music/menu/01-Vangelis-Heaven-and-Hell.mp3'},
+	  // game music
+	  { id: 'game0', url:'music/game/09-hypnosis-oxygene-dps.mp3'},
+	  { id: 'game1', url:'music/game/01_from_the_dawn_of_time-atm.mp3'},
+	  { id: 'game2', url:'music/game/01_power_run.mp3'},
+	  { id: 'game3', url:'music/game/02_humanoid_invasion.mp3'},
+	  { id: 'game4', url:'music/game/03_space_dance.mp3'},
+	  { id: 'game5', url:'music/game/08_time-atm.mp3'},
+	  { id: 'game6', url:'music/game/103-vangelis-blade_runner_end_titles.mp3'},
+	  
 	  { id: 'click', url:'sounds/menu/clicksound.mp3'}, 
 	  { id: 'hover1', url:'sounds/menu/hoversound.mp3'},
 	  { id: 'hover2', url:'sounds/menu/hoversound.mp3'},
@@ -29,6 +45,83 @@ function get(key){ if(supportsLocalStorage()){ if(localStorage != null){ return 
 function stopTimer(){ if(timer!=null){ window.clearInterval(timer); timer = null; } } // stop updaten 
 function cmp(ymax, ymin, xmax, xmin){ if(mousePos.y>ymax && mousePos.y<ymin && mousePos.x>xmax && mousePos.x<xmin){return true;}else{return false;} } //Cursor position
 
+function drawImageRotated(img,x,y,w,h,r){
+	ctx.save();
+	ctx.translate(x+(w/2),y+(h/2));
+	ctx.rotate(r);
+	ctx.translate((-(w/2)),(-(h/2)));
+	ctx.drawImage(img,0,0);
+	ctx.restore();	
+}
+
+function drawScaled(img,x,y,w,h,s){
+	ctx.save();
+	ctx.translate(x+(w/2),y+(h/2));
+	ctx.scale(s,s);
+	ctx.translate((-(w/2)),(-(h/2)));
+	ctx.drawImage(img,0,0);
+	ctx.restore();	
+}
+
+function getDelta(){ now = Date.now(); delta = (now - then); then = now; } // tijdverschil berkenen tussen nu en laatste keer
+
+/////////////////////////////////
+/// music functions
+////////////////////////////////
+function InitPlaylist(type){ // 1 = menu, 2 = game
+  stopMusic();
+  currentMusicIndex = -1; // init op -1 dan word bij play index op 0 gezet
+  musicType = type;
+  var done = false;
+  var tmpname;
+  var i = 0;
+  if(type==1){ tmpname = 'menu';}else{ tmpname = 'game'; }
+  while(!done){ // look for all music items starting with menu or game that are numbered from 0
+	if(soundManager.getSoundById(tmpname+i)!=null){ currentPlaylist[i] = soundManager.getSoundById(tmpname+i); i++; }else{ done = true;	}
+  }
+  checkPlayMusic();	
+}
+
+function playNextItem(){
+  currentMusicIndex++;	
+  if(currentMusicIndex>=currentPlaylist.length){ currentMusicIndex = 0; }	
+  currentPlaylist[currentMusicIndex].setVolume(40); 
+  currentPlaylist[currentMusicIndex].play({ onfinish: function() { playNextItem(); } });	
+}
+
+function stopMusic(){ if(currentPlaylist[currentMusicIndex]!=undefined){ if(currentPlaylist[currentMusicIndex].playState == 1){ currentPlaylist[currentMusicIndex].stop(); } } }
+
+function checkPlayMusic(){ if(musicType==1){  playMusic = menuMusic;  }else{ playMusic = gameMusic; } if(playMusic){ playNextItem(); }else{ stopMusic(); } } // kijk of ie mag spelen
+
+function loadSounds(){
+	var loader = new PxLoader(), 
+	i, len, url, n; 
+	n = 0;
+	// queue each sound for loading 
+	for(i=0, len = soundNames.length; i < len; i++) { 	 
+		// see if the browser can play m4a 
+		url = soundNames[i].url;
+		if (!soundManager.canPlayURL(url)) { 
+			continue; // can't be played 
+		} 
+		// queue the sound using the name as the SM2 id 
+		loader.addSound(soundNames[i].id, url); 
+	} 
+	len = soundNames.length;
+	 
+	// listen to load events 
+	loader.addProgressListener(function(e) { 
+	  n++;
+	  if(n>=len){ menuLoad(); }  
+	}); 
+	 
+	loader.start(); 	
+}
+
+
+/////////////////////////
+/// begin
+///////////////////////
 function Init(){
 	
     canvas = document.createElement("canvas");
@@ -66,56 +159,6 @@ function Init(){
 		}
 	});
 	
-}
-
-
-function loadSounds(){
-	var loader = new PxLoader(), 
-	i, len, url, n; 
-	n = 0;
-	// queue each sound for loading 
-	for(i=0, len = soundNames.length; i < len; i++) { 	 
-		// see if the browser can play m4a 
-		url = soundNames[i].url;
-		if (!soundManager.canPlayURL(url)) { 
-			continue; // can't be played 
-		} 
-		// queue the sound using the name as the SM2 id 
-		loader.addSound(soundNames[i].id, url); 
-	} 
-	len = soundNames.length;
-	 
-	// listen to load events 
-	loader.addProgressListener(function(e) { 
-	  n++;
-	  if(n>=len){ menuLoad(); }  
-	}); 
-	 
-	loader.start(); 	
-}
-
-function drawImageRotated(img,x,y,w,h,r){
-	ctx.save();
-	ctx.translate(x+(w/2),y+(h/2));
-	ctx.rotate(r);
-	ctx.translate((-(w/2)),(-(h/2)));
-	ctx.drawImage(img,0,0);
-	ctx.restore();	
-}
-
-function drawScaled(img,x,y,w,h,s){
-	ctx.save();
-	ctx.translate(x+(w/2),y+(h/2));
-	ctx.scale(s,s);
-	ctx.translate((-(w/2)),(-(h/2)));
-	ctx.drawImage(img,0,0);
-	ctx.restore();	
-}
-
-function getDelta(){
-	now = Date.now();
-	delta = (now - then);
-	then = now;
 }
 
 window.onload = function(e){ Init(); }

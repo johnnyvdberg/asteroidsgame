@@ -14,17 +14,6 @@ var hoverIndicator = {
 	ty : 0	
 };
 
-//MUTE MENU MUSIC
-function musicLevel(){
-	if(menuMusic){ soundManager.setVolume('menumusic',40); }else{ soundManager.setVolume('menumusic', 0); }
-}
-
-//PLAY THE MENU MUSIC
-function menuPlayMusic(){
-    musicLevel();
-    soundManager.play('menumusic',{ onfinish: function() { menuPlayMusic(); } });
-}
-
 //PLAY THE MENU CLICK SOUND
 function menuPlayClick(){
     soundManager.setVolume('click',100);
@@ -108,7 +97,7 @@ function menuLoaded(){
 	then = Date.now();
 	menuUpdate();
 	timer = setInterval("menuUpdate();",1);	
-	menuPlayMusic();
+	InitPlaylist(1); // init en play menu
 	canvasShow();
 }
 
@@ -135,7 +124,7 @@ function menuUpdate(){
 			menuHover(demHeight - 100, delta);
 		
 	  	}else if(cmp(demHeight-80, demHeight-54, 20, 46)){								// toggle music
-			if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; musicLevel(); set("menuMusic", menuMusic,365); menuPlayClick()}
+			if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; set("menuMusic", menuMusic,365); menuPlayClick(); checkPlayMusic(); }
 		
 		}else if(cmp(demHeight-50, demHeight-24, 20, 46)){ 								// toggle animation
 			if(mouseDown && mouseDownAble){ menuAnimate = !menuAnimate; mouseDownAble = false; set("menuAnimate", menuAnimate,365); menuPlayClick()}
