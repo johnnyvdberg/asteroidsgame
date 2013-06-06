@@ -17,19 +17,21 @@ var soundNames = [
 	  { id: 'menu0', url:'music/menu/206-vangelis-dream_in_an_open_place.mp3'},
 	  { id: 'menu1', url:'music/menu/01-Vangelis-Heaven-and-Hell.mp3'},
 	  // game music
-	  { id: 'game0', url:'music/game/09-hypnosis-oxygene-dps.mp3'},
+	  { id: 'game0', url:'music/game/09-hypnosis-oxygene-dps-cut.mp3'},
 	  { id: 'game1', url:'music/game/01_from_the_dawn_of_time-atm.mp3'},
 	  { id: 'game2', url:'music/game/01_power_run.mp3'},
 	  { id: 'game3', url:'music/game/02_humanoid_invasion.mp3'},
 	  { id: 'game4', url:'music/game/03_space_dance.mp3'},
 	  { id: 'game5', url:'music/game/08_time-atm.mp3'},
 	  { id: 'game6', url:'music/game/103-vangelis-blade_runner_end_titles.mp3'},
-	  
+	  // menu sounds
 	  { id: 'click', url:'sounds/menu/clicksound.mp3'}, 
 	  { id: 'hover1', url:'sounds/menu/hoversound.mp3'},
 	  { id: 'hover2', url:'sounds/menu/hoversound.mp3'},
 	  { id: 'hover3', url:'sounds/menu/hoversound.mp3'},
-	  { id: 'hover4', url:'sounds/menu/hoversound.mp3'}
+	  { id: 'hover4', url:'sounds/menu/hoversound.mp3'},
+	  // game sounds
+	  { id: 'explosion', url:'sounds/game/explosion.mp3'},
 	];
 
 
@@ -85,6 +87,8 @@ function InitPlaylist(type){ // 1 = menu, 2 = game
 function playNextItem(){
   currentMusicIndex++;	
   if(currentMusicIndex>=currentPlaylist.length){ currentMusicIndex = 0; }	
+  l('id3:');
+  l(currentPlaylist[currentMusicIndex].id3);
   currentPlaylist[currentMusicIndex].setVolume(40); 
   currentPlaylist[currentMusicIndex].play({ onfinish: function() { playNextItem(); } });	
 }
