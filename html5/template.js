@@ -1,6 +1,4 @@
-//CHANGE SCEEEN TO OWN NAME
-
-function screenLoad(){
+function screenLoad(){																		//CHANGE SCEEEN TO UNIQUE NAME
 	var loader = new PxLoader();
 	
 	//LOAD ALL IMAGES
@@ -11,20 +9,20 @@ function screenLoad(){
 	*/
 	
 	loader.addCompletionListener(function(){ 
-		screenLoaded(); 
+		screenLoaded(); 																	//CHANGE SCEEEN TO UNIQUE NAME
 	});
 	
 	loader.start();
 }
 
-function screenLoaded(){
+function screenLoaded(){																	//CHANGE SCEEEN TO UNIQUE NAME
 	then = Date.now();
-	screenUpdate();
-	timer = setInterval("screenUpdate();",1);	
+	screenUpdate();																			//CHANGE SCEEEN TO UNIQUE NAME
+	timer = setInterval("screenUpdate();",1);												//CHANGE SCEEEN TO UNIQUE NAME
 	canvasShow();
 }
 
-function screenUpdate(){
+function screenUpdate(){																	//CHANGE SCEEEN TO UNIQUE NAME
 	getDelta();
 	
 	
