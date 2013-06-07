@@ -65,6 +65,14 @@ function drawScaled(img,x,y,w,h,s){
 	ctx.restore();	
 }
 
+//SWITCH TO OTHER VIEWS
+function switchScreen(scr, hide){
+	menuPlayClick();
+	if(hide){canvasHide();}
+	stopTimer();
+	scr();
+}
+
 function getDelta(){ now = Date.now(); delta = (now - then); then = now; } // tijdverschil berkenen tussen nu en laatste keer
 
 /////////////////////////////////

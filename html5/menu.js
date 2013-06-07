@@ -60,14 +60,6 @@ function menuHoverOut(dt){
 	if(hoverIndicator.showing<0){ hoverIndicator.showing = 0; }
 }
 
-//SWITCH TO OTHER VIEWS
-function switchScreen(scr, hide){
-	menuPlayClick();
-	if(hide){canvasHide();}
-	stopTimer();
-	scr();
-}
-
 //LOAD THE MENU
 function menuLoad(){
 	var loader = new PxLoader();

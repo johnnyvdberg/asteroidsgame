@@ -61,7 +61,6 @@ function optionUpdate(){
 	
 	ctx.drawImage(menuBgImg, 0 + pan.x, 0 + pan.y);
 	ctx.drawImage(menuTitleImg, 20, 20);
-	
 	ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
 	
 	//Draw menu hover effect
