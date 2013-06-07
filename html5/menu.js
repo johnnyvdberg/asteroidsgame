@@ -61,9 +61,9 @@ function menuHoverOut(dt){
 }
 
 //SWITCH TO OTHER VIEWS
-function switchScreen(scr){
+function switchScreen(scr, hide){
 	menuPlayClick();
-	canvasHide();
+	if(hide){canvasHide();}
 	stopTimer();
 	scr();
 }
@@ -109,7 +109,7 @@ function menuUpdate(){
 	//Cursor
 	if(mousePos!=undefined){
 	  	if(cmp(demHeight-300, demHeight-260, demWidth-235, demWidth)){ 					// arcade mode
-			 menuHover(demHeight - 300, delta);  if(mouseDown){ switchScreen(gameLoadImages); }	
+			 menuHover(demHeight - 300, delta);  if(mouseDown){ switchScreen(gameLoadImages, true); }	
 		
 	  	}else if(cmp(demHeight-260, demHeight-220, demWidth-235, demWidth)){ 			// time attack
 			menuHover(demHeight - 260, delta);
@@ -118,10 +118,10 @@ function menuUpdate(){
 			menuHover(demHeight - 220, delta);
 			
 	  	}else if(cmp(demHeight-140, demHeight-100, demWidth-235, demWidth)){ 			// option
-			menuHover(demHeight - 140, delta);	if(mouseDown){ switchScreen(menuHighscore); }
+			menuHover(demHeight - 140, delta);	if(mouseDown){ switchScreen(optionLoad, false); }
 			
-	  	}else if(cmp(demHeight-100, demHeight-60, demWidth-235, demWidth)){ 			// quit
-			menuHover(demHeight - 100, delta);
+	  	//}else if(cmp(demHeight-100, demHeight-60, demWidth-235, demWidth)){ 			// quit
+		//	menuHover(demHeight - 100, delta);
 		
 	  	}else if(cmp(demHeight-80, demHeight-54, 20, 46)){								// toggle music
 			if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; set("menuMusic", menuMusic,365); menuPlayClick(); checkPlayMusic(); }
@@ -165,7 +165,7 @@ function menuUpdate(){
 	ctx.drawImage(menuTimeattackImg, demWidth - 225, demHeight - 260);
 	ctx.drawImage(menuSlingshotImg, demWidth - 190, demHeight - 220);
 	ctx.drawImage(menuOptionsImg, demWidth - 155, demHeight - 140);
-	ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
+	//ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
 	ctx.drawImage(menuAnimateImg, 50, demHeight - 50);
 	ctx.drawImage(menuMusicImg, 50, demHeight - 80);
 	
