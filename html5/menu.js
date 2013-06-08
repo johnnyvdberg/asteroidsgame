@@ -1,6 +1,3 @@
-var menuAnimate = !(get("menuAnimate")=="false");
-var menuMusic = !(get("menuMusic")=="false");
-
 var pan = {
 	xMode : true,
 	yMode : true,

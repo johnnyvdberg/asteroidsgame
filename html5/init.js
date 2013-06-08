@@ -1,3 +1,13 @@
+//OPTIONS
+//=======================================================
+var musicVolume = !(get("musicVolume")==50);
+var effectsVolume = !(get("effectsVolume")==50);
+var graphicsQuality = !(get("graphicsQuality")==2);
+var fullscreen = !(get("fullscreen")=="true");
+var menuAnimate = !(get("menuAnimate")=="false");
+var menuMusic = !(get("menuMusic")=="false");
+//=======================================================
+
 var timer = null; 
 var mousePos = null;
 var soundManager;
