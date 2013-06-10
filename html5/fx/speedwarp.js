@@ -48,7 +48,7 @@ window.onload = function(){
 	////////////////////////////////////
 	
 	var warpZ = 14,
-    units = 500,
+    units = 200,
     stars = [],
     cycle = 0,
     Z = 0.025 + (1/25 * 2);
@@ -61,8 +61,9 @@ window.onload = function(){
 	// function to reset a star object
 	function resetstar(a)
 	{
-		a.x = (Rnd() * W - (W * 0.5)) * warpZ;
-		a.y = (Rnd() * H - (H * 0.5)) * warpZ;
+		a.x = (Rnd() * W - (W * 0.5))-0.5 * warpZ;
+		a.y = (Rnd() * H - (H * 0.5))-0.5 * warpZ;
+		a.speed = 0.03 + -0.02+Math.random()*0.04
 		a.z = warpZ;
 		a.px = 0;
 		a.py = 0;
@@ -111,7 +112,7 @@ window.onload = function(){
 			// update star position values with new settings
 			n.px = xx;
 			n.py = yy;
-			n.z -= Z;
+			n.z -= n.speed;
       
 			// reset when star is out of the view field
 			if (n.z < Z || n.px > W || n.py > H)

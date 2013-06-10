@@ -85,6 +85,7 @@ function gameLoadImages(){
 	parImage = loader.addImage('images/game/1.png');
 	explodeImage1 = loader.addImage('images/game/explode.png');
 	explodeImage2 = loader.addImage('images/game/ring.png');
+	glowImage = loader.addImage('images/game/glow.png')
 	loader.addCompletionListener(function(){ gameBegin(); });
 	loader.start();
 }
@@ -134,7 +135,8 @@ var gameUpdate = function (modifier) {
 	if(orbit.bullettime == false){
 	  ass.angle += 0.05*modifier;
 	  if(ass.angle>1){ ass.angle -= 1; }
-      orbit.angle += 0.05*modifier;
+      orbit.angle -= 0.05*modifier;
+	  if(orbit.angle<0) orbit.angle += (512*9);
 	}else{
 	  // dit is bullettime		
 	}
@@ -152,7 +154,7 @@ function drawExplodingPlanet(){
   ctx.drawImage(explodeImage1,0,i*240,240,240,planet.x-60,planet.y-60,240,240);	
 }
 
-function drawTiledBackground(x,y){ // tile sizes are 512 by 512 
+/* function drawTiledBackground(x,y){ // tile sizes are 512 by 512 
   //what number to draw first
   var xtileindex = (x - (x % 512)) / 512;  
   var tmpti = 0;
@@ -166,6 +168,24 @@ function drawTiledBackground(x,y){ // tile sizes are 512 by 512
 	  tmpti = (((i+xtileindex) % 3)+((j % 2)*3));
 	  ctx.drawImage(bgTiles[tmpti],tx-(x%512),ty);
     }	    
+  }
+} */
+
+function drawTiledBackground(x,y){ // tile sizes are 512 by 512 
+  //what number to draw first
+  var xtileindex = (x - (x % 512)) / 512; 
+  var ytileindex = (y - (y % 512)) / 512;  
+  var tmpti = 0;
+  var tx,ty;
+  for(var i =0; i< orbit.xtiles; i++){
+    for(var j =0; j< orbit.ytiles; j++){
+		// this tile index
+		tx = i*512;
+		ty = j*512;
+		//tmpti = ((((i % 3)+((j % 2)*3))+xtileindex) % 6); // 2 rows with 3 tiles each, + offset over the max numbe rof tiles
+		tmpti = (((i+xtileindex) % 3)+(((j+ytileindex)% 2)*3));
+		ctx.drawImage(bgTiles[tmpti],tx-(x%512),ty-(y%512));
+    }     
   }
 }
 
@@ -183,13 +203,19 @@ var gameRender = function(delta) {
 	  ox = -2+(Math.random()*4); oy = -2+(Math.random()*4);	
 	}else{
 	  ox = 0; oy = 0;	
-	} 
+	}
+	
+	
 	 //ctx.globalCompositeOperation = "source-over";
     //ctx.drawImage(bgImage, ox, oy);
     //ctx.drawImage(starImage, par.x, par.y);
     //ctx.drawImage(starImage, par2.x, par2.y); 
  	// far planet
-    drawTiledBackground(Math.round(orbit.angle*5120),0); // dat is zodat we 512 loopen
+    //drawTiledBackground(Math.round(orbit.angle*5120),0); // dat is zodat we 512 loopen
+	drawTiledBackground(Math.round(orbit.angle*5120),0);
+	
+	//Sunglow
+	ctx.drawImage(glowImage, -30, canvas.height/2 - 100);
 	
  	if((planet.size<(1.7))&&(planet.alive)){ drawScaled(planetImage, canvasxc+((planet.x-canvasxc)*planet.size), canvasyc+((planet.y-canvasyc)*planet.size),    planet.w,planet.h,planet.size); }
     // asteroid
