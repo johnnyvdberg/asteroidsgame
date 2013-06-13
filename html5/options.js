@@ -6,6 +6,12 @@ function optionLoad(){
 	menuTitleImg = loader.addImage('images/menu/title.png');
 	menuQuitImg = loader.addImage('images/menu/quit.png');
 	
+	menuAnimateImg = loader.addImage('images/menu/animate.png');
+	menuMusicImg = loader.addImage('images/menu/music.png');
+	
+	menuCheckboxImg = loader.addImage('images/menu/checkbox.png');
+	menuCheckedImg = loader.addImage('images/menu/checked.png');
+	
 	loader.addCompletionListener(function(){ 
 		optionLoaded(); 
 	});
@@ -62,6 +68,12 @@ function optionUpdate(){
 	ctx.drawImage(menuBgImg, 0 + pan.x, 0 + pan.y);
 	ctx.drawImage(menuTitleImg, 20, 20);
 	ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
+	
+	ctx.drawImage(menuAnimateImg, demWidth / 2, demHeight / 2 + 30);
+	ctx.drawImage(menuMusicImg, demWidth / 2, demHeight /2);
+	
+	if(menuAnimate){ ctx.drawImage(menuCheckedImg, demWidth / 2 - 40, demHeight /2 + 30); }else{ ctx.drawImage(menuCheckboxImg, demWidth / 2 - 40, demHeight /2 + 30); }
+	if(menuMusic){ ctx.drawImage(menuCheckedImg, demWidth / 2 - 40, demHeight / 2); }else{ ctx.drawImage(menuCheckboxImg, demWidth / 2 - 40, demHeight /2); }
 	
 	//Draw menu hover effect
 	ctx.beginPath();

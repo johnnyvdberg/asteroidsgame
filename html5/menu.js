@@ -69,10 +69,6 @@ function menuLoad(){
 	menuSlingshotImg = loader.addImage('images/menu/slingshot.png');
 	menuOptionsImg = loader.addImage('images/menu/options.png');
 	menuQuitImg = loader.addImage('images/menu/quit.png');
-	menuAnimateImg = loader.addImage('images/menu/animate.png');
-	menuMusicImg = loader.addImage('images/menu/music.png');
-	menuCheckboxImg = loader.addImage('images/menu/checkbox.png');
-	menuCheckedImg = loader.addImage('images/menu/checked.png');
 	
 	loader.addCompletionListener(function(){ 
 		menuLoaded(); 
@@ -155,12 +151,6 @@ function menuUpdate(){
 	ctx.drawImage(menuSlingshotImg, demWidth - 190, demHeight - 220);
 	ctx.drawImage(menuOptionsImg, demWidth - 155, demHeight - 140);
 	//ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
-	ctx.drawImage(menuAnimateImg, 50, demHeight - 50);
-	ctx.drawImage(menuMusicImg, 50, demHeight - 80);
-	
-	//Toggle music and animation
-	if(menuMusic){ ctx.drawImage(menuCheckedImg, 20, demHeight - 80); }else{ ctx.drawImage(menuCheckboxImg, 20, demHeight - 80); }
-	if(menuAnimate){ ctx.drawImage(menuCheckedImg, 20, demHeight - 50); }else{ ctx.drawImage(menuCheckboxImg, 20, demHeight - 50); }
 	
 	//Draw menu hover effect
 	ctx.beginPath();
