@@ -6,8 +6,8 @@ function optionLoad(){
 	menuTitleImg = loader.addImage('images/menu/title.png');
 	menuQuitImg = loader.addImage('images/menu/quit.png');
 	
-	menuAnimateImg = loader.addImage('images/menu/animate.png');
-	menuMusicImg = loader.addImage('images/menu/music.png');
+	menuAnimateImg = loader.addImage('images/menu/menuAnimate.png');
+	menuMusicImg = loader.addImage('images/menu/menuMusic.png');
 	
 	menuCheckboxImg = loader.addImage('images/menu/checkbox.png');
 	menuCheckedImg = loader.addImage('images/menu/checked.png');

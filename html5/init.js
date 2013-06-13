@@ -1,11 +1,12 @@
 //OPTIONS
 //=======================================================
-var musicVolume = !(get("musicVolume")==50);
-var effectsVolume = !(get("effectsVolume")==50);
-var graphicsQuality = !(get("graphicsQuality")==2);
-var fullscreen = !(get("fullscreen")=="true");
-var menuAnimate = !(get("menuAnimate")=="false");
-var menuMusic = !(get("menuMusic")=="false");
+var musicVolume = get("musicVolume", 50);
+var effectsVolume = get("effectsVolume", 50);
+var graphicsQuality = get("graphicsQuality", 2);
+var fullscreen = get("fullscreen", true);
+var menuAnimate = get("menuAnimate", true);
+var menuMusic = get("menuMusic", true);
+var difficulty = get("difficulty", 2);
 //=======================================================
 
 var timer = null; 
@@ -53,7 +54,7 @@ function getMousePos(canvas, evt) { var rect = canvas.getBoundingClientRect(); r
 function l(e){ console.log(e); }
 function supportsLocalStorage() { return ('localStorage' in window) && window['localStorage'] !== null; }
 function set(key,value){ if(supportsLocalStorage()){ localStorage["asshole.asstroids."+key] = value; }else{ return null; } }
-function get(key){ if(supportsLocalStorage()){ if(localStorage != null){ return localStorage["asshole.asstroids."+key]; }else{ return null; } }else{ return null; } }
+function get(key, def){ if(supportsLocalStorage()){ if((localStorage != null)&&(localStorage["asshole.asstroids."+key]!=undefined)){ return localStorage["asshole.asstroids."+key]; }else{ return def; } }else{ return null; } }
 function stopTimer(){ if(timer!=null){ window.clearInterval(timer); timer = null; } } // stop updaten 
 function cmp(ymax, ymin, xmax, xmin){ if(mousePos.y>ymax && mousePos.y<ymin && mousePos.x>xmax && mousePos.x<xmin){return true;}else{return false;} } //Cursor position
 
