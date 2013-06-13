@@ -9,6 +9,14 @@ window.onload = function(){
 	canvas.height = H;
 	var img = new Image();
 	img.src = 'star.png'
+	var minimap = new Image();
+	minimap.src = 'minimap.png'
+	
+	var asteroid = new Image();
+	asteroid.src = 'asteroid.jpg'
+	
+	angle = 10;
+	distance = 50;
 	
 	var warp = new image();
 	/////////////////////////////////////
@@ -32,15 +40,44 @@ window.onload = function(){
 		//context.globalCompositeOperation = "source-atop";
 		//Load base background
 		context.drawImage(img, 0, 0, img.width, img.height);
+		
+		//Draw minimap
+		//context.drawImage(minimap, W - 300, 0, minimap.width, minimap.height);
 
 		//Load oscillating image
 		context.drawImage(img, warp.speed.x, warp.speed.y, img.width, img.height);
 		//New value
 		var time = (new Date()).getTime();
-		warp.speed.x = Math.sin(time / 30) * 1.3 + 0.5;
-		warp.speed.y = -Math.sin(time / 30) * 1.3 + 0.5;
+		warp.speed.x = -Math.sin(time / 100) * 50 + 0.5;
+		warp.speed.y = Math.cos(time / 100) * 50 + 0.5;
 		warping();
 		//console.log('Speed ' + warp.speed.x + ',' + warp.speed.y);
+		
+		//Draw minimap
+		
+		if(angle > 100)
+		{
+			angle = 0;
+		}
+		else
+		{
+			angle = angle + 0.5;
+		}
+		
+		//angle = 5;
+		
+		context.drawImage(minimap, W - minimap.width/2, 0, minimap.width/2, minimap.height/2);
+		
+		//planetx = (distance * Math.cos(angle) * (Math.PI / 50)) + (W - 75);
+        //planety = (distance * Math.sin(angle) * (Math.PI / 50)) + 75;
+		
+		planetx = (distance * Math.cos((angle/100)*(2*Math.PI))) + 700;
+		planety = (distance * Math.sin((angle/100)*(2*Math.PI))) + 50;
+		
+		//planetx = 6.24 / Math.sin(angle) * (distance/10 + 0.5);
+		//planety = 6.24 / Math.cos(angle) * (distance/10 + 0.5);
+		console.log('minimap: ' + planetx + ',' + planety);
+		context.drawImage(asteroid, planetx, planety, 50, 50);
 	}
 	
 	////////////////////////////////////
