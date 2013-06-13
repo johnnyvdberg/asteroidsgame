@@ -20,24 +20,14 @@ var planet = {
 	exploding: -1
 };
 
-var par = {
-	speed: 300,
-	x: 0,
-	y: 0
-};
-
-var par2 = {
-	speed: 300,
-	x: 1280,
-	y: 0
-};
-
 var orbit = {
   xtiles: 0, // number of x tiles that span the screen
   ytiles: 0, //  number of y tiles that span the screen
   angle: 0, // astroids angle in orbit
   distance: 100, // astroids distance from the sun	
-  bullettime: false // bullet
+  bullettime: false, // bullet
+  bullettimepercentage: 0, // percentage
+  bullettimeup: true, // direction
 }
 
 var planetsDestroyed = 0;
@@ -60,12 +50,20 @@ var gamePlanetReset = function () {
 
 var gameStart = function () {
 	ass.x = canvas.width /2;
-	ass.y = canvas.height /2;
+	// 100 pixels from the middle
+	ass.y = (canvas.height /2)+100;
 	canvasxc = canvas.width/2;
 	canvasyc = canvas.height/2;
 	// cals number of tiles
 	orbit.xtiles = Math.ceil(canvas.width/512)+1;
 	orbit.ytiles = Math.ceil(canvas.height/512)+1;
+	//init stars
+	for (var i=0, n; i<units; i++)
+	{
+		n = {};
+		resetstar(n);
+		stars.push(n);
+	}
 	addEventListener("keydown", function (e) { keysDown[e.keyCode] = true; }, false);
 	addEventListener("keyup", function (e) { delete keysDown[e.keyCode]; }, false);
 };
@@ -101,50 +99,8 @@ function gameBegin(){
 	canvasShow();
 }
 
-var gameUpdate = function (modifier) {
-	if (37 in keysDown) { //left
-		ass.x -= ass.speed * modifier;
-	}
-	if (39 in keysDown) { //right
-		ass.x += ass.speed * modifier;
-	}
-	
-	if(planet.alive){
-	   orbit.bullettime = true;	
-	   planet.size += 2*modifier; 
-	   if(planet.size>4){ gamePlanetReset(); }
-	   
-	   if((planet.size>1.3)&&(planet.size<1.7)){
-		  if (
-			  ass.x <= (planet.x + (120*1.7)) && planet.x <= (ass.x + (140*1.7))
-		  ) {
-			  var dx = (((planet.x+(planet.w/2))-(ass.x+(ass.w/2)))/20);
-			  var dy = (((planet.y+(planet.h/2))-(ass.y+(ass.h/2)))/20);
-			  planetsDestroyed++;
-			  planet.alive = false;
-			  for(var i = 0; i< particle_count;i++){ particles.push(new particle(planet.x+(60*planet.size),planet.y+(60*planet.size),dx,dy)); }
-			  planet.exploding = 0;
-			  gamePlayExplosion();
-			  setTimeout("explosionDone();",1000);
-			  setTimeout("gamePlanetReset();",10000);
-		  }
-		}
-	 }
-	 
-	// dit is in hyperspeed, update de angle 
-	if(orbit.bullettime == false){
-	  ass.angle += 0.05*modifier;
-	  if(ass.angle>1){ ass.angle -= 1; }
-      orbit.angle -= 0.05*modifier;
-	  if(orbit.angle<0) orbit.angle += (512*9);
-	}else{
-	  // dit is bullettime		
-	}
-	
-};
-
 function explosionDone(){ // explosion all gone, lets get back to sexy hyperspeed
-	orbit.bullettime = false;	
+	orbit.bullettimeup = false;	
 }
 
 function drawExplodingPlanet(){
@@ -189,6 +145,136 @@ function drawTiledBackground(x,y){ // tile sizes are 512 by 512
   }
 }
 
+var warpZ = 25,
+units = 5,
+stars = [],
+cycle = 0,
+Z = 0.035 + (1/25 * 2);
+
+// setup aliases
+var Rnd = Math.random,
+Sin = Math.sin,
+Floor = Math.floor;
+
+// function to reset a star object
+function resetstar(a)
+{
+	a.x = (-20+(Math.random()*40)) * warpZ; // start pos
+	a.y = (-10+(Math.random()*30)) * warpZ; // start pos
+	a.z = 2+Math.random()*2;
+	a.px = 0; //ass.x+(Math.random()*2);
+	a.py = 0; //ass.y+(Math.random()*2);
+}
+	
+
+
+function gameWarp(){
+// mouse position to head towards
+		var cx = ass.x+60;
+		cy = (canvas.height/2);
+   
+		// update all stars
+		var sat = Floor(Z * 500);       // Z range 0.01 -> 0.5
+		if (sat > 100) sat = 100;
+		for (var i=0; i<units; i++)
+		{
+			var n = stars[i],            // the star
+			xx = n.x / n.z,          // star position
+			yy = n.y / n.z,
+			e = (0.5 / n.z + 1) * 2;   // size i.e. z
+			xx -= (n.z*20);
+      
+			if (n.px !== 0)
+			{
+				// hsl colour from a sine wave
+				//ctx.strokeStyle = "hsl(" + ((cycle * i) % 360) + "," + sat + "%,80%)";
+				ctx.strokeStyle = "rgb(200,200,200)";
+				ctx.lineWidth = e;
+				ctx.beginPath();
+				ctx.moveTo(xx + cx, yy + cy);
+				//ctx.lineTo(n.px + cx, n.py + cy);
+				ctx.lineTo(xx + cx, yy + cy + 3);
+				ctx.stroke();
+			}
+      
+			// update star position values with new settings
+			n.px = xx;
+			n.py = yy;
+			if(orbit.bullettimepercentage>0){
+			  n.z -= (Z * ((120 - (orbit.bullettimepercentage))/100));	
+			}else{
+			  n.z -= Z*1.2;
+			}
+      
+			// reset when star is out of the view field
+			if (n.z < Z || n.px > canvas.width || n.py > canvas.height)
+			{
+				// reset star
+				resetstar(n);
+			}
+		}
+   
+   // colour cycle sinewave rotation
+   cycle += 0.01;
+}
+
+var gameUpdate = function (modifier) {
+	if (37 in keysDown) { //left
+		ass.x -= ass.speed * modifier;
+	}
+	if (39 in keysDown) { //right
+		ass.x += ass.speed * modifier;
+	}
+	
+	if(planet.alive){
+	   orbit.bullettime = true;	
+	   orbit.bullettimeup = true;
+	   planet.size += 2*modifier; 
+	   if(planet.size>4){ gamePlanetReset(); }
+	   
+	   if((planet.size>1.3)&&(planet.size<1.7)){
+		  if (
+			  ass.x <= (planet.x + (120*1.7)) && planet.x <= (ass.x + (140*1.7))
+		  ) {
+			  var dx = (((planet.x+(planet.w/2))-(ass.x+(ass.w/2)))/20);
+			  var dy = (((planet.y+(planet.h/2))-(ass.y+(ass.h/2)))/20);
+			  planetsDestroyed++;
+			  planet.alive = false;
+			  for(var i = 0; i< particle_count;i++){ particles.push(new particle(planet.x+(60*planet.size),planet.y+(60*planet.size),dx,dy)); }
+			  planet.exploding = 0;
+			  gamePlayExplosion();
+			  setTimeout("explosionDone();",1000);
+			  setTimeout("gamePlanetReset();",10000);
+		  }
+		}
+	 }
+	 
+	// dit is in hyperspeed, update de angle 
+	//alert(modifier);
+	//alert(orbit.angle);
+	if(orbit.bullettime == false){
+	  ass.angle += 0.05*modifier; 
+      orbit.angle -= 15*modifier; 
+	}else{
+	  // dit is bullettime		
+	  if(orbit.bullettimeup){
+		  orbit.bullettimepercentage+=150*modifier;
+		  if(orbit.bullettimepercentage>100) orbit.bullettimepercentage = 100;
+	  }else{
+		  orbit.bullettimepercentage-=150*modifier;
+		  if(orbit.bullettimepercentage <= 1){ orbit.bullettimepercentage = 0; orbit.bullettime = false; }		  
+	  } 
+	  if(orbit.bullettimepercentage>0){
+	    orbit.angle -= (15*modifier)*((100-orbit.bullettimepercentage)/100);
+	    ass.angle += (0.05*modifier)*((100-orbit.bullettimepercentage)/100); 
+	  }
+	}
+	// overbound
+	if(ass.angle>1){ ass.angle -= 1; }
+	if(orbit.angle<0){ orbit.angle += 100; }
+	
+};
+
 var ox, oy;  //offsets x en y voor dat lekkere explosie effect
 
 var gameRender = function(delta) {
@@ -204,15 +290,10 @@ var gameRender = function(delta) {
 	}else{
 	  ox = 0; oy = 0;	
 	}
-	
-	
-	 //ctx.globalCompositeOperation = "source-over";
-    //ctx.drawImage(bgImage, ox, oy);
-    //ctx.drawImage(starImage, par.x, par.y);
-    //ctx.drawImage(starImage, par2.x, par2.y); 
  	// far planet
     //drawTiledBackground(Math.round(orbit.angle*5120),0); // dat is zodat we 512 loopen
-	drawTiledBackground(Math.round(orbit.angle*5120),0);
+	drawTiledBackground(Math.round(orbit.angle*46.08),0);
+	gameWarp();
 	
 	//Sunglow
 	ctx.drawImage(glowImage, -30, canvas.height/2 - 100);
@@ -278,6 +359,8 @@ var gameRender = function(delta) {
 	 ctx.textBaseline = "top";
 	 ctx.fillText("Planets annihilated: " + planetsDestroyed, 32, 32);
 	 ctx.fillText("FPS: " + fps, 32, 64);
+	 ctx.fillText("Angle: " + orbit.angle, 32, 140);
+	 ctx.fillText("bullatp: " + orbit.bullettimepercentage, 32, 170);
 	 if(orbit.bullettime){
 	   ctx.fillText("FUCKING BULLETTIME", 36-(Math.random()*8), 100-(Math.random()*8));	 
 	 }
