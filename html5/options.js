@@ -97,8 +97,6 @@ function optionUpdate(){
 	ctx.drawImage(menuAnimateImg, demWidth / 2 - 50, demHeight / 2 - 160);
 	ctx.drawImage(fullscreenImg, demWidth / 2 - 50, demHeight / 2 - 120);
 	
-	
-	
 	if(graphicsQuality == 0){ //LOW
 		ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 - 30);
 		ctx.drawImage(lowImg, demWidth / 2 - 220, demHeight / 2 - 30);	
