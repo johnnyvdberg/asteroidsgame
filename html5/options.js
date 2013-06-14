@@ -53,8 +53,30 @@ function optionUpdate(){
 	if(mousePos!=undefined){
 	  	if(cmp(demHeight-100, demHeight-60, demWidth-235, demWidth)){					//quit
 			 menuHover(demHeight - 100, delta); 
-			 if(mouseDown){ switchScreen(menuLoad, false); }
-	  	}else{menuHoverOut(delta);}
+			 if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; switchScreen(menuLoad, false); }
+			 
+	  	}else if(cmp(demHeight / 2 - 195, demHeight / 2 - 169, demWidth / 2 - 100, demWidth / 2 - 74)){ 			// Menu Music
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; menuMusic = !menuMusic; set("menuMusic", menuMusic);}
+		
+		}else if(cmp(demHeight / 2 - 155, demHeight / 2 - 129, demWidth / 2 - 100, demWidth / 2 - 74)){ 			// Menu Animate
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; menuAnimate = !menuAnimate; set("menuAnimate", menuAnimate);}
+		
+		}else if(cmp(demHeight / 2 - 115, demHeight / 2 - 79, demWidth / 2 - 100, demWidth / 2 - 74)){ 			// Fullscreen
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; fullscreen = !fullscreen; set("fullscreen", fullscreen);}
+		
+		}else if(cmp(demHeight / 2 - 30, demHeight / 2 + 5, demWidth / 2 - 100, demWidth / 2 - 66)){ 			// Graphics up
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(graphicsQuality<2){set("graphicsQuality", graphicsQuality++);}}
+		
+		}else if(cmp(demHeight / 2 - 30, demHeight / 2 + 5, demWidth / 2 - 290, demWidth / 2 - 256)){ 			// Graphics down
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(graphicsQuality>0){set("graphicsQuality", graphicsQuality--);}}
+		
+		}else if(cmp(demHeight / 2 + 10, demHeight / 2 + 45, demWidth / 2 - 100, demWidth / 2 - 66)){ 			// Difficulty up
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(difficulty<2){set("difficulty", difficulty++);}}
+		
+		}else if(cmp(demHeight / 2 + 10, demHeight / 2 + 45, demWidth / 2 - 290, demWidth / 2 - 256)){ 			// Difficulty down
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(difficulty>0){set("difficulty", difficulty--);}}
+		
+		}else{menuHoverOut(delta);}
 		menuMove(delta);
 	}
 	
@@ -98,7 +120,7 @@ function optionUpdate(){
 	ctx.drawImage(fullscreenImg, demWidth / 2 - 50, demHeight / 2 - 120);
 	
 	if(graphicsQuality == 0){ //LOW
-		ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 - 30);
+		//ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 - 30);
 		ctx.drawImage(lowImg, demWidth / 2 - 220, demHeight / 2 - 30);	
 		ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 - 30);
 	} 
@@ -110,7 +132,7 @@ function optionUpdate(){
 	if(graphicsQuality == 2){ //HIGH
 		ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 - 30);
 		ctx.drawImage(highImg, demWidth / 2 - 215, demHeight / 2 - 30);
-		ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 - 30);
+		//ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 - 30);
 	} 
 	
 	ctx.drawImage(graphicsImg, demWidth / 2 - 50, demHeight / 2 - 30);
@@ -118,7 +140,7 @@ function optionUpdate(){
 	
 	
 	if(difficulty == 0){ //LOW
-		ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 10);
+		//ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 10);
 		ctx.drawImage(easyImg, demWidth / 2 - 220, demHeight / 2 + 10);	
 		ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 10);
 	} 
@@ -130,7 +152,7 @@ function optionUpdate(){
 	if(difficulty == 2){ //HIGH
 		ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 10);
 		ctx.drawImage(hardImg, demWidth / 2 - 220, demHeight / 2 + 10);
-		ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 10);
+		//ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 10);
 	} 
 	
 	ctx.drawImage(difficultyImg, demWidth / 2 - 50, demHeight / 2 + 10);

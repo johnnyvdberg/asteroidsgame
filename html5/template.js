@@ -31,7 +31,7 @@ function screenUpdate(){																	//CHANGE SCEEEN TO UNIQUE NAME
 	if(mousePos!=undefined){
 	  	if(cmp(demHeight-100, demHeight-60, demWidth-235, demWidth)){					//quit
 			 menuHover(demHeight - 100, delta); 
-			 if(mouseDown){ switchScreen(menuLoad, false); }
+			 if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(menuLoad, false); }
 	  	}else{menuHoverOut(delta);}
 		menuMove(delta);
 	}
