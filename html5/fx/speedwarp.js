@@ -13,7 +13,7 @@ window.onload = function(){
 	minimap.src = 'minimap.png'
 	
 	var asteroid = new Image();
-	asteroid.src = 'asteroid.jpg'
+	asteroid.src = 'asteroid.png'
 	
 	angle = 10;
 	distance = 50;
@@ -45,11 +45,11 @@ window.onload = function(){
 		//context.drawImage(minimap, W - 300, 0, minimap.width, minimap.height);
 
 		//Load oscillating image
-		context.drawImage(img, warp.speed.x, warp.speed.y, img.width, img.height);
+		//context.drawImage(img, warp.speed.x, warp.speed.y, img.width, img.height);
 		//New value
-		var time = (new Date()).getTime();
-		warp.speed.x = -Math.sin(time / 100) * 50 + 0.5;
-		warp.speed.y = Math.cos(time / 100) * 50 + 0.5;
+		//var time = (new Date()).getTime();
+		//warp.speed.x = -Math.sin(time / 100) * 50 + 0.5;
+		//warp.speed.y = Math.cos(time / 100) * 50 + 0.5;
 		warping();
 		//console.log('Speed ' + warp.speed.x + ',' + warp.speed.y);
 		
@@ -57,7 +57,7 @@ window.onload = function(){
 		
 		if(angle > 100)
 		{
-			angle = 0;
+			angle = 0.5;
 		}
 		else
 		{
@@ -65,19 +65,22 @@ window.onload = function(){
 		}
 		
 		//angle = 5;
+		distance = 100;
 		
 		context.drawImage(minimap, W - minimap.width/2, 0, minimap.width/2, minimap.height/2);
 		
 		//planetx = (distance * Math.cos(angle) * (Math.PI / 50)) + (W - 75);
         //planety = (distance * Math.sin(angle) * (Math.PI / 50)) + 75;
 		
-		planetx = (distance * Math.cos((angle/100)*(2*Math.PI))) + 700;
-		planety = (distance * Math.sin((angle/100)*(2*Math.PI))) + 50;
+		miniassx = ((distance/2) * -Math.cos((angle/100)*(2*Math.PI))) + (W - minimap.width/2 + 70);
+		miniassy = ((distance/2) * Math.sin((angle/100)*(2*Math.PI))) + 70;
 		
-		//planetx = 6.24 / Math.sin(angle) * (distance/10 + 0.5);
-		//planety = 6.24 / Math.cos(angle) * (distance/10 + 0.5);
-		console.log('minimap: ' + planetx + ',' + planety);
-		context.drawImage(asteroid, planetx, planety, 50, 50);
+		context.beginPath();
+		context.arc(W - minimap.width/2 + 75, 75, distance/2, 0, 2 * Math.PI, false);
+		context.strokeStyle = '#ffffff';
+		context.stroke();
+		//console.log('minimap: ' + planetx + ',' + planety);
+		context.drawImage(asteroid, miniassx, miniassy, 10, 10);
 	}
 	
 	////////////////////////////////////
