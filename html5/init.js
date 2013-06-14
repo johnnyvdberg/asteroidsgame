@@ -78,9 +78,9 @@ function drawScaled(img,x,y,w,h,s){
 
 //SWITCH TO OTHER VIEWS
 function switchScreen(scr, hide){
+	stopTimer();
 	menuPlayClick();
 	if(hide){canvasHide();}
-	stopTimer();
 	scr();
 }
 

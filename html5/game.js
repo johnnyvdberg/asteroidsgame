@@ -2,12 +2,13 @@ var canvas; var ctx;
 var gameMusic = true;
 
 var ass = {
-	speed: 956,
+	speed: 1000,
 	x: 0,
 	y: 0,
 	angle:0,
 	w: 100,
-	h: 142
+	h: 142,
+	lives: 2
 };
 
 var planet = {
@@ -24,7 +25,7 @@ var orbit = {
   xtiles: 0, // number of x tiles that span the screen
   ytiles: 0, //  number of y tiles that span the screen
   angle: 0, // astroids angle in orbit
-  distance: 100, // astroids distance from the sun	
+  distance: 50, // astroids distance from the sun	
   bullettime: false, // bullet
   bullettimepercentage: 0, // percentage
   bullettimeup: true, // direction
@@ -49,9 +50,13 @@ var gamePlanetReset = function () {
 };
 
 var gameStart = function () {
-	ass.x = canvas.width /2;
+	ass.x = (canvas.width /2)-50;
 	// 100 pixels from the middle
-	ass.y = (canvas.height /2)+100;
+	ass.y = (canvas.height /2)-70;
+	ass.angle = 0;
+	ass.speed = 1000;
+	orbit.angle = 0; orbit.distance = 50; // reset position
+	orbit.bullettimepercentage = 0; orbit.bullettime = false; orbit.bullettimeup = true; // reset bullettime
 	canvasxc = canvas.width/2;
 	canvasyc = canvas.height/2;
 	// cals number of tiles
@@ -88,9 +93,10 @@ function gameLoadImages(){
 	loader.start();
 }
 
-function gameBegin(){
+function gameBegin(){ // init alles
 	// start
 	gamePlanetReset();
+	ass.lives = 2; // extra lives
 	gameStart();
 	then = Date.now();
 	timer = setInterval(gameMain, 1);
@@ -221,10 +227,16 @@ function gameWarp(){
 var gameUpdate = function (modifier) {
 	if (37 in keysDown) { //left
 		ass.x -= ass.speed * modifier;
+		if(ass.x<0) ass.x = 0;
 	}
 	if (39 in keysDown) { //right
 		ass.x += ass.speed * modifier;
+		if((ass.x+50)>canvas.width) ass.x = canvas.width-50;
 	}
+	
+	orbit.distance += (((ass.x+50)-canvasxc)/10000);
+	if(orbit.distance<0){ gameDead();  }
+	if(orbit.distance>100){ gameDead(); }
 	
 	if(planet.alive){
 	   orbit.bullettime = true;	
@@ -292,7 +304,27 @@ var gameRender = function(delta) {
 	}
  	// far planet
     //drawTiledBackground(Math.round(orbit.angle*5120),0); // dat is zodat we 512 loopen
-	drawTiledBackground(Math.round(orbit.angle*46.08),0);
+	drawTiledBackground(Math.round(orbit.angle*30.72),0);
+	
+	// far approach lines
+	/*lx = ass.x+60;
+	ly = ass.y+60;
+	ctx.beginPath();
+	for(var i = 1; i < 20; i++){
+	  
+      ctx.moveTo(lx,ly);
+	  lx -= (i*5);
+	  ly = (ass.y+60)-Math.sqrt(i*2000);
+      ctx.lineTo(lx,ly);
+      
+	  
+	}
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = 'red';
+	ctx.stroke(); */
+	
+	
+	// sterren
 	gameWarp();
 	
 	//Sunglow
@@ -361,9 +393,26 @@ var gameRender = function(delta) {
 	 ctx.fillText("FPS: " + fps, 32, 64);
 	 ctx.fillText("Angle: " + orbit.angle, 32, 140);
 	 ctx.fillText("bullatp: " + orbit.bullettimepercentage, 32, 170);
+	 ctx.fillText("distance: " + orbit.distance, 32, 200);
 	 if(orbit.bullettime){
 	   ctx.fillText("FUCKING BULLETTIME", 36-(Math.random()*8), 100-(Math.random()*8));	 
 	 }
+	// close approach lines
+	/*lx = ass.x+60;
+	ly = ass.y+60;
+	ctx.beginPath();
+	for(var i = 1; i < 35; i++){
+	  
+      ctx.moveTo(lx,ly);
+	  lx -= (i*5);
+	  ly = (ass.y+60)+Math.sqrt(i*2000);
+      ctx.lineTo(lx,ly);
+      
+	  
+	}
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = 'red';
+	ctx.stroke(); */
 }
 	
 function particle(x,y,dx,dy)
@@ -389,6 +438,18 @@ function gamePlayExplosion(){
     soundManager.play('explosion',{ onfinish: function() { } });	
 }
 
+function gameDead(){
+	ass.lives--;
+	if(ass.lives>-1){
+	  gameStart()	
+	}else{
+	  gameOver();
+	}
+}
+
+function gameOver(){
+	switchScreen(menuLoad,true);
+}
 
 var gameMain = function () {
 	var now = Date.now();

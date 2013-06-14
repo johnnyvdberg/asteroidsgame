@@ -264,8 +264,6 @@ function gameWarp(){
    
    // colour cycle sinewave rotation
    cycle += 0.01;
-	
-	
 }
 
 var ox, oy;  //offsets x en y voor dat lekkere explosie effect
