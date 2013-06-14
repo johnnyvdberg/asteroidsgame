@@ -1,12 +1,14 @@
 //OPTIONS
 //=======================================================
+var menuMusic = get("menuMusic", false);
+var menuAnimate = get("menuAnimate", false);
+var fullscreen = get("fullscreen", false);
+
+var graphicsQuality = get("graphicsQuality", 1);
+var difficulty = get("difficulty", 2);
+
 var musicVolume = get("musicVolume", 50);
 var effectsVolume = get("effectsVolume", 50);
-var graphicsQuality = get("graphicsQuality", 2);
-var fullscreen = get("fullscreen", true);
-var menuAnimate = get("menuAnimate", true);
-var menuMusic = get("menuMusic", true);
-var difficulty = get("difficulty", 2);
 //=======================================================
 
 var timer = null; 
