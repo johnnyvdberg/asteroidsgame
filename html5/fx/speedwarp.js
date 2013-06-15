@@ -17,6 +17,7 @@ window.onload = function(){
 	
 	angle = 10;
 	distance = 50;
+	multiplier = 1
 	
 	var warp = new image();
 	/////////////////////////////////////
@@ -33,28 +34,22 @@ window.onload = function(){
 		this.location = {x: W/2, y: H/2};
 	}
 	
+	function planet()
+	{		
+		//Location
+		this.location = {angle: Math.random()*100, distance: Math.random()*100};
+	}
+	
 	function draw()
 	{
+		//Load base background
 		context.fillStyle = 'black';
 		context.fillRect(0,0,W,H);
-		//context.globalCompositeOperation = "source-atop";
-		//Load base background
 		context.drawImage(img, 0, 0, img.width, img.height);
-		
-		//Draw minimap
-		//context.drawImage(minimap, W - 300, 0, minimap.width, minimap.height);
 
-		//Load oscillating image
-		//context.drawImage(img, warp.speed.x, warp.speed.y, img.width, img.height);
-		//New value
-		//var time = (new Date()).getTime();
-		//warp.speed.x = -Math.sin(time / 100) * 50 + 0.5;
-		//warp.speed.y = Math.cos(time / 100) * 50 + 0.5;
 		warping();
-		//console.log('Speed ' + warp.speed.x + ',' + warp.speed.y);
 		
-		//Draw minimap
-		
+		//Test every angle
 		if(angle > 100)
 		{
 			angle = 0.5;
@@ -63,24 +58,58 @@ window.onload = function(){
 		{
 			angle = angle + 0.5;
 		}
+		//Test every distance
+		if(distance > 100)
+		{
+			multiplier = -0.5;
+		}
+		else if(distance < 0)
+		{
+			multiplier = 0.5;
+		}
+		distance += multiplier;
 		
-		//angle = 5;
-		distance = 100;
+		//////////////////////
+		////Minimap player////
+		//////////////////////
 		
+		//Draw minimap
 		context.drawImage(minimap, W - minimap.width/2, 0, minimap.width/2, minimap.height/2);
 		
-		//planetx = (distance * Math.cos(angle) * (Math.PI / 50)) + (W - 75);
-        //planety = (distance * Math.sin(angle) * (Math.PI / 50)) + 75;
-		
+		//Calculate and draw orbit path
 		miniassx = ((distance/2) * -Math.cos((angle/100)*(2*Math.PI))) + (W - minimap.width/2 + 70);
 		miniassy = ((distance/2) * Math.sin((angle/100)*(2*Math.PI))) + 70;
 		
 		context.beginPath();
+		context.strokeStyle ="#ff0000";
+		context.strokeWidth=1;
 		context.arc(W - minimap.width/2 + 75, 75, distance/2, 0, 2 * Math.PI, false);
-		context.strokeStyle = '#ffffff';
 		context.stroke();
-		//console.log('minimap: ' + planetx + ',' + planety);
+		context.closePath();
+		
+		//Draw asteroid in orbit
 		context.drawImage(asteroid, miniassx, miniassy, 10, 10);
+		
+		//Draw planets on minimap
+		for(var i = 0; i < 5; i++)
+		{
+			//If planet exists
+			if(planets[i] != null)
+			{
+				//Calculate location
+				//Calculate and draw orbit path
+				miniplanetx = ((planets[i].distance/2) * -Math.cos((planets[i].angle/100)*(2*Math.PI))) + (W - minimap.width/2 + 75);
+				miniplanety = ((planets[i].distance/2) * Math.sin((planets[i].angle/100)*(2*Math.PI))) + 75;
+				
+				//Draw planet
+				context.beginPath();
+				context.strokeStyle ="#00ffff";
+				context.strokeWidth=3;
+				context.arc(miniplanetx, miniplanety, 2, 0, 2 * Math.PI, false);
+				context.stroke();
+				context.closePath();
+			}
+		}
 	}
 	
 	////////////////////////////////////
@@ -115,6 +144,21 @@ window.onload = function(){
 		n = {};
 		resetstar(n);
 		stars.push(n);
+	}
+	
+	function resetplanet(a)
+	{
+		a.angle = Math.random()*100;
+		a.distance = Math.random()*60 + 40;
+	}
+	
+	planets = []
+	// initial planet setup
+	for (var i=0, plnt; i<5; i++)
+	{
+		plnt = {};
+		resetplanet(plnt);
+		planets.push(plnt);
 	}
 	
 	var warping = function()
