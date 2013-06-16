@@ -63,7 +63,7 @@ window.onload = function(){
 		{
 			multiplier = -0.5;
 		}
-		else if(distance < 0)
+		else if(distance < 20)
 		{
 			multiplier = 0.5;
 		}
@@ -76,20 +76,7 @@ window.onload = function(){
 		//Draw minimap
 		context.drawImage(minimap, W - minimap.width/2, 0, minimap.width/2, minimap.height/2);
 		
-		//Calculate and draw orbit path
-		miniassx = ((distance/2) * -Math.cos((angle/100)*(2*Math.PI))) + (W - minimap.width/2 + 70);
-		miniassy = ((distance/2) * Math.sin((angle/100)*(2*Math.PI))) + 70;
-		
-		context.beginPath();
-		context.strokeStyle ="#ff0000";
-		context.strokeWidth=1;
-		context.arc(W - minimap.width/2 + 75, 75, distance/2, 0, 2 * Math.PI, false);
-		context.stroke();
-		context.closePath();
-		
-		//Draw asteroid in orbit
-		context.drawImage(asteroid, miniassx, miniassy, 10, 10);
-		
+		planetCollision = -1;
 		//Draw planets on minimap
 		for(var i = 0; i < 5; i++)
 		{
@@ -97,19 +84,47 @@ window.onload = function(){
 			if(planets[i] != null)
 			{
 				//Calculate location
-				//Calculate and draw orbit path
 				miniplanetx = ((planets[i].distance/2) * -Math.cos((planets[i].angle/100)*(2*Math.PI))) + (W - minimap.width/2 + 75);
 				miniplanety = ((planets[i].distance/2) * Math.sin((planets[i].angle/100)*(2*Math.PI))) + 75;
 				
 				//Draw planet
 				context.beginPath();
+				context.fillStyle ="#000000";
 				context.strokeStyle ="#00ffff";
 				context.strokeWidth=3;
 				context.arc(miniplanetx, miniplanety, 2, 0, 2 * Math.PI, false);
 				context.stroke();
 				context.closePath();
+				
+				//Calculate collision
+				if(Math.abs(distance - planets[i].distance) < 2)
+				{
+					planetCollision = i;
+				}
 			}
 		}
+		
+		//Calculate and draw orbit path
+		miniassx = ((distance/2) * -Math.cos((angle/100)*(2*Math.PI))) + (W - minimap.width/2 + 70);
+		miniassy = ((distance/2) * Math.sin((angle/100)*(2*Math.PI))) + 70;
+		
+		context.beginPath();
+		context.strokeWidth=1;
+		context.arc(W - minimap.width/2 + 75, 75, distance/2, 0, 2 * Math.PI, false);
+		if(planetCollision == -1){
+			context.strokeStyle = "white";
+		}else{
+			//Draw collision course
+			//context.arc(W - minimap.width/2 + 75, 75, distance/2, (angle/100)*(2*Math.PI), (planets[planetCollision].angle/100)*(2*Math.PI), true);
+			//console.log((2*Math.PI)/angle + ',' +(Math.PI)/planets[planetCollision].angle);
+			//console.log((angle/100)*(2*Math.PI) + ',' +(planets[planetCollision].angle/100)*(2*Math.PI));
+			context.strokeStyle = "red";
+		}
+		context.stroke();
+		context.closePath();
+		
+		//Draw asteroid in orbit
+		context.drawImage(asteroid, miniassx, miniassy, 10, 10);
 	}
 	
 	////////////////////////////////////
