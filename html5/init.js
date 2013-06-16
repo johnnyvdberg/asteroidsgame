@@ -1,14 +1,14 @@
 //OPTIONS
 //=======================================================
-var menuMusic = get("menuMusic", false);
-var menuAnimate = get("menuAnimate", false);
-var fullscreen = get("fullscreen", false);
+var musicVolume = get("musicVolume", 50);
+var effectsVolume = get("effectsVolume", 50);
+var fullscreen = get("fullscreen", true);
 
 var graphicsQuality = get("graphicsQuality", 2);
 var difficulty = get("difficulty", 1);
 
-var musicVolume = get("musicVolume", 50);
-var effectsVolume = get("effectsVolume", 50);
+var menuAnimate = get("menuAnimate", true);
+var menuMusic = get("menuMusic", true);
 //=======================================================
 
 var timer = null; 
@@ -50,8 +50,8 @@ var soundNames = [
 
 function canvasHide(){ showLoader(); canvas.style.display = 'none'; }
 function canvasShow(){ hideLoader(); canvas.style.display = ''; }
-function hideLoader(){ document.body.style.backgroundImage = ''; }
-function showLoader(){ document.body.style.backgroundImage = 'images/menu/loader.gif'; }
+function hideLoader(){ document.getElementsByTagName("body")[0].style.backgroundImage = ''; }
+function showLoader(){ document.getElementsByTagName("body")[0].style.backgroundImage = 'images/menu/loader.gif'; }
 function getMousePos(canvas, evt) { var rect = canvas.getBoundingClientRect(); return { x: evt.clientX - rect.left, y: evt.clientY - rect.top }; }
 function l(e){ console.log(e); }
 function supportsLocalStorage() { return ('localStorage' in window) && window['localStorage'] !== null; }
@@ -148,7 +148,6 @@ function loadSounds(){
 /// begin
 ///////////////////////
 function Init(){
-	
     canvas = document.createElement("canvas");
 	canvas.width= demWidth; 
 	canvas.height= demHeight;
