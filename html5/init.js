@@ -10,7 +10,7 @@ var difficulty = Number(get("difficulty", 1));
 var menuAnimate = Boolean(get("menuAnimate", true));
 var menuMusic = Boolean(get("menuMusic", true));
 
-alert(musicVolume+", "+effectsVolume+", "+fullscreen+", "+graphicsQuality+", "+difficulty+", "+menuAnimate+", "+menuMusic);
+//alert(musicVolume+", "+effectsVolume+", "+fullscreen+", "+graphicsQuality+", "+difficulty+", "+menuAnimate+", "+menuMusic);
 //=======================================================
 
 var timer = null; 
