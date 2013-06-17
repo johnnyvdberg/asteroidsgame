@@ -108,11 +108,11 @@ function menuUpdate(){
 	  	//}else if(cmp(demHeight-100, demHeight-60, demWidth-235, demWidth)){ 			// quit
 		//	menuHover(demHeight - 100, delta);
 		
-	  	}else if(cmp(demHeight-80, demHeight-54, 20, 46)){								// toggle music
-			if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; set("menuMusic", menuMusic); menuPlayClick(); checkPlayMusic(); }
+	  	//}else if(cmp(demHeight-80, demHeight-54, 20, 46)){								// toggle music
+		//	if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; set("menuMusic", menuMusic); menuPlayClick(); checkPlayMusic(); }
 		
-		}else if(cmp(demHeight-50, demHeight-24, 20, 46)){ 								// toggle animation
-			if(mouseDown && mouseDownAble){ menuAnimate = !menuAnimate; mouseDownAble = false; set("menuAnimate", menuAnimate); menuPlayClick()}
+		//}else if(cmp(demHeight-50, demHeight-24, 20, 46)){ 								// toggle animation
+		//	if(mouseDown && mouseDownAble){ menuAnimate = !menuAnimate; mouseDownAble = false; set("menuAnimate", menuAnimate); menuPlayClick()}
 		
 		}else{menuHoverOut(delta);}
 		menuMove(delta);
