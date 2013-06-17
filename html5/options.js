@@ -81,6 +81,7 @@ function optionUpdate(){
 				musicVolume = Math.round(((mousePos.x-(demWidth / 2 - 290))*0.4425));
 				if(musicVolume > 100){ musicVolume = 100;}
 				if(musicVolume < 0){ musicVolume = 0;}
+				set("musicVolume", musicVolume);
 			}
 		
 		}else if(cmp(demHeight / 2 + 140, demHeight / 2 + 178, demWidth / 2 - 290, demWidth / 2 - 64)){ 			// Effects slider
@@ -88,6 +89,7 @@ function optionUpdate(){
 				effectsVolume = Math.round(((mousePos.x-(demWidth / 2 - 290))*0.4425));	
 				if(effectsVolume > 100){ effectsVolume = 100;}
 				if(effectsVolume < 0){ effectsVolume = 0;}
+				set("effectsVolume", effectsVolume);
 			}
 		
 		}else{menuHoverOut(delta);}
