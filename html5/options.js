@@ -62,7 +62,7 @@ function optionUpdate(){
 			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; menuAnimate = !menuAnimate; set("menuAnimate", menuAnimate);}
 		
 		}else if(cmp(demHeight / 2 - 115, demHeight / 2 - 79, demWidth / 2 - 100, demWidth / 2 - 74)){ 			// Fullscreen
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; fullscreen = !fullscreen; set("fullscreen", fullscreen); alert(musicVolume);}
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; fullscreen = !fullscreen; set("fullscreen", fullscreen);}
 		
 		}else if(cmp(demHeight / 2 - 30, demHeight / 2 + 5, demWidth / 2 - 100, demWidth / 2 - 66)){ 			// Graphics up
 			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(graphicsQuality<2){set("graphicsQuality", graphicsQuality++);}}
@@ -76,23 +76,11 @@ function optionUpdate(){
 		}else if(cmp(demHeight / 2 + 10, demHeight / 2 + 45, demWidth / 2 - 290, demWidth / 2 - 256)){ 			// Difficulty down
 			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(difficulty>0){set("difficulty", difficulty--);}}
 		
-		}else if(cmp(demHeight / 2 + 100, demHeight / 2 + 138, demWidth / 2 - barpos(musicVolume) - 13, demWidth / 2 - barpos(musicVolume))){ 			// Music slider
+		}else if(cmp(demHeight / 2 + 100, demHeight / 2 + 138, demWidth / 2 - 290, demWidth / 2 - 64)){ 			// Music slider
 			if(mouseDown){
-				if(mouseDownAble){
-					initX = mousePos.x; 
-					oMusicVolume = musicVolume;
-				}
-				mouseDownAble = false; 
-				if(musicVolume >= 0 && musicVolume <= 100){
-					musicVolume = Math.round(musicVolume - moveSlider());
-					if(musicVolume > 100){musicVolume = 100;}
-					if(musicVolume < 0){musicVolume = 0;}
-				}
-				if((oMusicVolume - musicVolume) > 1 || (oMusicVolume - musicVolume) < -1){
-					oMusicVolume = musicVolume;
-					initX = mousePos.x;
-				}
+				musicVolume = (((demWidth / 2 - 64)-mousePos.x)/2.26);
 			}
+		
 		}else if(cmp(demHeight / 2 + 140, demHeight / 2 + 178, demWidth / 2 - barpos(effectsVolume), demWidth / 2 - barpos(effectsVolume) - 13)){ 			// Effects slider
 			if(mouseDown){}
 		

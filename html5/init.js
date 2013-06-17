@@ -18,7 +18,6 @@ var currentMusicIndex = -1;
 var currentPlaylist = Array();
 var playMusic = true;
 var musicType; // 1 = menu, 2 = game
-var initX;
 
 var mouseDown;
 var mouseDownAble = true;
@@ -28,8 +27,8 @@ var now;
 var delta;
 var soundNames = [
       // menumusic
-	  { id: 'menu0', url:'music/menu/206-vangelis-dream_in_an_open_place.mp3'},
-	  { id: 'menu1', url:'music/menu/01-Vangelis-Heaven-and-Hell.mp3'},
+	  { id: 'menu0', url:'music/menu/01-Vangelis-Heaven-and-Hell.mp3'},
+	  { id: 'menu1', url:'music/menu/206-vangelis-dream_in_an_open_place.mp3'},
 	  // game music
 	  { id: 'game0', url:'music/game/hypnosis-oxygene-cut.mp3'},
 	  { id: 'game1', url:'music/game/koto-from_the_dawn_of_time-cut.mp3'},
@@ -61,8 +60,6 @@ function get(key, def){ if(supportsLocalStorage()){ if((localStorage != null)&&(
 function stopTimer(){ if(timer!=null){ window.clearInterval(timer); timer = null; } } // stop updaten 
 function cmp(ymax, ymin, xmax, xmin){ if(mousePos.y>ymax && mousePos.y<ymin && mousePos.x>xmax && mousePos.x<xmin){return true;}else{return false;} } //Cursor position
 function barpos(bar){return (290-(bar * 2.13));}
-
-function moveSlider(){return ((initX - mousePos.x)/2.13);}
 
 function drawImageRotated(img,x,y,w,h,r){
 	ctx.save();
@@ -163,7 +160,7 @@ function Init(){
 	
 	canvas.addEventListener('mousedown', function(e) { if(mouseDownAble){ mouseDown = true; } },false);
 	
-	canvas.addEventListener('mouseup', function(e) { mouseDownAble = true; mouseDown = false; },false); 
+	canvas.addEventListener('mouseup', function(e) { mouseDownAble = true; mouseDown = false;},false); 
 		
 	// load sound
     var tries = 0;
