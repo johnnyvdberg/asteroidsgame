@@ -56,7 +56,7 @@ function optionUpdate(){
 			 if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; switchScreen(menuLoad, false); }
 			 
 	  	}else if(cmp(demHeight / 2 - 195, demHeight / 2 - 169, demWidth / 2 - 100, demWidth / 2 - 74)){ 			// Menu Music
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; menuMusic = !menuMusic; set("menuMusic", menuMusic);}
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; menuMusic = !menuMusic; set("menuMusic", menuMusic); checkPlayMusic();}
 		
 		}else if(cmp(demHeight / 2 - 155, demHeight / 2 - 129, demWidth / 2 - 100, demWidth / 2 - 74)){ 			// Menu Animate
 			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; menuAnimate = !menuAnimate; set("menuAnimate", menuAnimate);}
@@ -159,11 +159,11 @@ function optionUpdate(){
 	
 	
 	ctx.drawImage(lineImg, demWidth / 2 - 290, demHeight / 2 + 110);
-	ctx.drawImage(barImg, demWidth / 2 - 200, demHeight / 2 + 100);
+	ctx.drawImage(barImg, demWidth / 2 - barpos(musicVolume), demHeight / 2 + 100);
 	ctx.drawImage(musicVolumeImg, demWidth / 2 - 50, demHeight / 2 + 100);
 	
 	ctx.drawImage(lineImg, demWidth / 2 - 290, demHeight / 2 + 150);
-	ctx.drawImage(barImg, demWidth / 2 - 180, demHeight / 2 + 140);
+	ctx.drawImage(barImg, demWidth / 2 - barpos(effectsVolume), demHeight / 2 + 140);
 	ctx.drawImage(effectsVolumeImg, demWidth / 2 - 50, demHeight / 2 + 140);
 	
 	//Draw menu hover effect

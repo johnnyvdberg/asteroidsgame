@@ -1,7 +1,7 @@
 //OPTIONS
 //=======================================================
-var musicVolume = get("musicVolume", 50);
-var effectsVolume = get("effectsVolume", 50);
+var musicVolume = get("musicVolume", 100);
+var effectsVolume = get("effectsVolume", 100);
 var fullscreen = get("fullscreen", true);
 
 var graphicsQuality = get("graphicsQuality", 2);
@@ -59,6 +59,7 @@ function set(key,value){ if(supportsLocalStorage()){ localStorage["asshole.asstr
 function get(key, def){ if(supportsLocalStorage()){ if((localStorage != null)&&(localStorage["asshole.asstroids."+key]!=undefined)){ return localStorage["asshole.asstroids."+key]; }else{ return def; } }else{ return null; } }
 function stopTimer(){ if(timer!=null){ window.clearInterval(timer); timer = null; } } // stop updaten 
 function cmp(ymax, ymin, xmax, xmin){ if(mousePos.y>ymax && mousePos.y<ymin && mousePos.x>xmax && mousePos.x<xmin){return true;}else{return false;} } //Cursor position
+function barpos(bar){return (290-(bar * 2.13));}
 
 function drawImageRotated(img,x,y,w,h,r){
 	ctx.save();
@@ -117,7 +118,7 @@ function playNextItem(){
 function stopMusic(){ if(currentPlaylist[currentMusicIndex]!=undefined){ if(currentPlaylist[currentMusicIndex].playState == 1){ currentPlaylist[currentMusicIndex].stop(); } } }
 
 function checkPlayMusic(){ if(musicType==1){  playMusic = menuMusic;  }else{ playMusic = gameMusic; } if(playMusic){ playNextItem(); }else{ stopMusic(); } } // kijk of ie mag spelen
-
+	
 function loadSounds(){
 	var loader = new PxLoader(), 
 	i, len, url, n; 
