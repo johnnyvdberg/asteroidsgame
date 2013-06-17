@@ -78,11 +78,13 @@ function optionUpdate(){
 		
 		}else if(cmp(demHeight / 2 + 100, demHeight / 2 + 138, demWidth / 2 - 290, demWidth / 2 - 64)){ 			// Music slider
 			if(mouseDown){
-				musicVolume = (((demWidth / 2 - 64)-mousePos.x)/2.26);
+				musicVolume = Math.round(((mousePos.x-(demWidth / 2 - 290))*0.4425));
 			}
 		
-		}else if(cmp(demHeight / 2 + 140, demHeight / 2 + 178, demWidth / 2 - barpos(effectsVolume), demWidth / 2 - barpos(effectsVolume) - 13)){ 			// Effects slider
-			if(mouseDown){}
+		}else if(cmp(demHeight / 2 + 140, demHeight / 2 + 178, demWidth / 2 - 290, demWidth / 2 - 64)){ 			// Effects slider
+			if(mouseDown){
+				effectsVolume = Math.round(((mousePos.x-(demWidth / 2 - 290))*0.4425));	
+			}
 		
 		}else{menuHoverOut(delta);}
 		menuMove(delta);
