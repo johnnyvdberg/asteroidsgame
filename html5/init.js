@@ -18,6 +18,7 @@ var currentMusicIndex = -1;
 var currentPlaylist = Array();
 var playMusic = true;
 var musicType; // 1 = menu, 2 = game
+var initX;
 
 var mouseDown;
 var mouseDownAble = true;
@@ -61,7 +62,7 @@ function stopTimer(){ if(timer!=null){ window.clearInterval(timer); timer = null
 function cmp(ymax, ymin, xmax, xmin){ if(mousePos.y>ymax && mousePos.y<ymin && mousePos.x>xmax && mousePos.x<xmin){return true;}else{return false;} } //Cursor position
 function barpos(bar){return (290-(bar * 2.13));}
 
-function moveSlider(){return ((initX - mousePos.X)/2.13);}
+function moveSlider(){return ((initX - mousePos.x)/2.13);}
 
 function drawImageRotated(img,x,y,w,h,r){
 	ctx.save();
