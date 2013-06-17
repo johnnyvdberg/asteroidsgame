@@ -76,6 +76,12 @@ function optionUpdate(){
 		}else if(cmp(demHeight / 2 + 10, demHeight / 2 + 45, demWidth / 2 - 290, demWidth / 2 - 256)){ 			// Difficulty down
 			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(difficulty>0){set("difficulty", difficulty--);}}
 		
+		}else if(cmp(demHeight / 2 + 100, demHeight / 2 + 138, demWidth / 2 - barpos(musicVolume) - 13, demWidth / 2 - barpos(musicVolume))){ 			// Music slider
+			if(mouseDown){if(mouseDownAble){initX = mousePos.x;} mouseDownAble = false; musicVolume = musicVolume + moveSlider(); }
+		
+		}else if(cmp(demHeight / 2 + 140, demHeight / 2 + 178, demWidth / 2 - barpos(effectsVolume), demWidth / 2 - barpos(effectsVolume) - 13)){ 			// Effects slider
+			if(mouseDown){}
+		
 		}else{menuHoverOut(delta);}
 		menuMove(delta);
 	}

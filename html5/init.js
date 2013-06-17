@@ -61,6 +61,8 @@ function stopTimer(){ if(timer!=null){ window.clearInterval(timer); timer = null
 function cmp(ymax, ymin, xmax, xmin){ if(mousePos.y>ymax && mousePos.y<ymin && mousePos.x>xmax && mousePos.x<xmin){return true;}else{return false;} } //Cursor position
 function barpos(bar){return (290-(bar * 2.13));}
 
+function moveSlider(){return ((initX - mousePos.X)/2.13);}
+
 function drawImageRotated(img,x,y,w,h,r){
 	ctx.save();
 	ctx.translate(x+(w/2),y+(h/2));
@@ -158,14 +160,9 @@ function Init(){
 	
 	canvas.addEventListener('mousemove', function(evt) { mousePos = getMousePos(canvas, evt); }, false);
 	
-	canvas.addEventListener('mousedown', function(e) {
-		if(mouseDownAble){ 
-			mouseDown = true;
-			setTimeout(function(){mouseDownAble = true;}, 500) 
-		}else{ setTimeout(function(){mouseDownAble = true;}, 100) }
-	},false);
+	canvas.addEventListener('mousedown', function(e) { if(mouseDownAble){ mouseDown = true; } },false);
 	
-	canvas.addEventListener('mouseup', function(e) { mouseDown = false; },false); 
+	canvas.addEventListener('mouseup', function(e) { mouseDownAble = true; mouseDown = false; },false); 
 		
 	// load sound
     var tries = 0;
