@@ -1,14 +1,16 @@
 //OPTIONS
 //=======================================================
-var musicVolume = get("musicVolume", 50);
-var effectsVolume = get("effectsVolume", 50);
-var fullscreen = get("fullscreen", true);
+var musicVolume = Number(get("musicVolume", 50));
+var effectsVolume = Number(get("effectsVolume", 50));
+var fullscreen = Boolean(get("fullscreen", true));
 
-var graphicsQuality = get("graphicsQuality", 2);
-var difficulty = get("difficulty", 1);
+var graphicsQuality = Number(get("graphicsQuality", 2));
+var difficulty = Number(get("difficulty", 1));
 
-var menuAnimate = get("menuAnimate", true);
-var menuMusic = get("menuMusic", true);
+var menuAnimate = Boolean(get("menuAnimate", true));
+var menuMusic = Boolean(get("menuMusic", true));
+
+alert(musicVolume+", "+effectsVolume+", "+fullscreen+", "+graphicsQuality+", "+difficulty+", "+menuAnimate+", "+menuMusic);
 //=======================================================
 
 var timer = null; 
@@ -55,8 +57,8 @@ function showLoader(){ document.getElementsByTagName("body")[0].style.background
 function getMousePos(canvas, evt) { var rect = canvas.getBoundingClientRect(); return { x: evt.clientX - rect.left, y: evt.clientY - rect.top }; }
 function l(e){ console.log(e); }
 function supportsLocalStorage() { return ('localStorage' in window) && window['localStorage'] !== null; }
-function set(key,value){ if(supportsLocalStorage()){ localStorage["asshole.asstroids."+key] = value; }else{ return null; } }
-function get(key, def){ if(supportsLocalStorage()){ if((localStorage != null)&&(localStorage["asshole.asstroids."+key]!=undefined)){ return localStorage["asshole.asstroids."+key]; }else{ return def; } }else{ return null; } }
+function set(key,value){ if(value == false){value = ""} if(supportsLocalStorage()){ localStorage["asshole.asstroids."+key] = value.toString(); }else{ return null; } }
+function get(key, def){ if(supportsLocalStorage()){ if((localStorage != null)&&(localStorage["asshole.asstroids."+key]!=undefined)){ return localStorage["asshole.asstroids."+key].toString(); }else{ return def.toString(); } }else{ return def.toString(); } }
 function stopTimer(){ if(timer!=null){ window.clearInterval(timer); timer = null; } } // stop updaten 
 function cmp(ymax, ymin, xmax, xmin){ if(mousePos.y>=ymax && mousePos.y<=ymin && mousePos.x>=xmax && mousePos.x<=xmin){return true;}else{return false;} } //Cursor position
 function barpos(bar){return (290-(bar * 2.13));}

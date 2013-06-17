@@ -65,16 +65,16 @@ function optionUpdate(){
 			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; fullscreen = !fullscreen; set("fullscreen", fullscreen);}
 		
 		}else if(cmp(demHeight / 2 - 30, demHeight / 2 + 5, demWidth / 2 - 100, demWidth / 2 - 66)){ 			// Graphics up
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(graphicsQuality<2){set("graphicsQuality", graphicsQuality++);}}
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(graphicsQuality<2){graphicsQuality++; set("graphicsQuality", graphicsQuality);}}
 		
 		}else if(cmp(demHeight / 2 - 30, demHeight / 2 + 5, demWidth / 2 - 290, demWidth / 2 - 256)){ 			// Graphics down
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(graphicsQuality>0){set("graphicsQuality", graphicsQuality--);}}
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(graphicsQuality>0){graphicsQuality--; set("graphicsQuality", graphicsQuality);}}
 		
 		}else if(cmp(demHeight / 2 + 10, demHeight / 2 + 45, demWidth / 2 - 100, demWidth / 2 - 66)){ 			// Difficulty up
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(difficulty<2){set("difficulty", difficulty++);}}
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(difficulty<2){difficulty++; set("difficulty", difficulty);}}
 		
 		}else if(cmp(demHeight / 2 + 10, demHeight / 2 + 45, demWidth / 2 - 290, demWidth / 2 - 256)){ 			// Difficulty down
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(difficulty>0){set("difficulty", difficulty--);}}
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(difficulty>0){difficulty--; set("difficulty", difficulty);}}
 		
 		}else if(cmp(demHeight / 2 + 100, demHeight / 2 + 138, demWidth / 2 - 300, demWidth / 2 - 54)){ 			// Music slider
 			if(mouseDown){
