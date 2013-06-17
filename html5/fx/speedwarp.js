@@ -47,8 +47,14 @@ window.onload = function(){
 		context.fillRect(0,0,W,H);
 		context.drawImage(img, 0, 0, img.width, img.height);
 
-		warping();
+		//warping();
+		minimapRender();
+		planetIndicator(100,100,"Earth-Like","15,457,874,047",100,"Algara VI",true,2);
 		
+	}
+	
+	function minimapRender()
+	{
 		//Test every angle
 		if(angle > 100)
 		{
@@ -125,6 +131,70 @@ window.onload = function(){
 		
 		//Draw asteroid in orbit
 		context.drawImage(asteroid, miniassx, miniassy, 10, 10);
+	}
+	
+	function planetIndicator(x, y, type, population, requiredSpeed, name, left, performanceLevel)
+	{
+		sizeX = 250;
+		sizeY = 100;
+	
+		//Draw border
+		context.beginPath();
+		context.strokeWidth=1;
+		context.strokeStyle = "green";
+		context.rect(x, y, sizeX, sizeY);
+		context.fillStyle = "rgba(0, 255, 0, 0.15)";
+		context.fill();
+		context.stroke();
+		context.closePath();
+		
+		//Draw pointing line thingie
+		context.beginPath();
+		if(left)
+		{
+			context.moveTo(x, y + sizeY);
+			context.lineTo(x - 10, y + sizeY + 5);
+		}
+		else
+		{
+			context.moveTo(x + sizeX, y + sizeY);
+			context.lineTo(x + sizeX + 10, y + sizeY + 5);
+		}
+		context.stroke();
+		context.closePath();
+		
+		//Draw prestige scanlines
+		for(i = 0; performanceLevel == 2 && i < sizeY/7; i++)
+		{
+			context.beginPath();
+			context.strokeStyle = "rgba(0, 255, 0, 0.04)";
+			context.moveTo(x, y + i*7);
+			context.lineTo(x + sizeX, y + i*7);
+			context.stroke();
+			context.closePath();
+		}
+		
+		//Write generic stuff
+		context.font = 'bold 10pt Arial Black';
+		context.fillStyle = 'Green'
+		context.fillText('Name', x + 10, y + 20);
+		context.fillText('Type', x + 10, y + 40);
+		context.fillText('Pop', x + 10, y + 60);
+		context.fillText('Speed', x + 10, y + 80);
+		
+		//Write actual values
+		context.fillText(name, x + 100, y + 20);
+		context.fillText(type, x + 100, y + 40);
+		context.fillText(population, x + 100, y + 60);
+		
+		//Add progressbar
+		context.beginPath();
+		context.strokeWidth=1;
+		context.strokeStyle = "green";
+		context.rect(x + 100, y + 71, (requiredSpeed/100)*(sizeX - 110), 10);
+		context.fill();
+		context.stroke();
+		context.closePath();
 	}
 	
 	////////////////////////////////////
