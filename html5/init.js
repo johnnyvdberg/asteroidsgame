@@ -119,7 +119,7 @@ function playItem(){
   currentPlaylist[currentMusicIndex].play({ onfinish: function() { playNextItem(); } });		
 }
 
-function playVolume(){ if(menuMusic){ currentPlaylist[currentMusicIndex].setVolume(musicVolume); } }
+function playVolume(){ currentPlaylist[currentMusicIndex].setVolume(musicVolume); }
 
 function stopMusic(){ if(currentPlaylist[currentMusicIndex]!=undefined){ if(currentPlaylist[currentMusicIndex].playState == 1){ currentPlaylist[currentMusicIndex].stop(); } } }
 

@@ -97,8 +97,7 @@ function optionUpdate(){
 				if(effectsVolume > 100){ effectsVolume = 100;}
 				if(effectsVolume < 0){ effectsVolume = 0;}
 				set("effectsVolume", effectsVolume);
-				l('effectsvol: '+effectsVolume);
-				playVolume();	
+				l('effectsvol: '+effectsVolume);	
 			}else if(SliderMouseIsDown){
 			  SliderMouseIsDown = false;
 			  menuPlayClick();	
