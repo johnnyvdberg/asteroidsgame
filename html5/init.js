@@ -1,15 +1,15 @@
 //OPTIONS
 //=======================================================
-var musicVolume = Number(get("musicVolume", 50));
-var effectsVolume = Number(get("effectsVolume", 50));
+var menuMusic = Boolean(get("menuMusic", true));
+var menuAnimate = Boolean(get("menuAnimate", true));
 var fullscreen = Boolean(get("fullscreen", true));
 
 var graphicsQuality = Number(get("graphicsQuality", 2));
 var difficulty = Number(get("difficulty", 1));
+var menuSound = Number(get("menuSound", 0));
 
-var menuAnimate = Boolean(get("menuAnimate", true));
-var menuMusic = Boolean(get("menuMusic", true));
-
+var musicVolume = Number(get("musicVolume", 50));
+var effectsVolume = Number(get("effectsVolume", 50));
 //alert(musicVolume+", "+effectsVolume+", "+fullscreen+", "+graphicsQuality+", "+difficulty+", "+menuAnimate+", "+menuMusic);
 //=======================================================
 
@@ -119,7 +119,7 @@ function playItem(){
   currentPlaylist[currentMusicIndex].play({ onfinish: function() { playNextItem(); } });		
 }
 
-function playVolume(){ currentPlaylist[currentMusicIndex].setVolume(musicVolume); }
+function playVolume(){ if(currentPlaylist[currentMusicIndex]!=undefined){currentPlaylist[currentMusicIndex].setVolume(musicVolume); }}
 
 function stopMusic(){ if(currentPlaylist[currentMusicIndex]!=undefined){ if(currentPlaylist[currentMusicIndex].playState == 1){ currentPlaylist[currentMusicIndex].stop(); } } }
 

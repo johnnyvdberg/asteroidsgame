@@ -13,6 +13,7 @@ function optionLoad(){
 	difficultyImg = loader.addImage('images/menu/difficulty.png');
 	musicVolumeImg = loader.addImage('images/menu/musicVolume.png');
 	effectsVolumeImg = loader.addImage('images/menu/effectsVolume.png');
+	menuSoundImg = loader.addImage('images/menu/menuSound.png');
 	
 	lowImg = loader.addImage('images/menu/low.png');
 	mediumImg = loader.addImage('images/menu/medium.png');
@@ -21,6 +22,11 @@ function optionLoad(){
 	easyImg = loader.addImage('images/menu/easy.png');
 	normalImg = loader.addImage('images/menu/normal.png');
 	hardImg = loader.addImage('images/menu/hard.png');
+	
+	daveyImg = loader.addImage('images/menu/davey.png');
+	hrvojeImg = loader.addImage('images/menu/hrvoje.png');
+	johnnyImg = loader.addImage('images/menu/johnny.png');
+	martijnImg = loader.addImage('images/menu/martijn.png');
 	
 	barImg = loader.addImage('images/menu/bar.png');
 	lineImg = loader.addImage('images/menu/line.png');
@@ -66,18 +72,24 @@ function optionUpdate(){
 			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; fullscreen = !fullscreen; set("fullscreen", fullscreen);}
 		
 		}else if(cmp(demHeight / 2 - 30, demHeight / 2 + 5, demWidth / 2 - 100, demWidth / 2 - 66)){ 			// Graphics up
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(graphicsQuality<2){graphicsQuality++; set("graphicsQuality", graphicsQuality);}}
+			if(mouseDown && mouseDownAble){mouseDownAble = false; if(graphicsQuality<2){ menuPlayClick(); graphicsQuality++; set("graphicsQuality", graphicsQuality);}}
 		
 		}else if(cmp(demHeight / 2 - 30, demHeight / 2 + 5, demWidth / 2 - 290, demWidth / 2 - 256)){ 			// Graphics down
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(graphicsQuality>0){graphicsQuality--; set("graphicsQuality", graphicsQuality);}}
+			if(mouseDown && mouseDownAble){mouseDownAble = false; if(graphicsQuality>0){ menuPlayClick(); graphicsQuality--; set("graphicsQuality", graphicsQuality);}}
 		
 		}else if(cmp(demHeight / 2 + 10, demHeight / 2 + 45, demWidth / 2 - 100, demWidth / 2 - 66)){ 			// Difficulty up
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(difficulty<2){difficulty++; set("difficulty", difficulty);}}
+			if(mouseDown && mouseDownAble){mouseDownAble = false; if(difficulty<2){ menuPlayClick(); difficulty++; set("difficulty", difficulty);}}
 		
 		}else if(cmp(demHeight / 2 + 10, demHeight / 2 + 45, demWidth / 2 - 290, demWidth / 2 - 256)){ 			// Difficulty down
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; if(difficulty>0){difficulty--; set("difficulty", difficulty);}}
+			if(mouseDown && mouseDownAble){mouseDownAble = false; if(difficulty>0){ menuPlayClick(); difficulty--; set("difficulty", difficulty);}}
 		
-		}else if(cmp(demHeight / 2 + 100, demHeight / 2 + 138, demWidth / 2 - 300, demWidth / 2 - 54)){ 			// Music slider
+		}else if(cmp(demHeight / 2 + 50, demHeight / 2 + 85, demWidth / 2 - 100, demWidth / 2 - 66)){ 			// menuSound up
+			if(mouseDown && mouseDownAble){mouseDownAble = false; if(menuSound<3){menuSound++; set("menuSound", menuSound);}}
+		
+		}else if(cmp(demHeight / 2 + 50, demHeight / 2 + 85, demWidth / 2 - 290, demWidth / 2 - 256)){ 			// menuSound down
+			if(mouseDown && mouseDownAble){mouseDownAble = false; if(menuSound>0){ menuPlayClick(); menuSound--; set("menuSound", menuSound);}}
+	
+		}else if(cmp(demHeight / 2 + 140, demHeight / 2 + 178, demWidth / 2 - 300, demWidth / 2 - 54)){ 			// Music slider
 			if(mouseDown){
 				SliderMouseIsDown = true;
 				musicVolume = Math.round(((mousePos.x-(demWidth / 2 - 290))*0.4425));
@@ -90,7 +102,7 @@ function optionUpdate(){
 			  menuPlayClick();	
 			}
 		
-		}else if(cmp(demHeight / 2 + 140, demHeight / 2 + 178, demWidth / 2 - 300, demWidth / 2 - 54)){ 			// Effects slider
+		}else if(cmp(demHeight / 2 + 180, demHeight / 2 + 218, demWidth / 2 - 300, demWidth / 2 - 54)){ 			// Effects slider
 			if(mouseDown){
 				SliderMouseIsDown = true;
 				effectsVolume = Math.round(((mousePos.x-(demWidth / 2 - 290))*0.4425));	
@@ -185,13 +197,37 @@ function optionUpdate(){
 	ctx.drawImage(difficultyImg, demWidth / 2 - 50, demHeight / 2 + 10);
 	
 	
-	ctx.drawImage(lineImg, demWidth / 2 - 290, demHeight / 2 + 110);
-	ctx.drawImage(barImg, demWidth / 2 - barpos(musicVolume), demHeight / 2 + 100);
-	ctx.drawImage(musicVolumeImg, demWidth / 2 - 50, demHeight / 2 + 100);
+	if(menuSound == 0){ //Davey
+		//ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 50);
+		ctx.drawImage(daveyImg, demWidth / 2 - 237, demHeight / 2 + 50);	
+		ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 50);
+	} 
+	if(menuSound == 1){ //Hrvoje
+		ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 50);
+		ctx.drawImage(hrvojeImg, demWidth / 2 - 239, demHeight / 2 + 50);
+		ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 50);
+	} 
+	if(menuSound == 2){ //Johnny
+		ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 50);
+		ctx.drawImage(johnnyImg, demWidth / 2 - 246, demHeight / 2 + 50);
+		ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 50);
+	}
+	if(menuSound == 3){ //Martijn
+		ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 50);
+		ctx.drawImage(martijnImg, demWidth / 2 - 240, demHeight / 2 + 50);
+		//ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 10);
+	}  
+	
+	ctx.drawImage(menuSoundImg, demWidth / 2 - 50, demHeight / 2 + 50);
+	
 	
 	ctx.drawImage(lineImg, demWidth / 2 - 290, demHeight / 2 + 150);
-	ctx.drawImage(barImg, demWidth / 2 - barpos(effectsVolume), demHeight / 2 + 140);
-	ctx.drawImage(effectsVolumeImg, demWidth / 2 - 50, demHeight / 2 + 140);
+	ctx.drawImage(barImg, demWidth / 2 - barpos(musicVolume), demHeight / 2 + 140);
+	ctx.drawImage(musicVolumeImg, demWidth / 2 - 50, demHeight / 2 + 140);
+	
+	ctx.drawImage(lineImg, demWidth / 2 - 290, demHeight / 2 + 190);
+	ctx.drawImage(barImg, demWidth / 2 - barpos(effectsVolume), demHeight / 2 + 180);
+	ctx.drawImage(effectsVolumeImg, demWidth / 2 - 50, demHeight / 2 + 180);
 	
 	//Draw menu hover effect
 	ctx.beginPath();

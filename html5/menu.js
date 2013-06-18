@@ -17,7 +17,6 @@ function menuPlayClick(){
 	  soundManager.getSoundById('click').stop();  	
 	}
 	soundManager.getSoundById('click').setVolume(parseInt(effectsVolume));
-	l('god damn it: '+effectsVolume);
 	soundManager.play('click',{ onfinish: function() { } });	
 }
 
