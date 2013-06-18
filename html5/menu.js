@@ -13,20 +13,20 @@ var hoverIndicator = {
 
 //PLAY THE MENU CLICK SOUND
 function menuPlayClick(){
-	if(soundManager.getSoundById('click').playState==1){
-	  soundManager.getSoundById('click').stop();  	
+	if(soundManager.getSoundById('click'+menuSound).playState==1){
+	  soundManager.getSoundById('click'+menuSound).stop();  	
 	}
-	soundManager.getSoundById('click').setVolume(parseInt(effectsVolume));
-	soundManager.play('click',{ onfinish: function() { } });	
+	soundManager.getSoundById('click'+menuSound).setVolume(parseInt(effectsVolume));
+	soundManager.play('click'+menuSound,{ onfinish: function() { } });	
 }
 
 //PLAY THE MENU HOVER SOUND
 function menuPlayHoverSound(i){
-	if(soundManager.getSoundById('hover'+i).playState==1){
+	if(soundManager.getSoundById('hover'+menuSound+'_'+i).playState==1){
 		if(i<4){ menuPlayHoverSound(i+1); }  
 	}else{
-		soundManager.getSoundById('hover'+i).setVolume(parseInt(effectsVolume)); //Math.round(effectsVolume*0.6)
-    	soundManager.play('hover'+i,{ onfinish: function() { } });
+		soundManager.getSoundById('hover'+menuSound+'_'+i).setVolume(parseInt(effectsVolume)); //Math.round(effectsVolume*0.6)
+    	soundManager.play('hover'+menuSound+'_'+i,{ onfinish: function() { } });
 	}
 }
 

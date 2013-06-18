@@ -38,7 +38,7 @@ var orbit = {
   bullettimeup: true, // direction
   planetinview: false, // when this is true see if planets need to be drawn
   planetlastcheck: 0, // only check every 100 ms or so
-  speed: 0 // used for bullettime and sun distance
+  speed: 1 // used for bullettime and sun distance
 }
 
 var planetsDestroyed = 0;
@@ -270,7 +270,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		 //planet.size += 2*modifier; 
 		 //if(planet.size>4){ gamePlanetReset(); }
 		 
-		 if(p.calcangle<2){ // colission
+		 if(p.calcangle<2 && p.calcangle>-2){ // colission
 		    l('boom');
 			if (
 				ass.x <= (p.x + (100*1.7)) && p.x <= (ass.x + (100*1.7)) // todo, make real
@@ -390,7 +390,7 @@ var gameRender = function(delta) {
 	 ctx.fillText("Lives: " + ass.lives, 32, 230);
 	 ctx.fillText("Planet x: " + Math.round(planet.x)+" Planet y: "+Math.round(planet.y), 32, 260);
 	 ctx.fillText("Planet in view: " + orbit.planetinview, 32, 290);
-	 ctx.fillText("p dist: " + Math.round(planets[0].distance)+" p angle: "+planets[0].angle+' p alive: '+planets[0].alive, 32, 320);
+	 ctx.fillText("p dist: " + Math.round(planets[0].distance)+" p angle: "+planets[0].angle+' p alive: '+planets[0].alive+' calcangle: '+planets[0].calcangle, 32, 320);
 	 if(orbit.bullettime){
 	   ctx.fillText("FUCKING BULLETTIME", 36-(Math.random()*8), 100-(Math.random()*8));	 
 	 }
@@ -421,8 +421,15 @@ var gameRender = function(delta) {
 function gameDrawPlanet(i){
   var p = planets[i];		
   //drawScaled(planetImage, canvasxc+((planet.x-canvasxc)*planet.size),  canvasyc+((planet.y-(canvasyc+60))*planet.size), planet.w,planet.h,planet.size); 
-  
-  drawScaled(planetImage, p.x-60,  p.y-60, planet.w,planet.h,p.calcsize); 	
+  //p.calcsize
+  var size = 0;
+  if(p.calcangle<0){
+    size = ((p.calcangle+10)/10);
+	if(size<0){ size = 0.1; }  
+  }else{
+  	size = ((p.calcangle)/10)+1;
+  }
+  drawScaled(planetImage, p.x-60,  p.y-60, planet.w,planet.h,size); 
 }
 
 function debugLine(x1,y1,x2,y2,color){
@@ -453,7 +460,8 @@ function particle(x,y,dx,dy)
 }
 
 function gamePlayExplosion(){
-    soundManager.setVolume('explosion',30);
+	if(soundManager.getSoundById('explosion').playState==1){ soundManager.getSoundById('explosion').stop();	}
+    soundManager.setVolume('explosion',Math.round(effectsVolume*0.3));
     soundManager.play('explosion',{ onfinish: function() { } });	
 }
 

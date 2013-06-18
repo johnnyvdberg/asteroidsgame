@@ -40,11 +40,14 @@ var soundNames = [
 	  { id: 'game5', url:'music/game/laserdance-space_dance-cut.mp3'},
 	  { id: 'game6', url:'music/game/vangelis-blade_runner_end_titles-cut.mp3'},
 	  // menu sounds
-	  { id: 'click', url:'sounds/menu/clicksound.mp3'}, 
-	  { id: 'hover1', url:'sounds/menu/hoversound.mp3'},
-	  { id: 'hover2', url:'sounds/menu/hoversound.mp3'},
-	  { id: 'hover3', url:'sounds/menu/hoversound.mp3'},
-	  { id: 'hover4', url:'sounds/menu/hoversound.mp3'},
+	  { id: 'click0', url:'sounds/menu/clicksound0.mp3'}, 
+	  { id: 'hover0', url:'sounds/menu/hoversound0.mp3'},
+	  { id: 'click1', url:'sounds/menu/clicksound1.mp3'}, 
+	  { id: 'hover1', url:'sounds/menu/hoversound1.mp3'},
+	  { id: 'click2', url:'sounds/menu/clicksound2.mp3'}, 
+	  { id: 'hover2', url:'sounds/menu/hoversound2.mp3'},
+	  { id: 'click3', url:'sounds/menu/clicksound3.mp3'}, 
+	  { id: 'hover3', url:'sounds/menu/hoversound3.mp3'},
 	  // game sounds
 	  { id: 'explosion', url:'sounds/game/explosion.mp3'},
 	];
@@ -125,8 +128,10 @@ function stopMusic(){ if(currentPlaylist[currentMusicIndex]!=undefined){ if(curr
 
 function checkPlayMusic(){ if(musicType==1){  playMusic = menuMusic;  }else{ playMusic = gameMusic; } if(playMusic){ playNextItem(); }else{ stopMusic(); } } // kijk of ie mag spelen
 	
+var realLen = 0;	
+	
 function loadSounds(){
-	var loader = new PxLoader(), 
+	var loader = new PxLoader(),
 	i, len, url, n; 
 	n = 0;
 	// queue each sound for loading 
@@ -137,14 +142,24 @@ function loadSounds(){
 			continue; // can't be played 
 		} 
 		// queue the sound using the name as the SM2 id 
-		loader.addSound(soundNames[i].id, url); 
+		if(soundNames[i].id.substring(0, 5)=='hover'){
+		   loader.addSound(soundNames[i].id+'_1', url); 
+		   loader.addSound(soundNames[i].id+'_2', url); 
+		   loader.addSound(soundNames[i].id+'_3', url); 
+		   loader.addSound(soundNames[i].id+'_4', url); 
+		   realLen += 4;	
+		}else{
+		  loader.addSound(soundNames[i].id, url); 
+		  realLen ++;
+		}
 	} 
 	len = soundNames.length;
 	 
 	// listen to load events 
 	loader.addProgressListener(function(e) { 
 	  n++;
-	  if(n>=len){ menuLoad(); }  
+	  l('length: '+realLen);
+	  if(n>=realLen){ menuLoad(); }  
 	}); 
 	 
 	loader.start(); 	

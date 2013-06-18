@@ -84,10 +84,10 @@ function optionUpdate(){
 			if(mouseDown && mouseDownAble){mouseDownAble = false; if(difficulty>0){ menuPlayClick(); difficulty--; set("difficulty", difficulty);}}
 		
 		}else if(cmp(demHeight / 2 + 50, demHeight / 2 + 85, demWidth / 2 - 100, demWidth / 2 - 66)){ 			// menuSound up
-			if(mouseDown && mouseDownAble){mouseDownAble = false; if(menuSound<3){menuPlayClick(); menuSound++; set("menuSound", menuSound);}}
+			if(mouseDown && mouseDownAble){mouseDownAble = false; if(menuSound<3){ menuSound++; set("menuSound", menuSound); menuPlayClick(); }}
 		
 		}else if(cmp(demHeight / 2 + 50, demHeight / 2 + 85, demWidth / 2 - 290, demWidth / 2 - 256)){ 			// menuSound down
-			if(mouseDown && mouseDownAble){mouseDownAble = false; if(menuSound>0){ menuPlayClick(); menuSound--; set("menuSound", menuSound);}}
+			if(mouseDown && mouseDownAble){mouseDownAble = false; if(menuSound>0){  menuSound--; set("menuSound", menuSound); menuPlayClick(); }}
 	
 		}else if(cmp(demHeight / 2 + 140, demHeight / 2 + 178, demWidth / 2 - 300, demWidth / 2 - 54)){ 			// Music slider
 			if(mouseDown){
