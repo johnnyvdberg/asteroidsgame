@@ -154,6 +154,8 @@ function loadSounds(){
 /////////////////////////
 /// begin
 ///////////////////////
+// load sound
+var SoundmanagerTries = 0;
 function Init(){
     canvas = document.createElement("canvas");
 	canvas.width= demWidth; 
@@ -168,8 +170,7 @@ function Init(){
 	
 	canvas.addEventListener('mouseup', function(e) { mouseDownAble = true; mouseDown = false;},false); 
 		
-	// load sound
-    var tries = 0;
+
 	soundManager.setup({
 		url: 'soundmanager2/swf/', 
 		useHTML5Audio: true,
@@ -180,8 +181,9 @@ function Init(){
 		  soundManager.useHTML5Audio = true; 
           soundManager.preferFlash = false; 
           soundManager.reboot(); 
-		  l('Reboot html5 only');
-		  if(tries==1){ l('failed, loading without sound.'); loadSounds(); }
+		  l('Reboot html5 only: '+SoundmanagerTries);
+		  if(SoundmanagerTries==1){ l('failed, loading without sound.'); loadSounds(); }
+		  SoundmanagerTries++;
 		}
 	});
 	
