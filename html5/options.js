@@ -45,6 +45,7 @@ function optionLoaded(){
 	canvasShow();
 }
 
+var SliderMouseIsDown = false;
 
 function optionUpdate(){
 	getDelta();
@@ -78,18 +79,29 @@ function optionUpdate(){
 		
 		}else if(cmp(demHeight / 2 + 100, demHeight / 2 + 138, demWidth / 2 - 300, demWidth / 2 - 54)){ 			// Music slider
 			if(mouseDown){
+				SliderMouseIsDown = true;
 				musicVolume = Math.round(((mousePos.x-(demWidth / 2 - 290))*0.4425));
 				if(musicVolume > 100){ musicVolume = 100;}
 				if(musicVolume < 0){ musicVolume = 0;}
 				set("musicVolume", musicVolume);
+				playVolume();	
+			}else if(SliderMouseIsDown){
+			  SliderMouseIsDown = false;
+			  menuPlayClick();	
 			}
 		
-		}else if(cmp(demHeight / 2 + 140, demHeight / 2 + 178, demWidth / 2 - 290, demWidth / 2 - 64)){ 			// Effects slider
+		}else if(cmp(demHeight / 2 + 140, demHeight / 2 + 178, demWidth / 2 - 300, demWidth / 2 - 54)){ 			// Effects slider
 			if(mouseDown){
+				SliderMouseIsDown = true;
 				effectsVolume = Math.round(((mousePos.x-(demWidth / 2 - 290))*0.4425));	
 				if(effectsVolume > 100){ effectsVolume = 100;}
 				if(effectsVolume < 0){ effectsVolume = 0;}
 				set("effectsVolume", effectsVolume);
+				l('effectsvol: '+effectsVolume);
+				playVolume();	
+			}else if(SliderMouseIsDown){
+			  SliderMouseIsDown = false;
+			  menuPlayClick();	
 			}
 		
 		}else{menuHoverOut(delta);}

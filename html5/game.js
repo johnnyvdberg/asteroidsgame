@@ -26,7 +26,6 @@ var planet = {
 	visible: false
 };
 
-
 var planets = new Array(); 
 
 var orbit = {
@@ -131,23 +130,6 @@ function drawExplodingPlanet(){
   //drawScaled(planetImage, canvasxc+((planet.x-canvasxc)*planet.size),  canvasyc+((planet.y-(canvasyc+60))*planet.size), planet.w,planet.h,planet.size); 
 }
 
-/* function drawTiledBackground(x,y){ // tile sizes are 512 by 512 
-  //what number to draw first
-  var xtileindex = (x - (x % 512)) / 512;  
-  var tmpti = 0;
-  var tx,ty;
-  for(var i =0; i< orbit.xtiles; i++){
-    for(var j =0; j< orbit.ytiles; j++){
-	  // this tile index
-	  tx = i*512;
-	  ty = j*512;
-	  //tmpti = ((((i % 3)+((j % 2)*3))+xtileindex) % 6); // 2 rows with 3 tiles each, + offset over the max numbe rof tiles
-	  tmpti = (((i+xtileindex) % 3)+((j % 2)*3));
-	  ctx.drawImage(bgTiles[tmpti],tx-(x%512),ty);
-    }	    
-  }
-} */
-
 function drawTiledBackground(x,y){ // tile sizes are 512 by 512 
   //what number to draw first
   var xtileindex = (x - (x % 512)) / 512; 
@@ -190,50 +172,49 @@ function resetstar(a)
 
 
 function gameWarp(){
-// mouse position to head towards
-		var cx = ass.x+60;
-		cy = (canvas.height/2);
-   
-		// update all stars
-		var sat = Floor(Z * 500);       // Z range 0.01 -> 0.5
-		if (sat > 100) sat = 100;
-		for (var i=0; i<units; i++)
-		{
-			var n = stars[i],            // the star
-			xx = n.x / n.z,          // star position
-			yy = n.y / n.z,
-			e = (0.5 / n.z + 1) * 2;   // size i.e. z
-			xx -= (n.z*20);
-      
-			if (n.px !== 0)
-			{
-				ctx.strokeStyle = "rgb(200,200,200)";
-				ctx.lineWidth = e;
-				ctx.beginPath();
-				ctx.moveTo(xx + cx, yy + cy);
-				ctx.lineTo(xx + cx, yy + cy + 3);
-				ctx.stroke();
-			}
-      
-			// update star position values with new settings
-			n.px = xx;
-			n.py = yy;
-			if(orbit.bullettimepercentage>0){
-			  n.z -= (Z * orbit.speed);	
-			}else{
-			  n.z -= Z*1.2;
-			}
-      
-			// reset when star is out of the view field
-			if (n.z < Z || n.px > canvas.width || n.py > canvas.height)
-			{
-				// reset star
-				resetstar(n);
-			}
-		}
-   
-   // colour cycle sinewave rotation
-   cycle += 0.01;
+  // mouse position to head towards
+  var cx = ass.x+60;
+  cy = (canvas.height/2);
+  
+  // update all stars
+  var sat = Floor(Z * 500);       // Z range 0.01 -> 0.5
+  if (sat > 100) sat = 100;
+  for (var i=0; i<units; i++)
+  {
+	  var n = stars[i],            // the star
+	  xx = n.x / n.z,          // star position
+	  yy = n.y / n.z,
+	  e = (0.5 / n.z + 1) * 2;   // size i.e. z
+	  xx -= (n.z*20);
+  
+	  if (n.px !== 0)
+	  {
+		  ctx.strokeStyle = "rgb(200,200,200)";
+		  ctx.lineWidth = e;
+		  ctx.beginPath();
+		  ctx.moveTo(xx + cx, yy + cy);
+		  ctx.lineTo(xx + cx, yy + cy + 3);
+		  ctx.stroke();
+	  }
+  
+	  // update star position values with new settings
+	  n.px = xx;
+	  n.py = yy;
+	  if(orbit.bullettimepercentage>0){
+		n.z -= (Z * orbit.speed);	
+	  }else{
+		n.z -= Z*1.2;
+	  }
+  
+	  // reset when star is out of the view field
+	  if (n.z < Z || n.px > canvas.width || n.py > canvas.height)
+	  {
+		  // reset star
+		  resetstar(n);
+	  }
+  }
+  // colour cycle sinewave rotation
+  cycle += 0.01;
 }
 
 var gameUpdate = function (modifier) { // modier is in seconds
@@ -262,8 +243,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	  for(var i=0; i<planets.length; i++){
 	    if(
 		  (planets[i].alive) && 
-		  (planets[i].angle<(ass.angle+10)) && 
-		  (planets[i].angle>(ass.angle-10)) && 
+		  (planets[i].angle<(orbit.angle+10)) && 
+		  (planets[i].angle>(orbit.angle-10)) && 
 		  (planets[i].distance<(orbit.distance+10)) && 
 		  (planets[i].distance>(orbit.distance-10)) 
 		){
@@ -283,7 +264,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		 p.calcangle = p.angle - orbit.angle;
 		 if(p.calcangle>100) p.calcangle -= 100;
 		 if(p.calcangle<-100) p.calcangle += 100;
-	     planet.calcsize = p.size*angledif;
+	     planet.calcsize = p.size*p.calcangle;
 		 
 		  
 		 //planet.size += 2*modifier; 
@@ -353,36 +334,18 @@ var gameRender = function(delta) {
 	  ox = 0; oy = 0;	
 	}
  	
-	drawTiledBackground(Math.round(orbit.angle*30.72),0);  // dat is zodat we 512*3 loopen
-	
-	// far approach lines
-	/*lx = ass.x+60;
-	ly = ass.y+60;
-	ctx.beginPath();
-	for(var i = 1; i < 20; i++){
-	  
-      ctx.moveTo(lx,ly);
-	  lx -= (i*5);
-	  ly = (ass.y+60)-Math.sqrt(i*2000);
-      ctx.lineTo(lx,ly);
-      
-	  
-	}
-	ctx.lineWidth = 1;
-	ctx.strokeStyle = 'red';
-	ctx.stroke();  */
-	
-	
+	drawTiledBackground(Math.round(orbit.angle*30.72),0);  // dat is zodat we 512*3 loopen	
 	// sterren
 	gameWarp();
-	
 	//Sunglow
 	ctx.drawImage(glowImage, -20, canvasyc - 122);
-	
+	// draw planet
 	if(orbit.planetinview){
 	  for(var i = 0; i < planets.length; i++){
  	    if(planets[i].visible){ gameDrawPlanet(i); }
 	  }
+	  // draw astroid alone , over or under? <- TODO
+	  drawImageRotated(assImage,(ass.x+ox)-50,(ass.y+oy)-71,ass.w,ass.h,ass.angle*6.28318531); 
 	}else{
       // draw astroid alone
 	  drawImageRotated(assImage,(ass.x+ox)-50,(ass.y+oy)-71,ass.w,ass.h,ass.angle*6.28318531); 
@@ -449,8 +412,8 @@ var gameRender = function(delta) {
 	ctx.stroke(); */
     debugLine(canvasxc,0,canvasxc,canvas.height,'red');	
     debugLine(0,canvasyc,canvas.width,canvasyc,'red');
-	debugLine(planet.x,0,planet.x,canvas.height,'green');	
-	debugLine(0,planet.y,canvas.width,planet.y,'red');	
+	debugLine(planets[0].x,0,planets[0].x,canvas.height,'green');	
+	debugLine(0,planets[0].y,canvas.width,planets[0].y,'green');	
 	debugLine(ass.x,0,ass.x,canvas.height,'white');
 	debugLine(0,ass.y,canvas.width,ass.y,'white');
 }
@@ -510,7 +473,7 @@ function gameOver(){
 function loadLevel1(){
   planet.alive = true;
   planet.angle = 50;
-  planet.distance = 30;
+  planet.distance = 50;
   planet.size = 1;
   planet.h = 120;
   planet.w = 120;

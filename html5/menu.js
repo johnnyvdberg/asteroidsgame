@@ -13,8 +13,12 @@ var hoverIndicator = {
 
 //PLAY THE MENU CLICK SOUND
 function menuPlayClick(){
-    soundManager.setVolume('click',100);
-    soundManager.play('click',{ onfinish: function() { } });	
+	if(soundManager.getSoundById('click').playState==1){
+	  soundManager.getSoundById('click').stop();  	
+	}
+	soundManager.getSoundById('click').setVolume(parseInt(effectsVolume));
+	l('god damn it: '+effectsVolume);
+	soundManager.play('click',{ onfinish: function() { } });	
 }
 
 //PLAY THE MENU HOVER SOUND
@@ -22,7 +26,7 @@ function menuPlayHoverSound(i){
 	if(soundManager.getSoundById('hover'+i).playState==1){
 		if(i<4){ menuPlayHoverSound(i+1); }  
 	}else{
-    	soundManager.setVolume('hover'+i,60);
+		soundManager.getSoundById('hover'+i).setVolume(parseInt(effectsVolume)); //Math.round(effectsVolume*0.6)
     	soundManager.play('hover'+i,{ onfinish: function() { } });
 	}
 }

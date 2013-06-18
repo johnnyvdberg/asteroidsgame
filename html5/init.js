@@ -111,11 +111,15 @@ function InitPlaylist(type){ // 1 = menu, 2 = game
 function playNextItem(){
   currentMusicIndex++;	
   if(currentMusicIndex>=currentPlaylist.length){ currentMusicIndex = 0; }	
-  l('id3:');
-  l(currentPlaylist[currentMusicIndex].id3);
-  currentPlaylist[currentMusicIndex].setVolume(40); 
-  currentPlaylist[currentMusicIndex].play({ onfinish: function() { playNextItem(); } });	
+  playItem();  	
 }
+
+function playItem(){
+  playVolume();	
+  currentPlaylist[currentMusicIndex].play({ onfinish: function() { playNextItem(); } });		
+}
+
+function playVolume(){ if(menuMusic){ currentPlaylist[currentMusicIndex].setVolume(musicVolume); } }
 
 function stopMusic(){ if(currentPlaylist[currentMusicIndex]!=undefined){ if(currentPlaylist[currentMusicIndex].playState == 1){ currentPlaylist[currentMusicIndex].stop(); } } }
 
