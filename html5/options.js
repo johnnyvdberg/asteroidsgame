@@ -84,7 +84,7 @@ function optionUpdate(){
 			if(mouseDown && mouseDownAble){mouseDownAble = false; if(difficulty>0){ menuPlayClick(); difficulty--; set("difficulty", difficulty);}}
 		
 		}else if(cmp(demHeight / 2 + 50, demHeight / 2 + 85, demWidth / 2 - 100, demWidth / 2 - 66)){ 			// menuSound up
-			if(mouseDown && mouseDownAble){mouseDownAble = false; if(menuSound<3){ menuSound++; set("menuSound", menuSound); menuPlayClick(); }}
+			if(mouseDown && mouseDownAble){mouseDownAble = false; if(menuSound<4){ menuSound++; set("menuSound", menuSound); menuPlayClick(); }}
 		
 		}else if(cmp(demHeight / 2 + 50, demHeight / 2 + 85, demWidth / 2 - 290, demWidth / 2 - 256)){ 			// menuSound down
 			if(mouseDown && mouseDownAble){mouseDownAble = false; if(menuSound>0){  menuSound--; set("menuSound", menuSound); menuPlayClick(); }}
@@ -197,22 +197,27 @@ function optionUpdate(){
 	ctx.drawImage(difficultyImg, demWidth / 2 - 50, demHeight / 2 + 10);
 	
 	
-	if(menuSound == 0){ //Davey
+	if(menuSound == 0){ //Normal
 		//ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 50);
-		ctx.drawImage(daveyImg, demWidth / 2 - 237, demHeight / 2 + 50);	
+		ctx.drawImage(normalImg, demWidth / 2 - 237, demHeight / 2 + 50);	
 		ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 50);
 	} 
-	if(menuSound == 1){ //Hrvoje
+	if(menuSound == 1){ //Davey
 		ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 50);
-		ctx.drawImage(hrvojeImg, demWidth / 2 - 239, demHeight / 2 + 50);
+		ctx.drawImage(daveyImg, demWidth / 2 - 239, demHeight / 2 + 50);
 		ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 50);
 	} 
-	if(menuSound == 2){ //Johnny
+	if(menuSound == 2){ //Hrvoje
 		ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 50);
-		ctx.drawImage(johnnyImg, demWidth / 2 - 246, demHeight / 2 + 50);
+		ctx.drawImage(hrvojeImg, demWidth / 2 - 246, demHeight / 2 + 50);
 		ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 50);
 	}
-	if(menuSound == 3){ //Martijn
+	if(menuSound == 3){ //Johnny
+		ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 50);
+		ctx.drawImage(johnnyImg, demWidth / 2 - 240, demHeight / 2 + 50);
+		ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 50);
+	} 
+	if(menuSound == 4){ //Martijn
 		ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 50);
 		ctx.drawImage(martijnImg, demWidth / 2 - 240, demHeight / 2 + 50);
 		//ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 10);
