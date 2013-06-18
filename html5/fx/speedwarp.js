@@ -49,7 +49,7 @@ window.onload = function(){
 
 		//warping();
 		minimapRender();
-		planetIndicator(100,100,"Earth-Like","15,457,874,047",100,"Algara VI",true,2);
+		planetIndicator(100,100,"Class M","15,457,874,047",75,"Algara VI",true,2);
 		
 	}
 	
@@ -135,8 +135,8 @@ window.onload = function(){
 	
 	function planetIndicator(x, y, type, population, requiredSpeed, name, left, performanceLevel)
 	{
-		sizeX = 250;
-		sizeY = 100;
+		sizeX = 200;
+		sizeY = 75;
 	
 		//Draw border
 		context.beginPath();
@@ -175,23 +175,23 @@ window.onload = function(){
 		}
 		
 		//Write generic stuff
-		context.font = 'bold 10pt Arial Black';
+		context.font = 'bold 8pt Arial Black';
 		context.fillStyle = 'Green'
-		context.fillText('Name', x + 10, y + 20);
-		context.fillText('Type', x + 10, y + 40);
-		context.fillText('Pop', x + 10, y + 60);
-		context.fillText('Speed', x + 10, y + 80);
+		context.fillText('Name', x + 10, y + 16);
+		context.fillText('Type', x + 10, y + 32);
+		context.fillText('Pop', x + 10, y + 48);
+		context.fillText('Speed', x + 10, y + 64);
 		
 		//Write actual values
-		context.fillText(name, x + 100, y + 20);
-		context.fillText(type, x + 100, y + 40);
-		context.fillText(population, x + 100, y + 60);
+		context.fillText(name, x + 100, y + 16);
+		context.fillText(type, x + 100, y + 32);
+		context.fillText(population, x + 100, y + 48);
 		
 		//Add progressbar
 		context.beginPath();
 		context.strokeWidth=1;
 		context.strokeStyle = "green";
-		context.rect(x + 100, y + 71, (requiredSpeed/100)*(sizeX - 110), 10);
+		context.rect(x + 100, y + 56, (requiredSpeed/100)*(sizeX - 110), 8);
 		context.fill();
 		context.stroke();
 		context.closePath();
