@@ -10,14 +10,17 @@ window.onload = function(){
 	var img = new Image();
 	img.src = 'star.png'
 	var minimap = new Image();
-	minimap.src = 'minimap.png'
+	minimap.src = '../images/game/radarbg.png';
+	var radarline = new Image();
+	radarline.src = '../images/game/radarline.png';
 	
 	var asteroid = new Image();
 	asteroid.src = 'asteroid.png'
 	
 	angle = 10;
 	distance = 50;
-	multiplier = 1
+	multiplier = 1;
+	radarAngle = 0;
 	
 	var warp = new image();
 	/////////////////////////////////////
@@ -34,6 +37,15 @@ window.onload = function(){
 		this.location = {x: W/2, y: H/2};
 	}
 	
+	function drawImageRotated(img,x,y,w,h,r){
+		context.save();
+		context.translate(x+(w/2),y+(h/2));
+		context.rotate(r);
+		context.translate((-(w/2)),(-(h/2)));
+		context.drawImage(img,0,0);
+		context.restore();	
+	}
+	
 	function planet()
 	{		
 		//Location
@@ -48,12 +60,12 @@ window.onload = function(){
 		context.drawImage(img, 0, 0, img.width, img.height);
 
 		//warping();
-		minimapRender();
+		minimapRender(2);
 		planetIndicator(100,100,"Class M","15,457,874,047",75,"Algara VI",true,2);
 		
 	}
 	
-	function minimapRender()
+	function minimapRender(performanceLevel)
 	{
 		//Test every angle
 		if(angle > 100)
@@ -80,7 +92,7 @@ window.onload = function(){
 		//////////////////////
 		
 		//Draw minimap
-		context.drawImage(minimap, W - minimap.width/2, 0, minimap.width/2, minimap.height/2);
+		context.drawImage(minimap, W - minimap.width, 0);
 		
 		planetCollision = -1;
 		//Draw planets on minimap
@@ -90,7 +102,7 @@ window.onload = function(){
 			if(planets[i] != null)
 			{
 				//Calculate location
-				miniplanetx = ((planets[i].distance/2) * -Math.cos((planets[i].angle/100)*(2*Math.PI))) + (W - minimap.width/2 + 75);
+				miniplanetx = ((planets[i].distance/2) * -Math.cos((planets[i].angle/100)*(2*Math.PI))) + (W - minimap.width + 75);
 				miniplanety = ((planets[i].distance/2) * Math.sin((planets[i].angle/100)*(2*Math.PI))) + 75;
 				
 				//Draw planet
@@ -111,23 +123,50 @@ window.onload = function(){
 		}
 		
 		//Calculate and draw orbit path
-		miniassx = ((distance/2) * -Math.cos((angle/100)*(2*Math.PI))) + (W - minimap.width/2 + 70);
+		miniassx = ((distance/2) * -Math.cos((angle/100)*(2*Math.PI))) + (W - minimap.width + 70);
 		miniassy = ((distance/2) * Math.sin((angle/100)*(2*Math.PI))) + 70;
 		
 		context.beginPath();
 		context.strokeWidth=1;
-		context.arc(W - minimap.width/2 + 75, 75, distance/2, 0, 2 * Math.PI, false);
+		context.arc(W - minimap.width + 75, 75, distance/2, 0, 2 * Math.PI, false);
 		if(planetCollision == -1){
 			context.strokeStyle = "white";
 		}else{
 			//Draw collision course
-			//context.arc(W - minimap.width/2 + 75, 75, distance/2, (angle/100)*(2*Math.PI), (planets[planetCollision].angle/100)*(2*Math.PI), true);
+			//context.arc(W - minimap.width + 75, 75, distance/2, (angle/100)*(2*Math.PI), (planets[planetCollision].angle/100)*(2*Math.PI), true);
 			//console.log((2*Math.PI)/angle + ',' +(Math.PI)/planets[planetCollision].angle);
 			//console.log((angle/100)*(2*Math.PI) + ',' +(planets[planetCollision].angle/100)*(2*Math.PI));
 			context.strokeStyle = "red";
 		}
 		context.stroke();
 		context.closePath();
+		
+		// Draw radar line
+		var currentTime = new Date();
+		
+		if(performanceLevel < 2)
+		{
+			radarx = (75 * Math.cos(currentTime.getTime()/1000) + (W - minimap.width + 75));
+			radary = (75 * Math.sin(currentTime.getTime()/1000)) + 75;
+		
+			context.beginPath();
+			context.strokeStyle = "rgba(0, 255, 0, 0.3)";
+			context.strokeWidth=1;
+			context.moveTo(W - minimap.width + 75,75);
+			context.lineTo(radarx, radary);
+			context.stroke();
+			context.closePath();
+		}
+		else
+		{
+			//Rotation
+			if(radarAngle >= 1)
+			{
+				radarAngle = 0;
+			}
+			radarAngle += 0.005;
+			drawImageRotated(radarline,(W - radarline.width),0,radarline.width,radarline.height,radarAngle*6.28318531);
+		}
 		
 		//Draw asteroid in orbit
 		context.drawImage(asteroid, miniassx, miniassy, 10, 10);
