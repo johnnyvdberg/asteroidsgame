@@ -379,7 +379,7 @@ var gameRender = function(delta) {
 
  
 	 ctx.fillStyle = "rgb(250, 250, 250)";
-	 ctx.font = "24px Arial";
+	 ctx.font = "24px SpaceOne";
 	 ctx.textAlign = "left";
 	 ctx.textBaseline = "top";
 	 ctx.fillText("Planets annihilated: " + planetsDestroyed, 32, 32);

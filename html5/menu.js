@@ -160,5 +160,9 @@ function menuUpdate(){
 	ctx.rect(demWidth - 235, hoverIndicator.cy, 234, 35);
 	ctx.fillStyle = "rgba(255,255,255,"+(hoverIndicator.showing/1000)+")";
 	ctx.fill();
+	
+	ctx.fillStyle = "white";
+  	ctx.font = "normal 24px SpaceOne";
+  	ctx.fillText("Asshole Asteroids", 100, 100);
 }
 
