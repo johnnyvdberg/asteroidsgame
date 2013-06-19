@@ -103,7 +103,7 @@ function menuUpdate(){
 			menuHover(demHeight - 260, delta);
 		
 		}else if(cmp(demHeight-220, demHeight-180, demWidth-235, demWidth)){ 			// highscore
-			menuHover(demHeight - 220, delta);	if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(highscoreLoad, true); }
+			menuHover(demHeight - 220, delta);	if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(highscoreLoad, false); }
 			
 	  	}else if(cmp(demHeight-140, demHeight-100, demWidth-235, demWidth)){ 			// option
 			menuHover(demHeight - 140, delta);	if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(optionLoad, false); }
