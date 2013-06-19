@@ -131,7 +131,7 @@ function menuUpdate(){
 	ctx.drawImage(menuTitleImg, 20, 20);
 	ctx.drawImage(menuArcadeImg, demWidth - 140, demHeight - 300);
 	ctx.drawImage(menuTimeattackImg, demWidth - 225, demHeight - 260);
-	ctx.drawImage(menuHighscoresImg, demWidth - 190, demHeight - 220);
+	ctx.drawImage(menuHighscoresImg, demWidth - 220, demHeight - 220);
 	ctx.drawImage(menuOptionsImg, demWidth - 155, demHeight - 140);
 	//ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
 	
