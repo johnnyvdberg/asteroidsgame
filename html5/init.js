@@ -29,27 +29,22 @@ var now;
 var delta;
 var soundNames = [
       // menumusic
-	  { id: 'menu0', url:'music/menu/01-Vangelis-Heaven-and-Hell.mp3'},
-	  { id: 'menu1', url:'music/menu/206-vangelis-dream_in_an_open_place.mp3'},
+	  { id: 'menu0', url:'music/menu/01-Vangelis-Heaven-and-Hell.ogg'},
+	  { id: 'menu1', url:'music/menu/206-vangelis-dream_in_an_open_place.ogg'},
 	  // game music
-	  { id: 'game0', url:'music/game/hypnosis-oxygene-cut.mp3'},
-	  { id: 'game1', url:'music/game/koto-from_the_dawn_of_time-cut.mp3'},
-	  { id: 'game2', url:'music/game/koto-time-atm-cut.mp3'},
-	  { id: 'game3', url:'music/game/laserdance-humanoid_invasion-cut.mp3'},
-	  { id: 'game4', url:'music/game/laserdance-power_run.mp3'},
-	  { id: 'game5', url:'music/game/laserdance-space_dance-cut.mp3'},
-	  { id: 'game6', url:'music/game/vangelis-blade_runner_end_titles-cut.mp3'},
+	  { id: 'game0', url:'music/game/hypnosis-oxygene-cut.ogg'},
+	  { id: 'game1', url:'music/game/koto-from_the_dawn_of_time-cut.ogg'},
 	  // menu sounds
-	  { id: 'click0', url:'sounds/menu/clicksound0.mp3'}, 
-	  { id: 'hover0', url:'sounds/menu/hoversound0.mp3'},
-	  { id: 'click1', url:'sounds/menu/clicksound1.mp3'}, 
-	  { id: 'hover1', url:'sounds/menu/hoversound1.mp3'},
-	  { id: 'click2', url:'sounds/menu/clicksound2.mp3'}, 
-	  { id: 'hover2', url:'sounds/menu/hoversound2.mp3'},
-	  { id: 'click3', url:'sounds/menu/clicksound3.mp3'}, 
-	  { id: 'hover3', url:'sounds/menu/hoversound3.mp3'},
-	  { id: 'click4', url:'sounds/menu/clicksound4.mp3'}, 
-	  { id: 'hover4', url:'sounds/menu/hoversound4.mp3'},
+	  { id: 'click0', url:'sounds/menu/clicksound0.ogg'}, 
+	  { id: 'hover0', url:'sounds/menu/hoversound0.ogg'},
+	  { id: 'click1', url:'sounds/menu/clicksound1.ogg'}, 
+	  { id: 'hover1', url:'sounds/menu/hoversound1.ogg'},
+	  { id: 'click2', url:'sounds/menu/clicksound2.ogg'}, 
+	  { id: 'hover2', url:'sounds/menu/hoversound2.ogg'},
+	  { id: 'click3', url:'sounds/menu/clicksound3.ogg'}, 
+	  { id: 'hover3', url:'sounds/menu/hoversound3.ogg'},
+	  { id: 'click4', url:'sounds/menu/clicksound4.ogg'}, 
+	  { id: 'hover4', url:'sounds/menu/hoversound4.ogg'},
 	  // game sounds
 	  { id: 'explosion', url:'sounds/game/explosion.mp3'},
 	];
@@ -211,22 +206,28 @@ function Init(){
 	canvas.addEventListener('mousedown', function(e) { if(mouseDownAble){ mouseDown = true; } },false);
 	
 	canvas.addEventListener('mouseup', function(e) { mouseDownAble = true; mouseDown = false;},false); 
-		
-
-	soundManager.setup({
-		url: 'soundmanager2/swf/', 
-		useHTML5Audio: true,
-		//preferFlash: false,
-		onready: function() { loadSounds();  },
-		ontimeout: function(status) { 
-		  //l('Loading flash error: The status is ' + status.success + ', the error type is ' + status.error.type);
-		  soundManager.useHTML5Audio = true; 
-          soundManager.preferFlash = false; 
-          soundManager.reboot(); 
-		  l('Reboot html5 only: '+SoundmanagerTries);
-		  if(SoundmanagerTries==1){ l('failed, loading without sound.'); loadSounds(); }
-		  SoundmanagerTries++;
-		}
+	
+	// initialize the sound manager 
+	soundManager.url = 'soundmanager2/'; 
+	soundManager.flashVersion = 9; 
+	soundManager.useHighPerformance = true; // reduces delays 
+	 
+	// reduce the default 1 sec delay to 500 ms 
+	soundManager.flashLoadTimeout = 500; 
+	 
+	// mp3 is required by default, but we don't want any requirements 
+	soundManager.audioFormats.mp3.required = false; 
+	
+	soundManager.onready(function() { 
+	  loadSounds(); 
+	});
+	
+	soundManager.ontimeout(function(){
+	  l('Failed to load flash, going for html5 only');
+	  // no flash, go with HTML5 audio
+	  soundManager.useHTML5Audio = true;
+	  soundManager.preferFlash = false;
+	  soundManager.reboot();	
 	});
 	
 }
