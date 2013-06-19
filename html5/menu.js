@@ -97,7 +97,7 @@ function menuUpdate(){
 	//Cursor
 	if(mousePos!=undefined){
 	  	if(cmp(demHeight-300, demHeight-260, demWidth-235, demWidth)){ 					// arcade mode
-			 menuHover(demHeight - 300, delta);  if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(gameLoad, true); }	
+			 menuHover(demHeight - 300, delta);  if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(gameLoadImages, true); }	
 		
 	  	}else if(cmp(demHeight-260, demHeight-220, demWidth-235, demWidth)){ 			// time attack
 			menuHover(demHeight - 260, delta);
