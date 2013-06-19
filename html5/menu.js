@@ -69,7 +69,7 @@ function menuLoad(){
 	menuTitleImg = loader.addImage('images/menu/title.png');
 	menuArcadeImg = loader.addImage('images/menu/arcade.png');
 	menuTimeattackImg = loader.addImage('images/menu/timeattack.png');
-	menuSlingshotImg = loader.addImage('images/menu/slingshot.png');
+	menuHighscoresImg = loader.addImage('images/menu/highscores.png');
 	menuOptionsImg = loader.addImage('images/menu/options.png');
 	menuQuitImg = loader.addImage('images/menu/quit.png');
 	
@@ -97,13 +97,13 @@ function menuUpdate(){
 	//Cursor
 	if(mousePos!=undefined){
 	  	if(cmp(demHeight-300, demHeight-260, demWidth-235, demWidth)){ 					// arcade mode
-			 menuHover(demHeight - 300, delta);  if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(gameLoadImages, true); }	
+			 menuHover(demHeight - 300, delta);  if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(gameLoad, true); }	
 		
 	  	}else if(cmp(demHeight-260, demHeight-220, demWidth-235, demWidth)){ 			// time attack
 			menuHover(demHeight - 260, delta);
 		
-		}else if(cmp(demHeight-220, demHeight-180, demWidth-235, demWidth)){ 			// slingshot
-			menuHover(demHeight - 220, delta);
+		}else if(cmp(demHeight-220, demHeight-180, demWidth-235, demWidth)){ 			// highscore
+			menuHover(demHeight - 220, delta);	if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(highscoreLoad, true); }
 			
 	  	}else if(cmp(demHeight-140, demHeight-100, demWidth-235, demWidth)){ 			// option
 			menuHover(demHeight - 140, delta);	if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(optionLoad, false); }
@@ -131,7 +131,7 @@ function menuUpdate(){
 	ctx.drawImage(menuTitleImg, 20, 20);
 	ctx.drawImage(menuArcadeImg, demWidth - 140, demHeight - 300);
 	ctx.drawImage(menuTimeattackImg, demWidth - 225, demHeight - 260);
-	ctx.drawImage(menuSlingshotImg, demWidth - 190, demHeight - 220);
+	ctx.drawImage(menuHighscoresImg, demWidth - 190, demHeight - 220);
 	ctx.drawImage(menuOptionsImg, demWidth - 155, demHeight - 140);
 	//ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
 	
