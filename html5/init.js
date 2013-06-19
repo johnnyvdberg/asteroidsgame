@@ -94,6 +94,31 @@ function switchScreen(scr, hide){
 	scr();
 }
 
+function backgroundPanning(){
+	if(pan.xMode){ 
+		pan.x = pan.x - 0.050 * delta; 
+		if(-pan.x > (4096 - demWidth)){ 
+			pan.xMode = false; 
+		} 
+	}else{ 
+		pan.x = pan.x + 0.1 * delta; 
+		if(pan.x > 0){ 
+			pan.xMode = true; 
+		}
+	}
+	if(pan.yMode){ 
+		pan.y = pan.y - 0.1 * delta; 
+		if(-pan.y > (4096 - demHeight)){ 
+			pan.yMode = false; 
+		}
+	}else{
+		pan.y = pan.y + 0.050 * delta; 
+		if(pan.y > 0){ 
+			pan.yMode = true;
+		}
+	}
+}
+
 function getDelta(){ now = Date.now(); delta = (now - then); then = now; } // tijdverschil berkenen tussen nu en laatste keer
 
 /////////////////////////////////

@@ -121,30 +121,10 @@ function optionUpdate(){
 	
 	//Pan the background
 	if(menuAnimate){
-		if(pan.xMode){ 
-			pan.x = pan.x - 0.050 * delta; 
-			if(-pan.x > (4096 - demWidth)){ 
-				pan.xMode = false; 
-			} 
-		}else{ 
-			pan.x = pan.x + 0.1 * delta; 
-			if(pan.x > 0){ 
-				pan.xMode = true; 
-			}
-		}
-		if(pan.yMode){ 
-			pan.y = pan.y - 0.1 * delta; 
-			if(-pan.y > (4096 - demHeight)){ 
-				pan.yMode = false; 
-			}
-		}else{
-			pan.y = pan.y + 0.050 * delta; 
-			if(pan.y > 0){ 
-				pan.yMode = true;
-			}
-		}
+		backgroundPanning();
 	}
 	
+		
 	ctx.drawImage(menuBgImg, 0 + pan.x, 0 + pan.y);
 	ctx.drawImage(menuTitleImg, 20, 20);
 	ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
