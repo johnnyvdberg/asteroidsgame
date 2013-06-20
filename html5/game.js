@@ -347,7 +347,7 @@ var gameMain = function () {
 }; 
 
 var gameUpdate = function (modifier) { // modier is in seconds
-    // key input
+    // key input + ass movement
 	if (37 in keysDown) { //left
 		ass.x -= ass.speed * modifier;
 		if(ass.x<0) ass.x = 0;
