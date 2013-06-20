@@ -47,7 +47,7 @@ var soundNames = [
 	  { id: 'click4', url:'sounds/menu/clicksound4.ogg'}, 
 	  { id: 'hover4', url:'sounds/menu/hoversound4.ogg'},
 	  // game sounds
-	  { id: 'explosion', url:'sounds/game/explosion.mp3'},
+	  { id: 'explosion', url:'sounds/game/explosion.ogg'},
 	];
 
 

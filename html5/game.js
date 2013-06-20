@@ -6,8 +6,8 @@ var ass = {
 	x: 0,
 	y: 0,
 	angle:0,
-	w: 64,
-	h: 64,
+	w: 88,
+	h: 80,
 	lives: 2
 };
 
@@ -281,7 +281,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		 
 		 if(p.calcangle<2 && p.calcangle>-2){ // colission
 		    l('boom');
-			if (ass.x <= (p.x + (32)) && p.x <= (ass.x + (32))) { // todo, make real
+			if (ass.x <= (p.x + (40)) && p.x <= (ass.x + (40))) { // todo, make real
 				var dx = ((p.x-ass.x)/50);
 				var dy = (((p.y+(p.h/2))-(ass.y+(ass.h/2)))/30);
 				planetsDestroyed++;
@@ -320,7 +320,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	  }
 	}
 	// overbound
-	if(ass.angle>=180){ ass.angle -= 180; }
+	if(ass.angle>=61){ ass.angle -= 61; }
 	if(orbit.angle<0){ orbit.angle += 100; }
 	
 };
@@ -419,16 +419,13 @@ var gameRender = function(delta) {
 	ctx.lineWidth = 1;
 	ctx.strokeStyle = 'red';
 	ctx.stroke(); */
-    debugLine(canvasxc,0,canvasxc,canvas.height,'red');	
-    debugLine(0,canvasyc,canvas.width,canvasyc,'red');
-	debugLine(planets[0].x,0,planets[0].x,canvas.height,'green');	
-	debugLine(0,planets[0].y,canvas.width,planets[0].y,'green');	
-	debugLine(ass.x,0,ass.x,canvas.height,'white');
-	debugLine(0,ass.y,canvas.width,ass.y,'white');
-	
-	
-	
-	
+    //debugLine(canvasxc,0,canvasxc,canvas.height,'red');	
+    //debugLine(0,canvasyc,canvas.width,canvasyc,'red');
+	//debugLine(planets[0].x,0,planets[0].x,canvas.height,'green');	
+	//debugLine(0,planets[0].y,canvas.width,planets[0].y,'green');	
+	//debugLine(ass.x,0,ass.x,canvas.height,'white');
+	//debugLine(0,ass.y,canvas.width,ass.y,'white');
+
 	//HUD
 	ctx.drawImage(hudImage, 0, demHeight - 173);
 	ctx.drawImage(radarbgImage, 6, demHeight - 160);
@@ -552,7 +549,7 @@ function gameDrawPlanet(i){
 function gameDrawAsstroid(){
   var n = Math.floor(ass.angle);		
   //drawScaled(explodeImage2,(planet.x-190)+(60*planet.size),(planet.y-250)+(60*planet.size),500,500,n/2);
-  ctx.drawImage(assFrames,0,n*64,64,64,ass.x-32,ass.y-32,64,64);	
+  ctx.drawImage(assFrames,0,n*80,80,80,ass.x-40,ass.y-40,80,80);	
 }
 
 function debugLine(x1,y1,x2,y2,color){
