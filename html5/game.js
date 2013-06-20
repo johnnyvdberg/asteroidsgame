@@ -320,7 +320,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	  }
 	}
 	// overbound
-	if(ass.angle>=61){ ass.angle -= 61; }
+	if(ass.angle>=60){ ass.angle -= 60; }
 	if(orbit.angle<0){ orbit.angle += 100; }
 	
 };
