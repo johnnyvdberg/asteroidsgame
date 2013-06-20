@@ -486,8 +486,8 @@ function minimapRender(performanceLevel)
 	// }
 		
 	//Calculate and draw orbit path
-	miniassx = ((orbit.distance/2) * -Math.cos((orbit.angle/100)*(2*Math.PI))) + 76;
-	miniassy = ((orbit.distance/2) * Math.sin((orbit.angle/100)*(2*Math.PI))) + canvas.height - 87;
+	miniassx = ((orbit.distance/2) * -Math.cos(((100-orbit.angle)/100)*(2*Math.PI)+Math.PI)) + 76;
+	miniassy = ((orbit.distance/2) * Math.sin(((100-orbit.angle)/100)*(2*Math.PI)+Math.PI)) + canvas.height - 87;
 		
 	ctx.beginPath();
 	ctx.strokeWidth=1;
@@ -524,12 +524,12 @@ function minimapRender(performanceLevel)
 			radarAngle = 0;
 		}
 		radarAngle += 0.005;
-		drawImageRotated(radarlineImage, 8, demHeight - 158, 150, 150, (orbit.angle/100) * 6.28318531);
+		drawImageRotated(radarlineImage, 8, demHeight - 158, 150, 150, (((orbit.angle+25)%100)/100) * 6.28318531);
 		//drawImageRotated(radarlineImage,6,canvas.height-8-radarlineImage.height,radarlineImage.width,radarlineImage.height,radarAngle*6.28318531);
 	}
 	
 	//Draw asteroid in orbit
-	//ctx.drawImage(asteroidMiniImage, miniassx, miniassy, 10, 10);
+	ctx.drawImage(asteroidMiniImage, miniassx, miniassy, 10, 10);
 }
 	
 function gameDrawPlanet(i){
