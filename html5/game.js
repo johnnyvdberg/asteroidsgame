@@ -92,7 +92,6 @@ function gameLoad(){
 	var loader = new PxLoader();
 	bgTiles = Array();
 	for(var i = 0; i < 6; i++){ bgTiles[i] = loader.addImage('images/game/space_'+i+'.png'); }
-	assImage = loader.addImage('images/game/ass.png'); 
 	assFrames = loader.addImage('images/game/ass_sprite.png'); 
 	planetImage = loader.addImage('images/game/planet.png'); 
 	starImage = loader.addImage('images/game/star.png');
@@ -129,12 +128,12 @@ function explosionDone(){ // explosion all gone, lets get back to sexy hyperspee
 	orbit.bullettimeup = false;	
 }
 
-function drawExplodingPlanet(){
+function drawExplodingPlanet(p){
   var n = planet.exploding;	
   var i = Math.round(n);	
   
-  drawScaled(explodeImage2,(planet.x-190)+(60*planet.calcsize),(planet.y-250)+(60*planet.calcsize),500,500,n/2);
-  ctx.drawImage(explodeImage1,0,i*240,240,240,planet.x-120,planet.y-120,240,240);	
+  drawScaled(explodeImage2,p.x,p.y,500,500,n/4);
+  ctx.drawImage(explodeImage1,0,i*240,240,240,p.x-120,p.y-120,240,240);	
   
   //drawScaled(planetImage, canvasxc+((planet.x-canvasxc)*planet.size),  canvasyc+((planet.y-(canvasyc+60))*planet.size), planet.w,planet.h,planet.size); 
 }
@@ -230,18 +229,22 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	if (37 in keysDown) { //left
 		ass.x -= ass.speed * modifier;
 		if(ass.x<0) ass.x = 0;
-	}
+	} else
 	if (39 in keysDown) { //right
 		ass.x += ass.speed * modifier;
 		if((ass.x+50)>canvas.width) ass.x = canvas.width-50;
-	}
+	}else if (27 in keysDown) {
+        gamePlaying = true;
+  		menuPlayClick();
+  		switchScreen(optionLoad, false);
+    }
 	// update distance
 	orbit.distance += ((ass.x-canvasxc)/30000); 
 	if(orbit.distance<0){ gameDead();  } 
 	if(orbit.distance>100){ gameDead(); }
 	// draw asstroid to middle
-	if(ass.x<canvasxc){ ass.x += 25*modifier; if(ass.x>canvasxc) ass.x = canvasxc; }
-	if(ass.x>canvasxc){ ass.x -= 25*modifier; if(ass.x<canvasxc) ass.x = canvasxc; }
+	if(ass.x<canvasxc){ ass.x += 35*modifier; if(ass.x>canvasxc) ass.x = canvasxc; }
+	if(ass.x>canvasxc){ ass.x -= 35*modifier; if(ass.x<canvasxc) ass.x = canvasxc; }
 	
 	// check if planets are near
 	if(orbit.planetlastcheck>0.1){
@@ -286,7 +289,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 				var dy = (((p.y+(p.h/2))-(ass.y+(ass.h/2)))/30);
 				planetsDestroyed++;
 				p.alive = false;
-				for(var i = 0; i< particle_count;i++){ particles.push(new particle(p.x,p.y,dx,dy)); }
+				//for(var i = 0; i< particle_count;i++){ particles.push(new particle(p.x,p.y,dx,dy)); }
 				p.exploding = 0;
 				gamePlayExplosion();
 				setTimeout("explosionDone();",1000);// use this to see if there are still things alive?
@@ -351,6 +354,13 @@ var gameRender = function(delta) {
 	if(orbit.planetinview){
 	  for(var i = 0; i < planets.length; i++){
  	    if(planets[i].visible){ gameDrawPlanet(i); }
+	    // chunks
+        if((planets[i].alive==false) && (planets[i].exploding>-1) && (planets[i].exploding<5)){
+	      planets[i].exploding += (delta*15); 
+	      drawExplodingPlanet(planets[i]); 
+        }else{
+	      planets[i].exploding = -1;	 
+        }
 	  }
 	  // draw astroid alone , over or under? <- TODO
 	  gameDrawAsstroid();
@@ -376,79 +386,52 @@ var gameRender = function(delta) {
     		if(p.remaining_life < 0 || p.radius > 400){ particles[i] = null; } 
   		}	
  	}
- 	if((f!=true) && (particles.length>0)){ particles = Array(); }
- 	 // chunks
-	 if((planet.alive==false) && (planet.exploding>-1) && (planet.exploding<5)){
-		planet.exploding += (delta*15); 
-		drawExplodingPlanet(); 
-	 }else{
-	    planet.exploding = -1;	 
-	 }
+    if((f!=true) && (particles.length>0)){ particles = Array(); }
+   
 
 
- 
-	 ctx.fillStyle = "rgb(250, 250, 250)";
-	 ctx.font = "24px Arial";
-	 ctx.textAlign = "left";
-	 ctx.textBaseline = "top";
-	 ctx.fillText("Planets annihilated: " + planetsDestroyed, 32, 32);
-	 ctx.fillText("FPS: " + fps, 32, 64);
-	 ctx.fillText("Angle: " + Math.round(orbit.angle)+" AssAngle :"+Math.round(ass.angle), 32, 140);
-	 ctx.fillText("bullatp: " + Math.round(orbit.bullettimepercentage*100), 32, 170);
-	 ctx.fillText("distance: " + Math.round(orbit.distance), 32, 200);
-	 ctx.fillText("Lives: " + ass.lives, 32, 230);
-	 ctx.fillText("Planet x: " + Math.round(planet.x)+" Planet y: "+Math.round(planet.y), 32, 260);
-	 ctx.fillText("Planet in view: " + orbit.planetinview, 32, 290);
-	 ctx.fillText("p dist: " + Math.round(planets[0].distance)+" p angle: "+planets[0].angle+' p alive: '+planets[0].alive+' calcangle: '+planets[0].calcangle, 32, 320);
-	 if(orbit.bullettime){
-	   ctx.fillText("FUCKING BULLETTIME", 36-(Math.random()*8), 100-(Math.random()*8));	 
-	 }
-	// close approach lines
-	/*lx = ass.x+60;
-	ly = ass.y+60;
-	ctx.beginPath();
-	for(var i = 1; i < 35; i++){
-	  
-      ctx.moveTo(lx,ly);
-	  lx -= (i*5);
-	  ly = (ass.y+60)+Math.sqrt(i*2000);
-      ctx.lineTo(lx,ly);
-      
-	  
-	}
-	ctx.lineWidth = 1;
-	ctx.strokeStyle = 'red';
-	ctx.stroke(); */
-    //debugLine(canvasxc,0,canvasxc,canvas.height,'red');	
-    //debugLine(0,canvasyc,canvas.width,canvasyc,'red');
-	//debugLine(planets[0].x,0,planets[0].x,canvas.height,'green');	
-	//debugLine(0,planets[0].y,canvas.width,planets[0].y,'green');	
-	//debugLine(ass.x,0,ass.x,canvas.height,'white');
-	//debugLine(0,ass.y,canvas.width,ass.y,'white');
 
-	//HUD
-	ctx.drawImage(hudImage, 0, demHeight - 173);
-	ctx.drawImage(radarbgImage, 6, demHeight - 160);
-	ctx.drawImage(displayImage, 175, demHeight - 50);
-	ctx.font = "14px Rock";
-	
-	minimapRender(2);
-	
-	//Dark text
-	ctx.fillStyle = "rgb(0, 145, 0)";	
-	ctx.fillText("LIVES: ", 183, demHeight-45);
-	ctx.fillText("POWERUP: ", 255, demHeight-45);
-	ctx.fillText("ORBIT: ", 455, demHeight-45);
-	ctx.fillText("SPEED: ", 575, demHeight-45);
-	ctx.fillText("SCORE: ", 750, demHeight-45);
-	
-	//Light text
-	ctx.fillStyle = "rgb(130, 200, 25)";
-	ctx.fillText(ass.lives, 228, demHeight-45);
-	ctx.fillText("[powerup]", 330, demHeight-45);
-	ctx.fillText("[orbit]" + " AU", 502, demHeight-45);
-	ctx.fillText("[speed]" + " KM/H", 625, demHeight-45);
-	ctx.fillText("[score]", 805, demHeight-45);
+
+   ctx.fillStyle = "rgb(250, 250, 250)";
+   ctx.font = "24px Arial";
+   ctx.textAlign = "left";
+   ctx.textBaseline = "top";
+   ctx.fillText("Planets annihilated: " + planetsDestroyed, 32, 32);
+   ctx.fillText("FPS: " + fps, 32, 64);
+   ctx.fillText("Angle: " + Math.round(orbit.angle)+" AssAngle :"+Math.round(ass.angle), 32, 140);
+   ctx.fillText("bullatp: " + Math.round(orbit.bullettimepercentage*100), 32, 170);
+   ctx.fillText("distance: " + Math.round(orbit.distance), 32, 200);
+   ctx.fillText("Lives: " + ass.lives, 32, 230);
+   ctx.fillText("Planet x: " + Math.round(planet.x)+" Planet y: "+Math.round(planet.y), 32, 260);
+   ctx.fillText("Planet in view: " + orbit.planetinview, 32, 290);
+   ctx.fillText("p dist: " + Math.round(planets[0].distance)+" p angle: "+planets[0].angle+' p alive: '+planets[0].alive+' calcangle: '+planets[0].calcangle, 32, 320);
+   if(orbit.bullettime){
+	 ctx.fillText("FUCKING BULLETTIME", 36-(Math.random()*8), 100-(Math.random()*8));	 
+   }
+
+  //HUD
+  ctx.drawImage(hudImage, 0, demHeight - 173);
+  ctx.drawImage(radarbgImage, 6, demHeight - 160);
+  ctx.drawImage(displayImage, 175, demHeight - 50);
+  ctx.font = "14px Rock";
+  
+  minimapRender(2);
+  
+  //Dark text
+  ctx.fillStyle = "rgb(0, 145, 0)";	
+  ctx.fillText("LIVES: ", 183, demHeight-45);
+  ctx.fillText("POWERUP: ", 255, demHeight-45);
+  ctx.fillText("ORBIT: ", 455, demHeight-45);
+  ctx.fillText("SPEED: ", 575, demHeight-45);
+  ctx.fillText("SCORE: ", 750, demHeight-45);
+  
+  //Light text
+  ctx.fillStyle = "rgb(130, 200, 25)";
+  ctx.fillText(ass.lives, 228, demHeight-45);
+  ctx.fillText("[powerup]", 330, demHeight-45);
+  ctx.fillText("[orbit]" + " AU", 502, demHeight-45);
+  ctx.fillText("[speed]" + " KM/H", 625, demHeight-45);
+  ctx.fillText("[score]", 805, demHeight-45);
 }
 
 function minimapRender(performanceLevel)
@@ -513,8 +496,9 @@ function minimapRender(performanceLevel)
 		ctx.strokeWidth=1;
 		ctx.moveTo(6 + 75,75);
 		ctx.lineTo(radarx, radary);
-		ctx.stroke();
 		ctx.closePath();
+		ctx.stroke();
+		
 	}
 	else
 	{
@@ -558,6 +542,7 @@ function debugLine(x1,y1,x2,y2,color){
   ctx.lineTo(x2,y2);
   ctx.strokeStyle = color;
   ctx.lineWidth = 1;
+  ctx.endPath();
   ctx.stroke(); 	
 }
 	
