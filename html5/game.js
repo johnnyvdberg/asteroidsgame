@@ -47,6 +47,7 @@ var fps = 0; var fpscounter = 0; var fpscount = 0;
 var then;
 var keysDown = {};
 var detailedParticles = true;
+var radarAngle = 0;
 
 var particles = [];
 var particle_count = 1000;
@@ -105,7 +106,7 @@ function gameLoad(){
 	radarbgImage = loader.addImage('images/game/radarbg.png');
 	radarlineImage = loader.addImage('images/game/radarline.png');
 	hudImage = loader.addImage('images/game/hud.png');
-	
+	asteroidMiniImage = loader.addImage('images/game/asteroid.png');
 	
 	
 	loader.addCompletionListener(function(){ gameBegin(); });
@@ -157,7 +158,7 @@ function drawTiledBackground(x,y){ // tile sizes are 512 by 512
 }
 
 var warpZ = 25,
-units = 5,
+units = 20,
 stars = [],
 cycle = 0,
 Z = 0.035 + (1/25 * 2);
@@ -434,6 +435,8 @@ var gameRender = function(delta) {
 	ctx.drawImage(displayImage, 175, demHeight - 50);
 	ctx.font = "14px Rock";
 	
+	minimapRender(2);
+	
 	//Dark text
 	ctx.fillStyle = "rgb(0, 145, 0)";	
 	ctx.fillText("LIVES: ", 183, demHeight-45);
@@ -449,6 +452,86 @@ var gameRender = function(delta) {
 	ctx.fillText("[orbit]" + " AU", 502, demHeight-45);
 	ctx.fillText("[speed]" + " KM/H", 625, demHeight-45);
 	ctx.fillText("[score]", 805, demHeight-45);
+}
+
+function minimapRender(performanceLevel)
+{
+	
+	//////////////////////
+	////Minimap player////
+	//////////////////////	
+	planetCollision = -1;
+	//Draw planets on minimap
+	// for(var i = 0; i < 5; i++)
+	// {
+		////If planet exists
+		// if(planets[i] != null)
+		// {
+			////Calculate location
+			// miniplanetx = ((planets[i].distance/2) * -Math.cos((planets[i].angle/100)*(2*Math.PI))) + (W - minimap.width + 75);
+			// miniplanety = ((planets[i].distance/2) * Math.sin((planets[i].angle/100)*(2*Math.PI))) + 75;
+			
+			////Draw planet
+			// ctx.beginPath();
+			// ctx.fillStyle ="#000000";
+			// ctx.strokeStyle ="#00ffff";
+			// ctx.strokeWidth=3;
+			// ctx.arc(miniplanetx, miniplanety, 2, 0, 2 * Math.PI, false);
+			// ctx.stroke();
+			// ctx.closePath();
+			
+			////Calculate collision
+			// if(Math.abs(distance - planets[i].distance) < 2)
+			// {
+				// planetCollision = i;
+			// }
+		// }
+	// }
+		
+	//Calculate and draw orbit path
+	miniassx = ((orbit.distance/2) * -Math.cos((orbit.angle/100)*(2*Math.PI))) + 76;
+	miniassy = ((orbit.distance/2) * Math.sin((orbit.angle/100)*(2*Math.PI))) + canvas.height - 87;
+		
+	ctx.beginPath();
+	ctx.strokeWidth=1;
+	ctx.arc(81,canvas.height - 81, orbit.distance/2, 0, 2 * Math.PI, false);
+	if(planetCollision == -1){
+		ctx.strokeStyle = "white";
+	}else{
+		//Draw collision course
+		ctx.strokeStyle = "red";
+	}
+	ctx.stroke();
+	ctx.closePath();
+		
+	// Draw radar line
+	var currentTime = new Date();
+	
+	if(performanceLevel < 2)
+	{
+		radarx = (75 * Math.cos(currentTime.getTime()/1000) + (81));
+		radary = (75 * Math.sin(currentTime.getTime()/1000)) + 75;		
+		ctx.beginPath();
+		ctx.strokeStyle = "rgba(0, 255, 0, 0.3)";
+		ctx.strokeWidth=1;
+		ctx.moveTo(6 + 75,75);
+		ctx.lineTo(radarx, radary);
+		ctx.stroke();
+		ctx.closePath();
+	}
+	else
+	{
+		//Rotation
+		if(radarAngle >= 1)
+		{
+			radarAngle = 0;
+		}
+		radarAngle += 0.005;
+		drawImageRotated(radarlineImage,6,canvas.height-8-radarlineImage.height,radarlineImage.width,radarlineImage.height,radarAngle*6.28318531);
+	}
+	
+	//Draw asteroid in orbit
+	ctx.drawImage(asteroidMiniImage, miniassx, miniassy, 10, 10);
 }
 	
 function gameDrawPlanet(i){
