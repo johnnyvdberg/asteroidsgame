@@ -65,7 +65,7 @@ function optionUpdate(){
 			 
 	  	}else if(cmp(demHeight-140, demHeight-100, demWidth-235, demWidth) && gamePlaying == true){ 			// Resume
 			menuHover(demHeight - 140, delta); 
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; switchScreen(gameLoad, false); }
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; switchScreen(gameLoad, true); }
 	
 		}else if(cmp(demHeight / 2 - 195, demHeight / 2 - 169, demWidth / 2 - 100, demWidth / 2 - 74)){ 			// Menu Music
 			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; menuMusic = !menuMusic; set("menuMusic", menuMusic); checkPlayMusic();}
@@ -185,7 +185,7 @@ function optionUpdate(){
 	
 	if(menuSound == 0){ //Normal
 		//ctx.drawImage(arrowLeftImg, demWidth / 2 - 290, demHeight / 2 + 50);
-		ctx.drawImage(normalImg, demWidth / 2 - 237, demHeight / 2 + 50);	
+		ctx.drawImage(normalImg, demWidth / 2 - 245, demHeight / 2 + 50);	
 		ctx.drawImage(arrowRightImg, demWidth / 2 - 100, demHeight / 2 + 50);
 	} 
 	if(menuSound == 1){ //Davey
