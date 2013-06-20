@@ -13,6 +13,7 @@ var effectsVolume = Number(get("effectsVolume", 50));
 //alert(musicVolume+", "+effectsVolume+", "+fullscreen+", "+graphicsQuality+", "+difficulty+", "+menuAnimate+", "+menuMusic);
 //=======================================================
 
+var gamePlaying = false;
 var timer = null; 
 var mousePos = null;
 var soundManager;

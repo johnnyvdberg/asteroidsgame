@@ -5,6 +5,7 @@ function optionLoad(){
 	menuBgImg = loader.addImage('images/menu/bg.png');
 	menuTitleImg = loader.addImage('images/menu/title.png');
 	menuQuitImg = loader.addImage('images/menu/quit.png');
+	menuResumeImg = loader.addImage('images/menu/resume.png');
 	
 	menuAnimateImg = loader.addImage('images/menu/menuAnimate.png');
 	menuMusicImg = loader.addImage('images/menu/menuMusic.png');
@@ -59,10 +60,14 @@ function optionUpdate(){
 	//Cursor
 	if(mousePos!=undefined){
 	  	if(cmp(demHeight-100, demHeight-60, demWidth-235, demWidth)){					//quit
-			 menuHover(demHeight - 100, delta); 
-			 if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; switchScreen(menuLoad, false); }
+			menuHover(demHeight - 100, delta); 
+			if(mouseDown && mouseDownAble){menuPlayClick(); gamePlaying = false; mouseDownAble = false; switchScreen(menuLoad, false); }
 			 
-	  	}else if(cmp(demHeight / 2 - 195, demHeight / 2 - 169, demWidth / 2 - 100, demWidth / 2 - 74)){ 			// Menu Music
+	  	}else if(cmp(demHeight-140, demHeight-100, demWidth-235, demWidth) && gamePlaying == true){ 			// Resume
+			menuHover(demHeight - 140, delta); 
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; switchScreen(gameLoad, false); }
+	
+		}else if(cmp(demHeight / 2 - 195, demHeight / 2 - 169, demWidth / 2 - 100, demWidth / 2 - 74)){ 			// Menu Music
 			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; menuMusic = !menuMusic; set("menuMusic", menuMusic); checkPlayMusic();}
 		
 		}else if(cmp(demHeight / 2 - 155, demHeight / 2 - 129, demWidth / 2 - 100, demWidth / 2 - 74)){ 			// Menu Animate
@@ -128,6 +133,7 @@ function optionUpdate(){
 	ctx.drawImage(menuBgImg, 0 + pan.x, 0 + pan.y);
 	ctx.drawImage(menuTitleImg, 20, 20);
 	ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
+	if(gamePlaying){ctx.drawImage(menuResumeImg, demWidth - 165, demHeight - 140);}
 	
 	
 	if(menuMusic){ ctx.drawImage(menuCheckedImg, demWidth / 2 - 100, demHeight / 2 - 195); }else{ ctx.drawImage(menuCheckboxImg, demWidth / 2 - 100, demHeight /2 - 195); }
