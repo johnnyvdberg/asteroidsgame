@@ -181,7 +181,6 @@ function loadSounds(){
 	// listen to load events 
 	loader.addProgressListener(function(e) { 
 	  n++;
-	  l('length: '+realLen);
 	  if(n>=realLen){ menuLoad(); }  
 	}); 
 	 
