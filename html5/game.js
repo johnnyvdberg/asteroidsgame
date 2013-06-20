@@ -336,8 +336,8 @@ var gameRender = function(delta) {
 	// sterren
 	gameWarp();
 	//Sunglow   default x was -20
-	glowx = -(orbit.distance/1.5);
-	ctx.drawImage(glowImage, glowx, canvasyc - 122);
+	glowx = -(orbit.distance*3);
+	ctx.drawImage(glowImage, glowx, 0, glowImage.width/2, canvas.height);
 	// draw planet
 	if(orbit.planetinview){
 	  for(var i = 0; i < planets.length; i++){
