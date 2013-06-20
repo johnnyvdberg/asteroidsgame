@@ -335,8 +335,9 @@ var gameRender = function(delta) {
 	drawTiledBackground(Math.round(orbit.angle*30.72),0);  // dat is zodat we 512*3 loopen	
 	// sterren
 	gameWarp();
-	//Sunglow
-	ctx.drawImage(glowImage, -20, canvasyc - 122);
+	//Sunglow   default x was -20
+	glowx = -(orbit.distance/1.5);
+	ctx.drawImage(glowImage, glowx, canvasyc - 122);
 	// draw planet
 	if(orbit.planetinview){
 	  for(var i = 0; i < planets.length; i++){
