@@ -99,7 +99,15 @@ function gameLoad(){
 	parImage = loader.addImage('images/game/1.png');
 	explodeImage1 = loader.addImage('images/game/explode.png');
 	explodeImage2 = loader.addImage('images/game/ring.png');
-	glowImage = loader.addImage('images/game/glow.png')
+	glowImage = loader.addImage('images/game/glow.png');
+	
+	displayImage = loader.addImage('images/game/display.png');
+	radarbgImage = loader.addImage('images/game/radarbg.png');
+	radarlineImage = loader.addImage('images/game/radarline.png');
+	hudImage = loader.addImage('images/game/hud.png');
+	
+	
+	
 	loader.addCompletionListener(function(){ gameBegin(); });
 	loader.start();
 }
@@ -416,6 +424,31 @@ var gameRender = function(delta) {
 	debugLine(0,planets[0].y,canvas.width,planets[0].y,'green');	
 	debugLine(ass.x,0,ass.x,canvas.height,'white');
 	debugLine(0,ass.y,canvas.width,ass.y,'white');
+	
+	
+	
+	
+	//HUD
+	ctx.drawImage(hudImage, 0, demHeight - 173);
+	ctx.drawImage(radarbgImage, 6, demHeight - 160);
+	ctx.drawImage(displayImage, 175, demHeight - 50);
+	ctx.font = "14px Rock";
+	
+	//Dark text
+	ctx.fillStyle = "rgb(0, 145, 0)";	
+	ctx.fillText("LIVES: ", 183, demHeight-45);
+	ctx.fillText("POWERUP: ", 255, demHeight-45);
+	ctx.fillText("ORBIT: ", 455, demHeight-45);
+	ctx.fillText("SPEED: ", 575, demHeight-45);
+	ctx.fillText("SCORE: ", 750, demHeight-45);
+	
+	//Light text
+	ctx.fillStyle = "rgb(130, 200, 25)";
+	ctx.fillText(ass.lives, 228, demHeight-45);
+	ctx.fillText("[powerup]", 330, demHeight-45);
+	ctx.fillText("[orbit]" + " AU", 502, demHeight-45);
+	ctx.fillText("[speed]" + " KM/H", 625, demHeight-45);
+	ctx.fillText("[score]", 805, demHeight-45);
 }
 	
 function gameDrawPlanet(i){
