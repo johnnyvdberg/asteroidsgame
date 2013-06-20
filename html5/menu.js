@@ -108,8 +108,8 @@ function menuUpdate(){
 	  	}else if(cmp(demHeight-140, demHeight-100, demWidth-235, demWidth)){ 			// option
 			menuHover(demHeight - 140, delta);	if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(optionLoad, false); }
 			
-	  	//}else if(cmp(demHeight-100, demHeight-60, demWidth-235, demWidth)){ 			// quit
-		//	menuHover(demHeight - 100, delta);
+	  	}else if(cmp(demHeight-100, demHeight-60, demWidth-235, demWidth)){ 			// quit
+			menuHover(demHeight - 100, delta);  if(mouseDown && mouseDownAble){mouseDownAble = false; window.close();}
 		
 	  	//}else if(cmp(demHeight-80, demHeight-54, 20, 46)){								// toggle music
 		//	if(mouseDown && mouseDownAble){ menuMusic = !menuMusic; mouseDownAble = false; set("menuMusic", menuMusic); menuPlayClick(); checkPlayMusic(); }
@@ -133,7 +133,7 @@ function menuUpdate(){
 	ctx.drawImage(menuTimeattackImg, demWidth - 225, demHeight - 260);
 	ctx.drawImage(menuHighscoresImg, demWidth - 220, demHeight - 220);
 	ctx.drawImage(menuOptionsImg, demWidth - 155, demHeight - 140);
-	//ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
+	ctx.drawImage(menuQuitImg, demWidth - 92, demHeight - 100);
 	
 	//Draw menu hover effect
 	ctx.beginPath();
