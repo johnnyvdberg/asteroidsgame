@@ -228,8 +228,8 @@ function minimapRender(performanceLevel){
 		//If planet exists
 		 if((planets[i] != null) && (planets[i].alive))
 		 {
-			 miniplanetx = ((planets[i].distance/2) * -Math.cos(((1-planets[i].angle)/100)*6.28318531)) + 80;
-			 miniplanety = ((planets[i].distance/2) * Math.sin(((1-planets[i].angle)/100)*6.28318531)) + (canvas.height-83);
+			 miniplanetx = ((planets[i].distance/1.5) * -Math.cos(((1-planets[i].angle)/100)*6.28318531)) + 83;
+			 miniplanety = ((planets[i].distance/1.5) * Math.sin(((1-planets[i].angle)/100)*6.28318531)) + (canvas.height-84);
 			 //debugLine(0,miniplanety,canvas.width,miniplanety,'red');
 			 ctx.beginPath();
 			 ctx.fillStyle ="#000000";
@@ -245,14 +245,14 @@ function minimapRender(performanceLevel){
 			 }
 		 }
 	 }
-		
+	
 	//Calculate and draw orbit path
-	miniassx = ((orbit.distance/2) * -Math.cos(((100-orbit.angle)/100)*(6.28318531))) + 76;
-	miniassy = ((orbit.distance/2) * Math.sin(((100-orbit.angle)/100)*(6.28318531))) + canvas.height - 87;
+	miniassx = ((orbit.distance/1.5) * -Math.cos(((100-orbit.angle)/100)*(6.28318531))) + 78;
+	miniassy = ((orbit.distance/1.5) * Math.sin(((100-orbit.angle)/100)*(6.28318531))) + canvas.height - 89;
 		
 	ctx.beginPath();
 	ctx.lineWidth=1;
-	ctx.arc(81,canvas.height - 81, orbit.distance/2, 0, 6.28318531, false);
+	ctx.arc(83,canvas.height - 84, orbit.distance/1.5, 0, 6.28318531, false);
 	if(planetCollision == -1){
 		ctx.strokeStyle = "white";
 	}else{
@@ -475,11 +475,11 @@ var gameRender = function(delta) {
 	      p.exploding = -1;	 
         }
 	  }
-	  // draw astroid alone , over or under? <- TODO
+	  // draw asteroid alone , over or under? <- TODO
 	  gameDrawAsstroid();
 	  //drawImageRotated(assImage,(ass.x+ox)-50,(ass.y+oy)-71,ass.w,ass.h,ass.angle*6.28318531); 
 	}else{
-      // draw astroid alone
+      // draw asteroid alone
 	 gameDrawAsstroid(); //drawImageRotated(assImage,(ass.x+ox)-50,(ass.y+oy)-71,ass.w,ass.h,ass.angle*6.28318531); 
 	}
     // update and draw explosion particles
