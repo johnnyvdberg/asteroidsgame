@@ -232,10 +232,19 @@ function minimapRender(performanceLevel){
 			 miniplanety = ((planets[i].distance/1.5) * Math.sin(((1-planets[i].angle)/100)*6.28318531)) + (canvas.height-84);
 			 //debugLine(0,miniplanety,canvas.width,miniplanety,'red');
 			 ctx.beginPath();
-			 ctx.fillStyle ="#000000";
-			 ctx.strokeStyle ="#00ffff";
-			 ctx.lineWidth=3;
-			 ctx.arc(miniplanetx, miniplanety, 2, 0, 6.28318531, false);
+			 //ctx.fillStyle ="#000000";
+			 ctx.strokeStyle ="#00ff00";
+			 //Give it blip effect
+			 angleDiff = orbit.angle - planets[i].angle;
+			 if(angleDiff < 0 && angleDiff > -10)
+			 {
+				ctx.lineWidth= 3 + Math.sin((Math.abs(angleDiff)/10)*3.14159265359)*3;
+			 }
+			 else
+			 {
+				ctx.lineWidth=3;
+			 }
+			 ctx.arc(miniplanetx, miniplanety, 1, 0, 6.28318531, false);
 			 ctx.stroke();
 			 ctx.closePath();
 			
@@ -267,12 +276,12 @@ function minimapRender(performanceLevel){
 	
 	if(performanceLevel < 2)
 	{
-		radarx = (75 * Math.cos(currentTime.getTime()/1000) + (81));
-		radary = (75 * Math.sin(currentTime.getTime()/1000)) + 75;		
+		radarx = (75 * Math.cos(currentTime.getTime()/1000) + (83));
+		radary = (75 * Math.sin(currentTime.getTime()/1000)) + canvas.height-84;		
 		ctx.beginPath();
 		ctx.strokeStyle = "rgba(0, 255, 0, 0.3)";
 		ctx.lineWidth=1;
-		ctx.moveTo(6 + 75,75);
+		ctx.moveTo(83,canvas.height - 84);
 		ctx.lineTo(radarx, radary);
 		ctx.closePath();
 		ctx.stroke();
