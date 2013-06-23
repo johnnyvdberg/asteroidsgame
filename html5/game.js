@@ -6,7 +6,7 @@ var canvas; var ctx;
 var gameMusic = true;
 
 var ass = {
-	speed: 1000,
+	speed: 0,
 	x: 0,
 	y: 0,
 	angle:0,
@@ -100,7 +100,7 @@ var gameStart = function () { // TODO: get called only once
 	ass.x = (canvas.width /2);
 	ass.y = (canvas.height /2);
 	ass.angle = 0;
-	ass.speed = 1000;
+	ass.speed = 400;
 	orbit.angle = 0; orbit.distance = 50; // reset position
 	orbit.bullettimepercentage = 0; orbit.bullettime = false; orbit.bullettimeup = true; // reset bullettime
 	canvasxc = canvas.width/2;
@@ -206,9 +206,9 @@ function gameWarp(){ // warp star effect
 	  n.px = xx;
 	  n.py = yy;
 	  if(orbit.bullettimepercentage>0){
-		n.z -= (Z * orbit.speed);	
+		n.z -= (Z * (orbit.speed*100));	
 	  }else{
-		n.z -= Z*1.2;
+		n.z -= Z*120;
 	  }
   
 	  // reset when star is out of the view field
@@ -306,13 +306,7 @@ function minimapRender(performanceLevel){
 function gameDrawPlanet(i){
     var p = planets[i];		
 	var size = 0;
-	if(p.calcangle<0){
-	  size = ((p.calcangle+10)/10);
-	  if(size<0){ size = 0.1; }  
-	}else{
-	  size = ((p.calcangle)/10)+1;
-	}
-	drawScaled(planetImage, p.x-60,  p.y-60, planet.w,planet.h,size); 
+	drawScaled(planetImage, p.x-60,  p.y-60, planet.w,planet.h,p.calcsize); 
 }
 
 function gameDrawAsstroid(){
@@ -373,7 +367,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	  if(ass.x>canvasxc){ ass.x -= 35*modifier; if(ass.x<canvasxc) ass.x = canvasxc; }
 	}
 	// check if planets are near every 100 ms
-	if(orbit.planetlastcheck>0.1){
+	if(orbit.planetlastcheck>0){
 	  orbit.planetlastcheck = 0;	
 	  orbit.planetinview = false;	
 	  orbit.bullettimeup = false;
@@ -381,8 +375,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		var p = planets[i];  
 	    if(
 		  (p.alive) && 
-		  (p.angle<(orbit.angle+5)) && 
-		  (p.angle>(orbit.angle-10)) && 
+		  (p.angle<(orbit.angle+0.5)) && 
+		  (p.angle>(orbit.angle-6)) && 
 		  (p.distance<(orbit.distance+2)) && 
 		  (p.distance>(orbit.distance-2)) 
 		){
@@ -399,29 +393,32 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	}else{ orbit.planetlastcheck += modifier; } // add time
 	// if planets are near or in bullettime check for colission
 	if((orbit.planetinview) || (orbit.bullettime)){
-	   for(var i=0; i<planets.length; i++){
-	     var p = planets[i];
-		 // get angle difference
-		 p.calcangle = p.angle - orbit.angle;
-		 if(p.calcangle>100) p.calcangle -= 100;
-		 if(p.calcangle<-100) p.calcangle += 100;
-	     p.calcsize = p.size*((p.calcangle+10)/10);
-		 
-		 if((p.calcangle<2) && (p.calcangle>-2) && (p.alive)){ // colission
-			l(ass.x);
-			/*if (ass.x <= (p.x + (40)) && p.x <= (ass.x + (40))) { // todo, make real
-			  
-				var dx = ((p.x-ass.x)/50);
-				var dy = (((p.y+(p.h/2))-(ass.y+(ass.h/2)))/30);
-				planetsDestroyed++;
-				p.alive = false;
-				p.exploding = 0;
-				for(var i = 0; i< particle_count;i++){ particles.push(new particle(p.x,p.y,dx,dy)); }
-				gamePlayExplosion();
-			} */
-		  }
-		}
-	 } 
+		for(var i=0; i<planets.length; i++){
+	    	var p = planets[i];
+		 	// get angle difference
+		 	p.calcangle = p.angle - orbit.angle;
+		 	if(p.calcangle>100) p.calcangle -= 100;
+		 	if(p.calcangle<-100) p.calcangle += 100;
+		 	if(p.calcangle<0.1){
+	        	p.calcsize = (((p.calcangle*2)+1));
+	       		if(p.calcsize<0){ p.calcsize = 0.0; }  
+	     	}else{
+	       		p.calcsize = ((p.calcangle*2)+1);
+			}		 
+		 	if((p.calcangle<0.01) && (p.calcangle>-0.01) && (p.visible)){ // colission
+			    if ((ass.x-40) <= (p.x+(60*p.calcsize)) && (ass.x+40) >= (p.x-(60*p.calcsize)) ) { // todo, make real
+					var dx = ((p.x-ass.x)/50);
+					var dy = (((p.y+(p.h/2))-(ass.y+(ass.h/2)))/30);
+					planetsDestroyed++;
+					p.alive = false;
+					p.exploding = 0;
+					for(var i = 0; i< particle_count;i++){ particles.push(new particle(p.x,p.y,dx,dy)); }
+					gamePlayExplosion();
+			
+		  		}
+			}
+		} 
+	}
 	// orbit and ass angle;
 	if(orbit.bullettime == false){
 	  ass.angle += 25*modifier; 
@@ -436,7 +433,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		  orbit.bullettimepercentage-=1.5*modifier;
 		  if(orbit.bullettimepercentage <= 0){ orbit.bullettimepercentage = 0; orbit.bullettime = false; }		  
 	  } 
-	  orbit.speed = (1-(orbit.bullettimepercentage*0.8));
+	  orbit.speed = (1-(orbit.bullettimepercentage*0.99));
 	  
 	  if(orbit.bullettimepercentage>0){
 	    orbit.angle -= (15*modifier)*orbit.speed;
@@ -464,7 +461,9 @@ var gameRender = function(delta) {
  	// draw tiled background
 	drawTiledBackground(Math.round(orbit.angle*30.72),0);  // dat is zodat we 512*3 loopen	
 	// draw stars coming at you
-	gameWarp();
+	if(orbit.bullettime){
+	  gameWarp();
+	}
 	// draw sun glow
 	glowx = -(orbit.distance*3);
 	ctx.drawImage(glowImage, glowx, 0, glowImage.width/2, canvas.height);
@@ -472,10 +471,16 @@ var gameRender = function(delta) {
 	if((orbit.planetinview) || (orbit.bullettime)){
 	  for(var i = 0; i < planets.length; i++){ 
 	    var p = planets[i];
- 	    if(p.visible){ gameDrawPlanet(i); }
-		debugLine(ass.x,0,ass.x,canvas.height,"red");
+ 	    if(p.visible){ 
+		  gameDrawPlanet(i); 
+		  debugLine(p.x+(60*p.calcsize),0,p.x+(60*p.calcsize),canvas.height,"blue");
+		  debugLine(p.x-(60*p.calcsize),0,p.x-(60*p.calcsize),canvas.height,"blue"); 
+		  debugLine(ass.x+40,0,ass.x+40,canvas.height,"red");
+		  debugLine(ass.x-40,0,ass.x-40,canvas.height,"red");
+		}
+		
 		l(p.calcsize);
-	    debugLine(p.x+(40*p.calcsize),0,p.x+(40*p.calcsize),canvas.height,"blue");
+	    
 	    // chunks
         if((p.alive==false) && (p.exploding>-1) && (p.exploding<5)){
 	      p.exploding += (delta*15); 
