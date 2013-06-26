@@ -15,6 +15,10 @@ var ass = {
 	lives: 2
 };
 
+//Enum for all types of planets
+var PlanetEnum = Object.freeze({"Arid":0, "Caldonia":1, "Cold":2, "Dead":3, "Drye":4, "PostIndustrial":5, "GasGiant":6, "Ice":7, "Earth1":8, "Earth2":9, "Fire":10, "SmallGas":11, "Waterless":12});
+var planetImages = new Array();
+
 var planet = {
 	x: 0,
 	y: 0,
@@ -27,6 +31,7 @@ var planet = {
 	angle: 0,
 	calcangle: 0,
 	distance: 0,
+	type: 0,
 	visible: false
 };
 
@@ -91,6 +96,21 @@ function gameLoad(){  // init loader
 	radarlineImage = loader.addImage('images/game/radarline.png');
 	hudImage = loader.addImage('images/game/hud.png');
 	asteroidMiniImage = loader.addImage('images/game/asteroid.png');
+	
+	//Add all planets
+	planetImages.push(loader.addImage('images/game/planets/Arid_World.png'));
+	planetImages.push(loader.addImage('images/game/planets/Caldonia.png'));
+	planetImages.push(loader.addImage('images/game/planets/Cold_World.png'));
+	planetImages.push(loader.addImage('images/game/planets/Dead_World.png'));
+	planetImages.push(loader.addImage('images/game/planets/Drye.png'));
+	planetImages.push(loader.addImage('images/game/planets/Global_Warming.png'));
+	planetImages.push(loader.addImage('images/game/planets/High_Winds.png'));
+	planetImages.push(loader.addImage('images/game/planets/Ice_Planet.png'));
+	planetImages.push(loader.addImage('images/game/planets/Mostly_Harmless.png'));
+	planetImages.push(loader.addImage('images/game/planets/Nu_Earth.png'));
+	planetImages.push(loader.addImage('images/game/planets/Pyrobora.png'));
+	planetImages.push(loader.addImage('images/game/planets/Small_Gas_Giant.png'));
+	planetImages.push(loader.addImage('images/game/planets/Waterless_World.png'));
 	
 	loader.addCompletionListener(function(){ gameBegin(); });
 	loader.start();
@@ -306,7 +326,72 @@ function minimapRender(performanceLevel){
 function gameDrawPlanet(i){
     var p = planets[i];		
 	var size = 0;
-	drawScaled(planetImage, p.x-60,  p.y-60, planet.w,planet.h,p.calcsize); 
+	drawScaled(planetImages[p.type], p.x-60,  p.y-60, planet.w,planet.h,p.calcsize); 
+	planetIndicator(p.x+60, p.y-120, p.type, 10000000, 75, "Je moeder", true, 2);
+}
+
+function planetIndicator(x, y, type, population, requiredSpeed, name, left, performanceLevel)
+{
+	sizeX = 200;
+	sizeY = 75;
+
+	//Draw border
+	ctx.beginPath();
+	ctx.lineWidth=1;
+	ctx.strokeStyle = "green";
+	ctx.rect(x, y, sizeX, sizeY);
+	ctx.fillStyle = "rgba(0, 255, 0, 0.15)";
+	ctx.fill();
+	ctx.stroke();
+	ctx.closePath();
+	
+	//Draw pointing line thingie
+	ctx.beginPath();
+	if(left)
+	{
+		ctx.moveTo(x, y + sizeY);
+		ctx.lineTo(x - 10, y + sizeY + 5);
+	}
+	else
+	{
+		ctx.moveTo(x + sizeX, y + sizeY);
+		ctx.lineTo(x + sizeX + 10, y + sizeY + 5);
+	}
+	ctx.stroke();
+	ctx.closePath();
+		
+	//Draw prestige scanlines
+	for(i = 0; performanceLevel == 2 && i < sizeY/7; i++)
+	{
+		ctx.beginPath();
+		ctx.strokeStyle = "rgba(0, 255, 0, 0.04)";
+		ctx.moveTo(x, y + i*7);
+		ctx.lineTo(x + sizeX, y + i*7);
+		ctx.stroke();
+		ctx.closePath();
+	}
+		
+	//Write generic stuff
+	ctx.font = 'bold 8pt Arial Black';
+	ctx.fillStyle = 'Green'
+	ctx.fillText('Name', x + 10, y + 8);
+	ctx.fillText('Type', x + 10, y + 24);
+	ctx.fillText('Pop', x + 10, y + 40);
+	ctx.fillText('Speed', x + 10, y + 56);
+		
+	//Write actual values
+	ctx.fillText(name, x + 100, y + 8);
+	ctx.fillText(type, x + 100, y + 24);
+	ctx.fillText(population, x + 100, y + 40);
+	
+	//Add progressbar
+	ctx.beginPath();
+	ctx.strokeWidth=1;
+	ctx.strokeStyle = "green";
+	ctx.rect(x + 100, y + 60, (requiredSpeed/100)*(sizeX - 110), 8);
+	ctx.fill();
+	ctx.stroke();
+	ctx.closePath();
 }
 
 function gameDrawAsstroid(){
@@ -615,15 +700,19 @@ function loadLevel1(){
     planets.push($.extend(true, {}, planet));
 	planet.distance = 44;
 	planet.angle = 70;
+	planet.type = Math.round(Math.random()*12);
 	planets.push($.extend(true, {}, planet));
 	planet.distance = 50;
 	planet.angle = 90;
+	planet.type = Math.round(Math.random()*12);
 	planets.push($.extend(true, {}, planet));
 	planet.distance = 67.9;
 	planet.angle = (Math.random()*60)+20;
+	planet.type = Math.round(Math.random()*12);
 	planets.push($.extend(true, {}, planet));
 	planet.distance = 20;
 	planet.angle = (Math.random()*60)+20;
+	planet.type = Math.round(Math.random()*12);
 	planets.push($.extend(true, {}, planet));
 }
 
