@@ -647,6 +647,9 @@ var gameRender = function(delta) {
 	ctx.fillText("PLANETS HIT: " + planetsDestroyed, 295, demHeight - 95);
 	ctx.fillText("JUNK HIT: " + "5", 295, demHeight - 80);
 	ctx.fillText("LIVES LOST: " + "0", 295, demHeight - 65);
+	
+	//Notification test
+	notification(demWidth - 270, 20, 250, 50, "Achievement Unlocked", "Being an asshole");
 }
 
 /* ======================================  
