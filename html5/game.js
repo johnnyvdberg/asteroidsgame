@@ -91,11 +91,24 @@ function gameLoad(){  // init loader
 	explodeImage2 = loader.addImage('images/game/ring.png');
 	glowImage = loader.addImage('images/game/glow.png');
 	
-	displayImage = loader.addImage('images/game/display.png');
+	asteroidMiniImage = loader.addImage('images/game/asteroid.png');
+	
 	radarbgImage = loader.addImage('images/game/radarbg.png');
 	radarlineImage = loader.addImage('images/game/radarline.png');
-	hudImage = loader.addImage('images/game/hud.png');
-	asteroidMiniImage = loader.addImage('images/game/asteroid.png');
+	powerupImage = loader.addImage('images/game/powerup.png');
+	speedImage = loader.addImage('images/game/speed.png');
+	speedfillImage = loader.addImage('images/game/speedfill.png');   //USELESS NEEDS PROPER BAR
+	livesImage = loader.addImage('images/game/lives.png');
+	lifeImage = loader.addImage('images/game/life.png');
+	statsImage = loader.addImage('images/game/stats.png');
+	orbitImage = loader.addImage('images/game/orbit.png');
+	orbitfillImage = loader.addImage('images/game/orbitfill.png');   //USELESS NEEDS PROPER BAR
+	
+	
+	fireImage = loader.addImage('images/game/powerups/fire.png');
+	iceImage = loader.addImage('images/game/powerups/ice.png');
+	scoreImage = loader.addImage('images/game/powerups/score.png');
+	nostopImage = loader.addImage('images/game/powerups/nostop.png');
 	
 	//Add all planets
 	planetImages.push(loader.addImage('images/game/planets/Arid_World.png'));
@@ -601,28 +614,39 @@ var gameRender = function(delta) {
     if((f!=true) && (particles.length>0)){ particles = Array(); }
     // draw debug text
 	drawDebugText();
-    //Draw hud
-    ctx.drawImage(hudImage, 0, demHeight - 173);
-  ctx.drawImage(radarbgImage, 6, demHeight - 160);
-  ctx.drawImage(displayImage, 175, demHeight - 50);
-  ctx.font = "14px Rock";
-  minimapRender(2);
-  
-  //Dark text
-  ctx.fillStyle = "rgb(0, 145, 0)";	
-  ctx.fillText("LIVES: ", 183, demHeight-45);
-  ctx.fillText("POWERUP: ", 255, demHeight-45);
-  ctx.fillText("ORBIT: ", 455, demHeight-45);
-  ctx.fillText("SPEED: ", 575, demHeight-45);
-  ctx.fillText("SCORE: ", 750, demHeight-45);
-  
-  //Light text
-  ctx.fillStyle = "rgb(130, 200, 25)";
-  ctx.fillText(ass.lives, 228, demHeight-45);
-  ctx.fillText("[powerup]", 330, demHeight-45);
-  ctx.fillText("[orbit]" + " AU", 502, demHeight-45);
-  ctx.fillText("[speed]" + " KM/H", 625, demHeight-45);
-  ctx.fillText("[score]", 805, demHeight-45);
+	
+	
+	
+    //Draw HUD
+  	ctx.drawImage(radarbgImage, 6, demHeight - 160);
+	ctx.drawImage(speedfillImage, 130 , demHeight - 160);  //USELESS NEEDS PROPER BAR
+	ctx.drawImage(speedImage, 130 , demHeight - 160);
+	ctx.drawImage(powerupImage, 168 , demHeight - 118);
+	
+	ctx.drawImage(livesImage, 290, demHeight - 160);
+	ctx.drawImage(lifeImage, 290, demHeight - 160);
+	ctx.drawImage(statsImage, 290, demHeight - 118);
+	ctx.drawImage(orbitImage, 290, demHeight - 33)
+	ctx.drawImage(orbitfillImage, 290, demHeight - 33) //USELESS NEEDS PROPER BAR
+	
+	//FIRE, ICE, NOSTOP, SCORE
+	ctx.drawImage(fireImage, 173, demHeight - 113);
+	
+  	ctx.font = "12px Rock";
+  	minimapRender(2);
+  	ctx.fillStyle = "rgb(20, 105, 5)";	
+	ctx.fillText("POWERUP", 173, demHeight - 127);
+	ctx.fillText("SPEED", 143, demHeight - 170);
+	ctx.fillText("LIVES", 303, demHeight - 169);
+	ctx.fillText("STATS", 303, demHeight - 127);
+	ctx.fillText("ORBIT", 303, demHeight - 43);
+	
+	ctx.font = "14px Rock";
+	ctx.fillText("4", 263, demHeight - 20); //POWERUP TIME LEFT
+	ctx.fillText("SCORE: " + "2897546235", 295, demHeight - 110);
+	ctx.fillText("PLANETS HIT: " + planetsDestroyed, 295, demHeight - 95);
+	ctx.fillText("JUNK HIT: " + "5", 295, demHeight - 80);
+	ctx.fillText("LIVES LOST: " + "0", 295, demHeight - 65);
 }
 
 /* ======================================  
