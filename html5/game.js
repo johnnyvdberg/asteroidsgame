@@ -4,6 +4,8 @@
  ========================================*/
 var canvas; var ctx;
 var gameMusic = true;
+var junkhit = 0;
+var score = 0;
 
 var ass = {
 	speed: 0,
@@ -147,6 +149,8 @@ var gameStart = function () { // TODO: get called only once
 	orbit.xtiles = Math.ceil(canvas.width/512)+1;
 	orbit.ytiles = Math.ceil(canvas.height/512)+1;
 	ass.lives = 2; // extra lives
+	junkhit = 0;
+	score = 0;
 	
 	addEventListener("keydown", function (e) { keysDown[e.keyCode] = true; }, false);
 	addEventListener("keyup", function (e) { delete keysDown[e.keyCode]; }, false);
@@ -373,8 +377,11 @@ function minimapRender(performanceLevel){
 function gameDrawPlanet(i){
     var p = planets[i];		
 	var size = 0;
-	drawScaled(planetImages[p.type], p.x-60,  p.y-60, planet.w,planet.h,p.calcsize); 
-	planetIndicator(p.x+60, p.y-120, p.type, 10000000, 75, "Je moeder", true, 2);
+	if(p.alive){		
+	  drawScaled(planetImages[p.type], p.x-60,  p.y-60, planet.w,planet.h,p.calcsize); 
+	  planetIndicator(p.x+60, p.y-120, p.type, 10000000, 75, "Je moeder", true, 2);
+	  if(p.calcsize<1){ gameDrawAsstroid(); }
+	}
 }
 
 function planetIndicator(x, y, type, population, requiredSpeed, name, left, performanceLevel)
@@ -559,7 +566,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	  if((asstroid.size>1)&&(asstroid.size<1.3)){
 	    if( (asstroid.x<(ass.x+80)) && asstroid.x>(ass.x-80)){
 		  asstroid.alive = false;
-		  asstroid.explosion = 0; 
+		  asstroid.explosion = 0;
+		  junkhit++;
 		  orbit.velocity -= 10; 	
 		  asstroid.ox = (Math.random()*canvasxc)+(canvasxc/2); asstroid.oy = (Math.random()*canvasyc)+(canvasyc/2);
 		}
@@ -733,7 +741,7 @@ var gameRender = function(delta) {
 	
     //Draw HUD
   	ctx.drawImage(radarbgImage, 6, demHeight - 160);
-	ctx.drawImage(speedfillImage, 130 , demHeight - 160);  //USELESS NEEDS PROPER BAR
+	//ctx.drawImage(speedfillImage, 130 , demHeight - 160);  //USELESS NEEDS PROPER BAR
 	ctx.drawImage(speedImage, 130 , demHeight - 160);
 	ctx.drawImage(powerupImage, 168 , demHeight - 118);
 	
@@ -757,9 +765,9 @@ var gameRender = function(delta) {
 	
 	ctx.font = "14px Rock";
 	ctx.fillText("4", 263, demHeight - 20); //POWERUP TIME LEFT
-	ctx.fillText("SCORE: " + "2897546235", 295, demHeight - 110);
+	ctx.fillText("SCORE: " + score, 295, demHeight - 110);
 	ctx.fillText("PLANETS HIT: " + planetsDestroyed, 295, demHeight - 95);
-	ctx.fillText("JUNK HIT: " + "5", 295, demHeight - 80);
+	ctx.fillText("JUNK HIT: " + junkhit, 295, demHeight - 80);
 	ctx.fillText("LIVES LOST: " + "0", 295, demHeight - 65);
 	
 	//Notification test
@@ -838,6 +846,7 @@ function loadLevel1(){
     planet.w = 120;
     planet.y = canvasyc;
     planet.x = canvasxc;
+	planets = new Array();
     planets.push($.extend(true, {}, planet));
 	planet.distance = 44;
 	planet.angle = 70;
