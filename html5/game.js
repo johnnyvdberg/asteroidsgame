@@ -129,14 +129,15 @@ function gameLoad(){  // init loader
 	planetImages.push(loader.addImage('images/game/planets/Cold_World.png'));
 	planetImages.push(loader.addImage('images/game/planets/Dead_World.png'));
 	planetImages.push(loader.addImage('images/game/planets/Drye.png'));
+	planetImages.push(loader.addImage('images/game/planets/Pyrobora.png'));
+	planetImages.push(loader.addImage('images/game/planets/Waterless_World.png'));
 	planetImages.push(loader.addImage('images/game/planets/Global_Warming.png'));
-	planetImages.push(loader.addImage('images/game/planets/High_Winds.png'));
-	planetImages.push(loader.addImage('images/game/planets/Ice_Planet.png'));
 	planetImages.push(loader.addImage('images/game/planets/Mostly_Harmless.png'));
 	planetImages.push(loader.addImage('images/game/planets/Nu_Earth.png'));
-	planetImages.push(loader.addImage('images/game/planets/Pyrobora.png'));
+	planetImages.push(loader.addImage('images/game/planets/Ice_Planet.png'));
 	planetImages.push(loader.addImage('images/game/planets/Small_Gas_Giant.png'));
-	planetImages.push(loader.addImage('images/game/planets/Waterless_World.png'));
+	planetImages.push(loader.addImage('images/game/planets/High_Winds.png'));
+	
 	
 	loader.addCompletionListener(function(){ gameStart(); });
 	loader.start();
@@ -838,30 +839,73 @@ function gamePlayExplosion(){
  ========================================*/
 
 function loadLevel1(){
-    planet.alive = true;
-    planet.angle = 40;
-    planet.distance = 50;
+    // planet.alive = true;
+    // planet.angle = 40;
+    // planet.distance = 50;
+    // planet.size = 1;
+    // planet.h = 120;
+    // planet.w = 120;
+    // planet.y = canvasyc;
+    // planet.x = canvasxc;
+	// planets = new Array();
+    // planets.push($.extend(true, {}, planet));
+	// planet.distance = 44;
+	// planet.angle = 70;
+	// planet.type = Math.round(Math.random()*12);
+	// planets.push($.extend(true, {}, planet));
+	// planet.distance = 50;
+	// planet.angle = 90;
+	// planet.type = Math.round(Math.random()*12);
+	// planets.push($.extend(true, {}, planet));
+	// planet.distance = 67.9;
+	// planet.angle = (Math.random()*60)+20;
+	// planet.type = Math.round(Math.random()*12);
+	// planets.push($.extend(true, {}, planet));
+	// planet.distance = 20;
+	// planet.angle = (Math.random()*60)+20;
+	// planet.type = Math.round(Math.random()*12);
+	// planets.push($.extend(true, {}, planet));
+	randomLevel(3,5,5);
+}
+
+function randomLevel(gasPlanets, normalPlanets, otherPlanets)
+{
+	planets = new Array();
+	
+	planet.alive = true;
     planet.size = 1;
     planet.h = 120;
     planet.w = 120;
     planet.y = canvasyc;
     planet.x = canvasxc;
-	planets = new Array();
-    planets.push($.extend(true, {}, planet));
-	planet.distance = 44;
-	planet.angle = 70;
-	planet.type = Math.round(Math.random()*12);
-	planets.push($.extend(true, {}, planet));
-	planet.distance = 50;
-	planet.angle = 90;
-	planet.type = Math.round(Math.random()*12);
-	planets.push($.extend(true, {}, planet));
-	planet.distance = 67.9;
-	planet.angle = (Math.random()*60)+20;
-	planet.type = Math.round(Math.random()*12);
-	planets.push($.extend(true, {}, planet));
-	planet.distance = 20;
-	planet.angle = (Math.random()*60)+20;
-	planet.type = Math.round(Math.random()*12);
-	planets.push($.extend(true, {}, planet));
+	
+	//Dead or lifeless planets
+	for(i = 0; i < otherPlanets; i++)
+	{
+		planet.size = 0.5;
+		planet.angle = Math.random()*100;
+		planet.distance = Math.random()*20 + 20;
+		planet.type = Math.floor(Math.random()*5);
+		planets.push($.extend(true, {}, planet));
+	}
+	
+	//Earthlike planets
+	for(i = 0; i < normalPlanets; i++)
+	{
+		planet.size = 1;
+		planet.angle = Math.random()*100;
+		planet.distance = Math.random()*30 + 40;
+		planet.type = Math.floor(Math.random()*6 + 5);
+		planets.push($.extend(true, {}, planet));
+	}
+	
+	//Gas Planets
+	for(i = 0; i < gasPlanets; i++)
+	{
+		planet.size = 3;
+		planet.angle = Math.random()*100;
+		planet.distance = Math.random()*25 + 70;
+		planet.type = Math.floor(Math.random()*3 + 10);
+		planets.push($.extend(true, {}, planet));
+	}
 }
