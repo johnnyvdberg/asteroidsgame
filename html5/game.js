@@ -101,8 +101,9 @@ function gameLoad(){  // init loader
 	smallExplodeImage = loader.addImage('images/game/smallring.png');
 	warningImage = loader.addImage('images/game/warning.png');
 	deathImage = loader.addImage('images/game/death.png');
+	asteroidMiniImage = loader.addImage('images/game/asteroid.png');
 	
-	displayImage = loader.addImage('images/game/display.png');
+	//displayImage = loader.addImage('images/game/display.png');
 	radarbgImage = loader.addImage('images/game/radarbg.png');
 	radarlineImage = loader.addImage('images/game/radarline.png');
 	powerupImage = loader.addImage('images/game/powerup.png');
