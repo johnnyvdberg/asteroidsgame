@@ -6,6 +6,9 @@ var canvas; var ctx;
 var gameMusic = true;
 var junkhit = 0;
 var score = 0;
+var gear = 0;
+var powerup = Math.floor(Math.random()*5);
+var poweruptime = 9;
 
 var ass = {
 	speed: 0,
@@ -110,12 +113,10 @@ function gameLoad(){  // init loader
 	radarlineImage = loader.addImage('images/game/radarline.png');
 	powerupImage = loader.addImage('images/game/powerup.png');
 	speedImage = loader.addImage('images/game/speed.png');
-	speedfillImage = loader.addImage('images/game/speedfill.png');   //USELESS NEEDS PROPER BAR
 	livesImage = loader.addImage('images/game/lives.png');
 	lifeImage = loader.addImage('images/game/life.png');
 	statsImage = loader.addImage('images/game/stats.png');
 	orbitImage = loader.addImage('images/game/orbit.png');
-	orbitfillImage = loader.addImage('images/game/orbitfill.png');   //USELESS NEEDS PROPER BAR
 	
 	
 	fireImage = loader.addImage('images/game/powerups/fire.png');
@@ -149,7 +150,7 @@ var gameStart = function () { // TODO: get called only once
 	// cals number of tiles
 	orbit.xtiles = Math.ceil(canvas.width/512)+1;
 	orbit.ytiles = Math.ceil(canvas.height/512)+1;
-	ass.lives = 2; // extra lives
+	ass.lives = 3; // extra lives
 	junkhit = 0;
 	score = 0;
 	
@@ -530,8 +531,6 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	  if(ass.x>canvasxc){ ass.x -= 35*modifier; if(ass.x<canvasxc) ass.x = canvasxc; }
 	}
 	
-	orbit.velocity = orbit.velocity + (1 * delta);
-	
 	// our dead astroid handeling
 	if(ass.alive==false){
 	  ass.exploding += (modifier*15);
@@ -741,22 +740,55 @@ var gameRender = function(delta) {
     // draw debug text
 	drawDebugText();
 	
-	
+	orbit.velocity = orbit.velocity + 2 * delta;
 	
     //Draw HUD
   	ctx.drawImage(radarbgImage, 6, demHeight - 160);
-	//ctx.drawImage(speedfillImage, 130 , demHeight - 160);  //USELESS NEEDS PROPER BAR
 	ctx.drawImage(speedImage, 130 , demHeight - 160);
 	ctx.drawImage(powerupImage, 168 , demHeight - 118);
 	
 	ctx.drawImage(livesImage, 290, demHeight - 160);
-	ctx.drawImage(lifeImage, 290, demHeight - 160);
 	ctx.drawImage(statsImage, 290, demHeight - 118);
 	ctx.drawImage(orbitImage, 290, demHeight - 33)
-	ctx.drawImage(orbitfillImage, 290, demHeight - 33) //USELESS NEEDS PROPER BAR
+	
+	if(ass.lives > 0){ ctx.drawImage(lifeImage, 295, demHeight - 160); }
+	if(ass.lives > 1){ ctx.drawImage(lifeImage, 323, demHeight - 160); }
+	if(ass.lives > 2){ ctx.drawImage(lifeImage, 351, demHeight - 160); }
+	if(ass.lives > 3){ ctx.drawImage(lifeImage, 379, demHeight - 160); }
+	if(ass.lives > 4){ ctx.drawImage(lifeImage, 407, demHeight - 160); }
+	
+	
+	//SPEEDBAR
+	ctx.beginPath();
+	ctx.strokeWidth=1;
+	if(orbit.velocity < 50){
+	ctx.fillStyle = "rgba(180, 0, 0, 0.5)";
+	}else{
+	ctx.fillStyle = "rgba(6, 64, 2, 0.5)";
+	}
+	gear = Math.floor(orbit.velocity / 100);
+	ctx.rect(277, demHeight - 157, -(orbit.velocity * 1.08) + (108*gear), 27);
+	ctx.fill();
+	ctx.closePath();
+	
+	//ORBITBAR
+	ctx.beginPath();
+	ctx.strokeWidth=1;
+	if(orbit.distance < 10 || orbit.distance > 90){
+	ctx.fillStyle = "rgba(180, 0, 0, 0.5)";
+	}else{
+	ctx.fillStyle = "rgba(6, 64, 2, 0.5)";
+	}
+	ctx.rect(293, demHeight - 30, orbit.distance * 1.45, 19);
+	ctx.fill();
+	ctx.closePath();
+	
 	
 	//FIRE, ICE, NOSTOP, SCORE
-	ctx.drawImage(fireImage, 173, demHeight - 113);
+	if(powerup == 1){ctx.drawImage(fireImage, 173, demHeight - 113);}
+	if(powerup == 2){ctx.drawImage(iceImage, 173, demHeight - 113);}
+	if(powerup == 3){ctx.drawImage(nostopImage, 173, demHeight - 113);}
+	if(powerup == 4){ctx.drawImage(scoreImage, 173, demHeight - 113);}
 	
   	ctx.font = "12px Rock";
   	minimapRender(2);
@@ -768,8 +800,9 @@ var gameRender = function(delta) {
 	ctx.fillText("ORBIT", 303, demHeight - 43);
 	
 	ctx.font = "14px Rock";
-	ctx.fillText("5", 152, demHeight - 160);
-	ctx.fillText("4", 263, demHeight - 20); //POWERUP TIME LEFT
+	ctx.fillText(gear, 152, demHeight - 160);
+	ctx.fillText(Math.round(poweruptime), 263, demHeight - 20);
+	poweruptime = poweruptime - 1 * delta;
 	ctx.fillText("SCORE: " + score, 295, demHeight - 110);
 	ctx.fillText("PLANETS HIT: " + planetsDestroyed, 295, demHeight - 95);
 	ctx.fillText("JUNK HIT: " + junkhit, 295, demHeight - 80);
