@@ -871,7 +871,6 @@ function loadLevel1(){
 function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 {
 	planets = new Array();
-	
 	planet.alive = true;
     planet.size = 1;
     planet.h = 120;
@@ -907,5 +906,24 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.distance = Math.random()*25 + 70;
 		planet.type = Math.floor(Math.random()*3 + 10);
 		planets.push($.extend(true, {}, planet));
+	}
+	
+	//Check for collisions
+	for(i = 0; i < planets.length; i++)
+	{
+		for(x = 0; x <planets.length; x++)
+		{
+			if(x != i)
+			{
+				//Check orbit
+				angleDiff = Math.abs(planets[i].angle - planets[x].angle);
+				distDiff = Math.abs(planets[i].distance - planets[x].distance);
+				
+				if(distDiff < 7.5 && angleDiff < 5)
+				{
+					randomLevel(gasPlanets, normalPlanets, otherPlanets);
+				}
+			}
+		}
 	}
 }
