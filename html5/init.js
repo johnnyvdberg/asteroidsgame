@@ -103,7 +103,38 @@ var planetNames = [
 		{ name: 'Druidia' },
 		{ name: 'Planet Spaceballs' },
 		{ name: 'Times New Roman' },
-		{ name: 'Comic Sans' }
+		{ name: 'Comic Sans' },
+		{ name: 'Vulcan' },
+		{ name: 'Omicron' },
+		{ name: 'Kronos' },
+		{ name: 'Bergia' },
+		{ name: 'Titan' },
+		{ name: 'Canceros' },
+		{ name: 'Olympus' },
+		{ name: 'New Vegas' },
+		{ name: 'Liteon' },
+		{ name: 'Olsen' },
+		{ name: 'Hannibal' },
+		{ name: 'Nigerium' },
+		{ name: 'Eurydome' },
+		{ name: 'Carme' },
+		{ name: 'Natrium' }
+	]
+	
+var planetProperties = [
+		{ name: 'Barren', popMultiplier: 0.3 },
+		{ name: 'Sulfuric', popMultiplier: 0 },
+		{ name: 'Glacial', popMultiplier: 0.5 },
+		{ name: 'Barren', popMultiplier: 0 },
+		{ name: 'Sulfuric', popMultiplier: 0 },
+		{ name: 'Molten', popMultiplier: 0 },
+		{ name: 'Barren', popMultiplier: 0.4 },
+		{ name: 'Terrestrial', popMultiplier: 500000000 },
+		{ name: 'Terrestrial', popMultiplier: 750000000 },
+		{ name: 'Terrestrial', popMultiplier: 1000000000 },
+		{ name: 'Glacial', popMultiplier: 0.2 },
+		{ name: 'Gas Giant', popMultiplier: 0 },
+		{ name: 'Gas Giant', popMultiplier: 0}
 	]
 
 function canvasHide(){ showLoader(); canvas.style.display = 'none'; }

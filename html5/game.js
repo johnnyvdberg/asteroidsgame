@@ -39,7 +39,9 @@ var planet = {
 	calcangle: 0,
 	distance: 0,
 	type: 0,
-	visible: false
+	visible: false,
+	pop: 0,
+	name: "Undefined"
 };
 
 var asstroid = {
@@ -319,7 +321,7 @@ function minimapRender(performanceLevel){
 			 ctx.stroke();
 			 ctx.closePath();
 			
-			 if(Math.abs(orbit.distance - planets[i].distance) < 1.2)
+			 if(Math.abs(orbit.distance - planets[i].distance) < 0.8)
 			 {
 				 planetCollision = i;
 			 }
@@ -381,14 +383,14 @@ function gameDrawPlanet(i){
 	var size = 0;
 	if(p.alive){		
 	  drawScaled(planetImages[p.type], p.x-60,  p.y-60, planet.w,planet.h,p.calcsize); 
-	  planetIndicator(p.x+60, p.y-120, p.type, 10000000, 75, "Je moeder", true, 2);
+	  planetIndicator(p.x+60, p.y-120, planetProperties[p.type].name, p.pop, 75, p.name, true, 2);
 	  if(p.calcsize<1){ gameDrawAsstroid(); }
 	}
 }
 
 function planetIndicator(x, y, type, population, requiredSpeed, name, left, performanceLevel)
 {
-	sizeX = 200;
+	sizeX = 225;
 	sizeY = 75;
 
 	//Draw border
@@ -875,32 +877,6 @@ function gamePlayExplosion(){
  ========================================*/
 
 function loadLevel1(){
-    // planet.alive = true;
-    // planet.angle = 40;
-    // planet.distance = 50;
-    // planet.size = 1;
-    // planet.h = 120;
-    // planet.w = 120;
-    // planet.y = canvasyc;
-    // planet.x = canvasxc;
-	// planets = new Array();
-    // planets.push($.extend(true, {}, planet));
-	// planet.distance = 44;
-	// planet.angle = 70;
-	// planet.type = Math.round(Math.random()*12);
-	// planets.push($.extend(true, {}, planet));
-	// planet.distance = 50;
-	// planet.angle = 90;
-	// planet.type = Math.round(Math.random()*12);
-	// planets.push($.extend(true, {}, planet));
-	// planet.distance = 67.9;
-	// planet.angle = (Math.random()*60)+20;
-	// planet.type = Math.round(Math.random()*12);
-	// planets.push($.extend(true, {}, planet));
-	// planet.distance = 20;
-	// planet.angle = (Math.random()*60)+20;
-	// planet.type = Math.round(Math.random()*12);
-	// planets.push($.extend(true, {}, planet));
 	randomLevel(3,5,5);
 }
 
@@ -917,10 +893,18 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 	//Dead or lifeless planets
 	for(i = 0; i < otherPlanets; i++)
 	{
+		//Properties
 		planet.size = 0.5;
 		planet.angle = Math.random()*100;
 		planet.distance = Math.random()*20 + 20;
-		planet.type = Math.floor(Math.random()*5);
+		planet.type = Math.floor(Math.random()*7);
+		
+		//Name
+		planet.name = planetNames[Math.floor(Math.random()*planetNames.length)].name;
+		
+		//Population
+		planet.pop = Math.floor(Math.random() * 10 * planetProperties[planet.type].popMultiplier);
+		
 		planets.push($.extend(true, {}, planet));
 	}
 	
@@ -929,8 +913,15 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 	{
 		planet.size = 1;
 		planet.angle = Math.random()*100;
-		planet.distance = Math.random()*30 + 40;
-		planet.type = Math.floor(Math.random()*6 + 5);
+		planet.distance = Math.random()*25 + 35;
+		planet.type = Math.floor(Math.random()*4 + 7);
+		
+		//Name
+		planet.name = planetNames[Math.floor(Math.random()*planetNames.length)].name;
+		
+		//Population
+		planet.pop = Math.floor(Math.random() * 10 * planetProperties[planet.type].popMultiplier);
+		
 		planets.push($.extend(true, {}, planet));
 	}
 	
@@ -941,6 +932,10 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.angle = Math.random()*100;
 		planet.distance = Math.random()*25 + 70;
 		planet.type = Math.floor(Math.random()*3 + 10);
+		
+		//Name
+		planet.name = planetNames[Math.floor(Math.random()*planetNames.length)].name;		
+		
 		planets.push($.extend(true, {}, planet));
 	}
 	
