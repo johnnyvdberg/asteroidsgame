@@ -566,7 +566,11 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		  asstroid.alive = false;
 		  asstroid.explosion = 0;
 		  junkhit++;
-		  orbit.velocity -= 10; 	
+		  
+		  if(powerup != 3){
+		  	orbit.velocity -= (orbit.velocity/100)*20;
+		  }
+		  
 		  asstroid.ox = (Math.random()*(canvasxc*1.2))+(canvasxc/2); asstroid.oy = (Math.random()*(canvasyc*1.5))+(canvasyc/2);
 		}
 	  }
@@ -575,7 +579,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	
 	// check if planets are near every 100 ms
 	if(orbit.planetlastcheck>0){
-	  orbit.planetlastcheck = 0;	
+	  orbit.planetlastcheck = 0;
 	  orbit.planetinview = false;	
 	  orbit.bullettimeup = false;
 	  for(var i=0; i<planets.length; i++){
