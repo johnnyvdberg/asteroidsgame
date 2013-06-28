@@ -904,7 +904,7 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.type = Math.floor(Math.random()*7);
 		
 		//Name
-		planet.name = planetNames[Math.floor(Math.random()*planetNames.length)].name;
+		planet.name = planetNames[Math.floor(Math.random()*planetNames.length)].name + " " + romanize(Math.floor(Math.random()*11));
 		
 		//Population
 		planet.pop = Math.floor(Math.random() * 10 * planetProperties[planet.type].popMultiplier);
@@ -921,7 +921,7 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.type = Math.floor(Math.random()*4 + 7);
 		
 		//Name
-		planet.name = planetNames[Math.floor(Math.random()*planetNames.length)].name;
+		planet.name = planetNames[Math.floor(Math.random()*planetNames.length)].name + " " + romanize(Math.floor(Math.random()*11));
 		
 		//Population
 		planet.pop = Math.floor(Math.random() * 10 * planetProperties[planet.type].popMultiplier);
@@ -938,7 +938,7 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.type = Math.floor(Math.random()*3 + 10);
 		
 		//Name
-		planet.name = planetNames[Math.floor(Math.random()*planetNames.length)].name;		
+		planet.name = planetNames[Math.floor(Math.random()*planetNames.length)].name + " " + romanize(Math.floor(Math.random()*11));		
 		
 		planets.push($.extend(true, {}, planet));
 	}
