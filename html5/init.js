@@ -86,6 +86,40 @@ function drawScaled(img,x,y,w,h,s){
 	ctx.restore();	
 }
 
+function notification(x,y,width,height,textHeader, textInfo)
+{
+	sizeX = width;
+	sizeY = height;
+
+	//Draw border
+	ctx.beginPath();
+	ctx.lineWidth=1;
+	ctx.strokeStyle = "green";
+	ctx.rect(x, y, sizeX, sizeY);
+	ctx.fillStyle = "rgba(0, 255, 0, 0.15)";
+	ctx.fill();
+	ctx.stroke();
+	ctx.closePath();
+	
+	//Draw prestige scanlines
+	for(i = 0; i < sizeY/7; i++)
+	{
+		ctx.beginPath();
+		ctx.strokeStyle = "rgba(0, 255, 0, 0.04)";
+		ctx.moveTo(x, y + i*7);
+		ctx.lineTo(x + sizeX, y + i*7);
+		ctx.stroke();
+		ctx.closePath();
+	}
+		
+	//Write generic stuff
+	ctx.font = 'bold 12pt Arial Black';
+	ctx.fillStyle = 'Green';
+	ctx.fillText(textHeader, x + 10, y + 5);
+	ctx.font = 'bold italic 10pt Arial Black';
+	ctx.fillText(textInfo, x + 10, y + 25);
+}
+
 //SWITCH TO OTHER VIEWS
 function switchScreen(scr, hide){
 	stopTimer();
