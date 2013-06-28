@@ -52,8 +52,55 @@ var soundNames = [
 	  { id: 'hover4', url:'sounds/menu/hoversound4.ogg'},
 	  // game sounds
 	  { id: 'explosion', url:'sounds/game/explosion.ogg'},
+	  // taunts
+	  { id: 'taunt_win_0', url: 'sounds/menu/taunt_corecrusher.ogg' },
+	  { id: 'taunt_win_1', url: 'sounds/menu/taunt_hastalaplanet.ogg' },
+	  { id: 'taunt_win_2', url: 'sounds/menu/taunt_muwhahaha.ogg' },
+	  { id: 'taunt_win_3', url: 'sounds/menu/taunt_planetcrushed.ogg' },
+	  { id: 'taunt_win_4', url: 'sounds/menu/taunt_thatwasmoonploding.ogg' },
+	  { id: 'taunt_hurt_0', url: 'sounds/menu/taunt_help.ogg' },
+	  { id: 'taunt_fail_0', url: 'sounds/menu/taunt_missionfailed.ogg' }
 	];
-
+	
+var planetNames = [
+		{ name: 'Ariel' },
+		{ name: 'Beaumonde' },
+		{ name: 'Bellerophon' },
+		{ name: 'Hera' },
+		{ name: 'Jiangyin' },
+		{ name: 'Miranda' },
+		{ name: 'Osiris' },
+		{ name: 'Persephone' },
+		{ name: 'Regina' },
+		{ name: 'Santo' },
+		{ name: 'St. Albans' },
+		{ name: 'Triumph' },
+		{ name: 'Aberdeen' },
+		{ name: 'Angel' },
+		{ name: 'Athens' },
+		{ name: 'Bernadette' },
+		{ name: 'Beylix' },
+		{ name: 'Boros' },
+		{ name: 'Constance' },
+		{ name: 'Deadwood' },
+		{ name: 'Ezra' },
+		{ name: 'Greenleaf' },
+		{ name: 'Harvest' },
+		{ name: 'Highgate' },
+		{ name: 'Kerry' },
+		{ name: 'Liann Jiun' },
+		{ name: 'Londinium' },
+		{ name: 'Muir' },
+		{ name: 'Newhall' },
+		{ name: 'New Melbourne' },
+		{ name: 'Pelorum' },
+		{ name: 'Salisbury' },
+		{ name: 'Shadow' },
+		{ name: 'Sihnon' },
+		{ name: 'Three Hills' },
+		{ name: 'Verbena' },
+		{ name: 'Whittier' }
+	]
 
 function canvasHide(){ showLoader(); canvas.style.display = 'none'; }
 function canvasShow(){ hideLoader(); canvas.style.display = ''; }
@@ -271,8 +318,9 @@ function Init(){
 	highscoreDummy = get("highscore", "null");
 	
 	if(highscoreDummy != "null"){
-		$.each(JSON.parse("submissions:["+highscoreDummy+"]"), function(i, obj) {
-			highscoreArray.push("{ name: " + obj + ", score: " + obj + "}");
+		$.each(JSON.parse(highscoreDummy), function(i, obj) {
+			var highscoreItem = { name: obj.name, score: obj.score};
+			highscoreArray.push(highscoreItem);
 		});
 	}
 }

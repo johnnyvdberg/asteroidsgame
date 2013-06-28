@@ -32,10 +32,14 @@ function highscorePlayHoverSound(i){
 	}
 }
 
+function highscoreSubmitPopup(score){
+	
+}
+
 function highscoreSubmitScore(name, score){
 	var highscoreString = { name: name, score: score};
 	highscoreArray.push(highscoreString);	
-	l(highscoreArray.sort(function(a, b) {
+	/*l(highscoreArray.sort(function(a, b) {
 		var avalue = a.score,
 			bvalue = b.score;
 		if (avalue > bvalue) {
@@ -45,8 +49,8 @@ function highscoreSubmitScore(name, score){
 			return 1;
 		}
 		return 0;
-	}));
-	set("highscore", JSON.stringify(highscoreString));
+	}));*/
+	set("highscore", JSON.stringify(highscoreArray));
 }
 
 function highscoreUpdate(){
