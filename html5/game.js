@@ -40,7 +40,7 @@ var planet = {
 };
 
 var asstroid = {
-  ox: 0, oy: 0, x: 0, y:0, size: 0, spawntimer: 5, alive: false, explosion: -1	
+  ox: 0, oy: 0, x: 0, y:0, size: 0, spawntimer: 5, alive: false, explosion: -1, xoffset: 0, yoffset: 0
 }
 
 var planets = new Array(); 
@@ -471,13 +471,11 @@ function gameDrawEnemyAsstroid(){
 }
 
 function gameDead(){
-	l('deadbegin');
 	ass.exploding = 0;
     ass.alive = false;
 }
 
 function gameDeadEnd(){
-	l('deadend');
 	ass.lives--;
 	if(ass.lives>-1){
 	  gameBegin()	
@@ -547,12 +545,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		if(asstroid.explosion>1.5){ asstroid.explosion = -1; }  
 	  }
 	  asstroid.spawntimer -= modifier;
-	  if(asstroid.spawntimer<1){
-		// show warning
-		  
-	  }
 	  if(asstroid.spawntimer<0){
-		asstroid.spawntimer = (Math.random()*2)+2; 
+		asstroid.spawntimer = (Math.random()*8)+4; 
 		asstroid.alive = true;
 		asstroid.size = 0;
 	  }
@@ -561,7 +555,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	  asstroid.size += (modifier*3);
 	  if(asstroid.size>2){ 
 	    asstroid.alive = false; 
-		asstroid.ox = (Math.random()*canvasxc)+(canvasxc/2); asstroid.oy = (Math.random()*canvasyc)+(canvasyc/2);
+		asstroid.ox = (Math.random()*(canvasxc*1.2))+(canvasxc/2); asstroid.oy = (Math.random()*(canvasyc*1.5))+(canvasyc/2);
 	  }else{
 		asstroid.x =  asstroid.ox + ((canvasxc-asstroid.ox)*asstroid.size);
 		asstroid.y =  asstroid.oy + ((canvasyc-asstroid.oy)*asstroid.size);   
@@ -572,7 +566,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		  asstroid.explosion = 0;
 		  junkhit++;
 		  orbit.velocity -= 10; 	
-		  asstroid.ox = (Math.random()*canvasxc)+(canvasxc/2); asstroid.oy = (Math.random()*canvasyc)+(canvasyc/2);
+		  asstroid.ox = (Math.random()*(canvasxc*1.2))+(canvasxc/2); asstroid.oy = (Math.random()*(canvasyc*1.5))+(canvasyc/2);
 		}
 	  }
 	}
@@ -589,8 +583,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		  (p.alive) && 
 		  (p.angle<(orbit.angle+0.5)) && 
 		  (p.angle>(orbit.angle-6)) && 
-		  (p.distance<(orbit.distance+1)) && 
-		  (p.distance>(orbit.distance-1)) 
+		  (p.distance<(orbit.distance+0.7)) && 
+		  (p.distance>(orbit.distance-0.7)) 
 		){
 		  p.visible = true;	
 		  var pdist = (p.distance-orbit.distance);
@@ -686,6 +680,10 @@ var gameRender = function(delta) {
 	glowx = -(orbit.distance*3);
 	ctx.drawImage(glowImage, glowx, 0, glowImage.width/2, canvas.height);
 	// draw enemy astroid 
+	if((asstroid.spawntimer<1) && (asstroid.spawntimer>0)){
+      ctx.drawImage(warningImage, asstroid.ox-100, asstroid.oy-50, 200, 100);
+		  
+	}
 	gameDrawEnemyAsstroid();
 	debugLine(asstroid.ox,0,asstroid.ox,canvas.height,"green");
 	debugLine(0,asstroid.oy,canvas.width,asstroid.oy,"green");
