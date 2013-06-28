@@ -32,6 +32,23 @@ function highscorePlayHoverSound(i){
 	}
 }
 
+function highscoreSubmitScore(name, score){
+	var highscoreString = { name: name, score: score};
+	highscoreArray.push(highscoreString);	
+	l(highscoreArray.sort(function(a, b) {
+		var avalue = a.score,
+			bvalue = b.score;
+		if (avalue > bvalue) {
+			return -1;
+		}
+		if (avalue < bvalue) {
+			return 1;
+		}
+		return 0;
+	}));
+	set("highscore", JSON.stringify(highscoreString));
+}
+
 function highscoreUpdate(){
 	getDelta();
 	

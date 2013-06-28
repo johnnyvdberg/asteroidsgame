@@ -12,7 +12,11 @@ var musicVolume = Number(get("musicVolume", 50));
 var effectsVolume = Number(get("effectsVolume", 50));
 //alert(musicVolume+", "+effectsVolume+", "+fullscreen+", "+graphicsQuality+", "+difficulty+", "+menuAnimate+", "+menuMusic);
 //=======================================================
-
+//HIGHSCORE
+//=======================================================
+var highscoreDummy; //get("highscore", "null");
+var highscoreArray = [];//JSON.parse(get("highscore", JSON.stringify("{ name: , score: }")));
+//=======================================================
 var gamePlaying = false;
 var timer = null; 
 var mousePos = null;
@@ -264,6 +268,13 @@ function Init(){
 	  soundManager.reboot();	
 	});
 	
+	highscoreDummy = get("highscore", "null");
+	
+	if(highscoreDummy != "null"){
+		$.each(JSON.parse("submissions:["+highscoreDummy+"]"), function(i, obj) {
+			highscoreArray.push("{ name: " + obj + ", score: " + obj + "}");
+		});
+	}
 }
 
 window.onload = function(e){ Init(); }
