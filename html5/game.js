@@ -801,7 +801,7 @@ var gameRender = function(delta) {
 	ctx.fillText(gear, 152, demHeight - 160);
 	ctx.fillText(Math.round(poweruptime), 263, demHeight - 20);
 	poweruptime = poweruptime - 1 * delta;
-	if(poweruptime < 0){poweruptime = 10; powerup = Math.floor(Math.random()*5);}
+	if(poweruptime < 0){poweruptime = 9; powerup = Math.floor(Math.random()*5);}
 	ctx.fillText("SCORE: " + score, 295, demHeight - 110);
 	ctx.fillText("PLANETS HIT: " + planetsDestroyed, 295, demHeight - 95);
 	ctx.fillText("JUNK HIT: " + junkhit, 295, demHeight - 80);
