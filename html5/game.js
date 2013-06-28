@@ -530,6 +530,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	  if(ass.x>canvasxc){ ass.x -= 35*modifier; if(ass.x<canvasxc) ass.x = canvasxc; }
 	}
 	
+	orbit.velocity = orbit.velocity + (1 * delta);
+	
 	// our dead astroid handeling
 	if(ass.alive==false){
 	  ass.exploding += (modifier*15);
@@ -620,6 +622,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 					var dx = ((p.x-ass.x)/50);
 					var dy = (((p.y+(p.h/2))-(ass.y+(ass.h/2)))/30);
 					planetsDestroyed++;
+					orbit.velocity = orbit.velocity - 10;
 					p.alive = false;
 					p.exploding = 0;
 					for(var i = 0; i< particle_count;i++){ particles.push(new particle(p.x,p.y,dx,dy)); }
@@ -765,11 +768,12 @@ var gameRender = function(delta) {
 	ctx.fillText("ORBIT", 303, demHeight - 43);
 	
 	ctx.font = "14px Rock";
+	ctx.fillText("5", 152, demHeight - 160);
 	ctx.fillText("4", 263, demHeight - 20); //POWERUP TIME LEFT
 	ctx.fillText("SCORE: " + score, 295, demHeight - 110);
 	ctx.fillText("PLANETS HIT: " + planetsDestroyed, 295, demHeight - 95);
 	ctx.fillText("JUNK HIT: " + junkhit, 295, demHeight - 80);
-	ctx.fillText("LIVES LOST: " + "0", 295, demHeight - 65);
+	ctx.fillText("TIME LEFT: " + "0", 295, demHeight - 65);
 	
 	//Notification test
 	notification(demWidth - 270, 20, 250, 50, "Achievement Unlocked", "Being an asshole");
