@@ -589,8 +589,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		  (p.alive) && 
 		  (p.angle<(orbit.angle+0.5)) && 
 		  (p.angle>(orbit.angle-6)) && 
-		  (p.distance<(orbit.distance+2)) && 
-		  (p.distance>(orbit.distance-2)) 
+		  (p.distance<(orbit.distance+1)) && 
+		  (p.distance>(orbit.distance-1)) 
 		){
 		  p.visible = true;	
 		  var pdist = (p.distance-orbit.distance);
