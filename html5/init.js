@@ -99,7 +99,11 @@ var planetNames = [
 		{ name: 'Sihnon' },
 		{ name: 'Three Hills' },
 		{ name: 'Verbena' },
-		{ name: 'Whittier' }
+		{ name: 'Whittier' },
+		{ name: 'Druidia' },
+		{ name: 'Planet Spaceballs' },
+		{ name: 'Times New Roman' },
+		{ name: 'Comic Sans' }
 	]
 
 function canvasHide(){ showLoader(); canvas.style.display = 'none'; }
