@@ -62,6 +62,36 @@ var soundNames = [
 	  { id: 'taunt_fail_0', url: 'sounds/menu/taunt_missionfailed.ogg' }
 	];
 	
+var soundNamesCompatibility = [
+      // menumusic
+	  { id: 'menu0', url:'music/menu/01-Vangelis-Heaven-and-Hell.mp3'},
+	  { id: 'menu1', url:'music/menu/206-vangelis-dream_in_an_open_place.mp3'},
+	  // game music
+	  { id: 'game0', url:'music/game/hypnosis-oxygene-cut.mp3'},
+	  { id: 'game1', url:'music/game/koto-from_the_dawn_of_time-cut.mp3'},
+	  // menu sounds
+	  { id: 'click0', url:'sounds/menu/clicksound0.mp3'}, 
+	  { id: 'hover0', url:'sounds/menu/hoversound0.mp3'},
+	  { id: 'click1', url:'sounds/menu/clicksound1.mp3'}, 
+	  { id: 'hover1', url:'sounds/menu/hoversound1.mp3'},
+	  { id: 'click2', url:'sounds/menu/clicksound2.mp3'}, 
+	  { id: 'hover2', url:'sounds/menu/hoversound2.mp3'},
+	  { id: 'click3', url:'sounds/menu/clicksound3.mp3'}, 
+	  { id: 'hover3', url:'sounds/menu/hoversound3.mp3'},
+	  { id: 'click4', url:'sounds/menu/clicksound4.mp3'}, 
+	  { id: 'hover4', url:'sounds/menu/hoversound4.mp3'},
+	  // game sounds
+	  { id: 'explosion', url:'sounds/game/explosion.mp3'},
+	  // taunts
+	  { id: 'taunt_win_0', url: 'sounds/menu/taunt_corecrusher.mp3' },
+	  { id: 'taunt_win_1', url: 'sounds/menu/taunt_hastalaplanet.mp3' },
+	  { id: 'taunt_win_2', url: 'sounds/menu/taunt_muwhahaha.mp3' },
+	  { id: 'taunt_win_3', url: 'sounds/menu/taunt_planetcrushed.mp3' },
+	  { id: 'taunt_win_4', url: 'sounds/menu/taunt_thatwasmoonploding.mp3' },
+	  { id: 'taunt_hurt_0', url: 'sounds/menu/taunt_help.mp3' },
+	  { id: 'taunt_fail_0', url: 'sounds/menu/taunt_missionfailed.mp3' }
+	];
+	
 var planetNames = [
 		{ name: 'Ariel' },
 		{ name: 'Beaumonde' },
@@ -294,26 +324,28 @@ function loadSounds(){
 	var loader = new PxLoader(),
 	i, len, url, n; 
 	n = 0;
-	// queue each sound for loading 
-	for(i=0, len = soundNames.length; i < len; i++) { 	 
-		// see if the browser can play m4a 
-		url = soundNames[i].url;
+	// Queue each sound for loading
+	// if browser is IE launch compatibility
+	var val = navigator.userAgent.toLowerCase();
+	if(val.indexOf("msie") > -1){var soundList = soundNamesCompatibility;} else{var soundList = soundNames;}
+	for(i=0, len = soundList.length; i < len; i++) {
+		url = soundList[i].url;
 		if (!soundManager.canPlayURL(url)) { 
 			continue; // can't be played 
 		} 
 		// queue the sound using the name as the SM2 id 
-		if(soundNames[i].id.substring(0, 5)=='hover'){
-		   loader.addSound(soundNames[i].id+'_1', url); 
-		   loader.addSound(soundNames[i].id+'_2', url); 
-		   loader.addSound(soundNames[i].id+'_3', url); 
-		   loader.addSound(soundNames[i].id+'_4', url); 
+		if(soundList[i].id.substring(0, 5)=='hover'){
+		   loader.addSound(soundList[i].id+'_1', url); 
+		   loader.addSound(soundList[i].id+'_2', url); 
+		   loader.addSound(soundList[i].id+'_3', url); 
+		   loader.addSound(soundList[i].id+'_4', url); 
 		   realLen += 4;	
 		}else{
-		  loader.addSound(soundNames[i].id, url); 
+		  loader.addSound(soundList[i].id, url); 
 		  realLen ++;
 		}
 	} 
-	len = soundNames.length;
+	len = soundList.length;
 	 
 	// listen to load events 
 	loader.addProgressListener(function(e) { 
