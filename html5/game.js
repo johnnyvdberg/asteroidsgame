@@ -9,6 +9,7 @@ var score = 0;
 var gear = 0;
 var powerup = Math.floor(Math.random()*5);
 var poweruptime = 9;
+var bullettimesound = false;
 
 var ass = {
 	speed: 0,
@@ -619,8 +620,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		  var pdist = (p.distance-orbit.distance);
 		  p.x = canvasxc+(pdist*(canvas.width/2));
 		  orbit.planetinview = true;
-		  orbit.bullettime = true; 
-		  orbit.bullettimeup = true;	
+		  orbit.bullettime = true;
+		  orbit.bullettimeup = true;		  
 		}else{
 		  p.visible = false;	
 		}
@@ -657,7 +658,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 			
 		  		}
 			}
-		} 
+		}
+		
 	}
 	// check orbit speed
 	if((orbit.velocity<50) && (ass.alive)){
@@ -672,11 +674,19 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	}else{
 	  // dit is bullettime		
 	  if(orbit.bullettimeup){
-		  orbit.bullettimepercentage+=1.5*modifier;
-		  if(orbit.bullettimepercentage>1) orbit.bullettimepercentage = 1;
+		if(!bullettimesound)
+		{
+			bullettimesound = true;
+			slowMotionSound(true);
+		}
+		orbit.bullettimepercentage+=1.5*modifier;
+		if(orbit.bullettimepercentage>1) 
+		{
+			orbit.bullettimepercentage = 1;
+		}
 	  }else{
 		  orbit.bullettimepercentage-=1.5*modifier;
-		  if(orbit.bullettimepercentage <= 0){ orbit.bullettimepercentage = 0; orbit.bullettime = false; }		  
+		  if(orbit.bullettimepercentage <= 0){ orbit.bullettimepercentage = 0; orbit.bullettime = false; bullettimesound = false; slowMotionSound(false);}		  
 	  } 
 	  orbit.speed = (1-(orbit.bullettimepercentage*0.97));
 	  
@@ -715,6 +725,7 @@ var gameRender = function(delta) {
 	// draw enemy astroid 
 	if((asstroid.spawntimer<1) && (asstroid.spawntimer>0)){
       ctx.drawImage(warningImage, asstroid.ox-100, asstroid.oy-50, 200, 100);
+	  alertSound();
 		  
 	}
 	gameDrawEnemyAsstroid();
@@ -902,6 +913,31 @@ function gamePlayExplosion(){
 	if(soundManager.getSoundById('explosion').playState==1){ soundManager.getSoundById('explosion').stop();	}
     soundManager.setVolume('explosion',Math.round(effectsVolume*0.3));
     soundManager.play('explosion',{ onfinish: function() { } });	
+}
+
+function slowMotionSound(enter)
+{
+    
+	if(enter && soundManager.getSoundById('intoslomo').playState==0)
+	{
+		soundManager.setVolume('intoslomo',Math.round(effectsVolume));
+		soundManager.play('intoslomo',{ onfinish: function() { } });
+	}
+	else if(soundManager.getSoundById('outofslomo').playState==0)
+	{
+		soundManager.setVolume('outofslomo',Math.round(effectsVolume));
+		soundManager.play('outofslomo',{ onfinish: function() { } });
+	}
+}
+
+function alertSound()
+{
+    
+	if(soundManager.getSoundById('alert').playState==0)
+	{
+		soundManager.setVolume('alert',Math.round(effectsVolume));
+		soundManager.play('alert',{ onfinish: function() { } });
+	}
 }
 
 /* ======================================  

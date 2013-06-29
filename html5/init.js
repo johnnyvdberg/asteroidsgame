@@ -52,6 +52,9 @@ var soundNames = [
 	  { id: 'hover4', url:'sounds/menu/hoversound4.ogg'},
 	  // game sounds
 	  { id: 'explosion', url:'sounds/game/explosion.ogg'},
+	  { id: 'intoslomo', url:'sounds/game/intoslomo.ogg'},
+	  { id: 'outofslomo', url:'sounds/game/outofslomo.ogg'},
+	  { id: 'alert', url:'sounds/game/alert.mp3'},
 	  // taunts
 	  { id: 'taunt_win_0', url: 'sounds/menu/taunt_corecrusher.ogg' },
 	  { id: 'taunt_win_1', url: 'sounds/menu/taunt_hastalaplanet.ogg' },
@@ -82,6 +85,9 @@ var soundNamesCompatibility = [
 	  { id: 'hover4', url:'sounds/menu/hoversound4.mp3'},
 	  // game sounds
 	  { id: 'explosion', url:'sounds/game/explosion.mp3'},
+	  { id: 'intoslomo', url:'sounds/game/intoslomo.mp3'},
+	  { id: 'outofslomo', url:'sounds/game/outofslomo.mp3'},
+	  { id: 'alert', url:'sounds/game/alert.mp3'},
 	  // taunts
 	  { id: 'taunt_win_0', url: 'sounds/menu/taunt_corecrusher.mp3' },
 	  { id: 'taunt_win_1', url: 'sounds/menu/taunt_hastalaplanet.mp3' },
