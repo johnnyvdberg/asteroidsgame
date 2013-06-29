@@ -492,6 +492,30 @@ function gameOver(){
 	switchScreen(menuLoad,true);
 }
 
+function scoreAdd(population, type, speedMult)
+{
+	//Calculate type bonus
+	typeBonus = 0;
+	if(type < 7)
+	{
+		typeBonus = 10000;
+	}
+	else if(type < 10)
+	{
+		typeBonus = 20000;
+	}
+	else
+	{
+		typeBonus = 50000;
+	}
+	tempScore = ((population/10000000) + typeBonus)*speedMult;
+	
+	//Randomize a bit because score system will seem more accurate, yeah right
+	tempScore = Math.floor(tempScore*(0.95 + Math.random()*0.1));
+	
+	score += tempScore;
+}
+
 /* ======================================  
            LOOPING FUNCTIONS
  ========================================*/
@@ -602,7 +626,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		}
 	  }
 	}else{ orbit.planetlastcheck += modifier; } // add time
-	// if planets are near or in bullettime check for colission
+	// if planets are near or in bullet time check for collision
 	if((orbit.planetinview) || (orbit.bullettime)){
 		for(var i=0; i<planets.length; i++){
 	    	var p = planets[i];
@@ -624,6 +648,10 @@ var gameUpdate = function (modifier) { // modier is in seconds
 					orbit.velocity = orbit.velocity - 10;
 					p.alive = false;
 					p.exploding = 0;
+					
+					//Add score
+					scoreAdd(p.pop, p.type, ass.speed);
+					
 					for(var i = 0; i< particle_count;i++){ particles.push(new particle(p.x,p.y,dx,dy)); }
 					gamePlayExplosion();
 			
@@ -682,7 +710,7 @@ var gameRender = function(delta) {
 	  gameWarp();
 	}
 	// draw sun glow
-	glowx = -(orbit.distance*3);
+	glowx = -(orbit.distance*2.5);
 	ctx.drawImage(glowImage, glowx, 0, glowImage.width/2, canvas.height);
 	// draw enemy astroid 
 	if((asstroid.spawntimer<1) && (asstroid.spawntimer>0)){
@@ -907,6 +935,7 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.name = planetNames[Math.floor(Math.random()*planetNames.length)].name + " " + romanize(Math.floor(Math.random()*11));
 		
 		//Population
+		//Because most civilizations in our game are capable of limited space travel, some uninhabitable planets may have some people
 		planet.pop = Math.floor(Math.random() * 10 * planetProperties[planet.type].popMultiplier);
 		
 		planets.push($.extend(true, {}, planet));
@@ -938,7 +967,11 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.type = Math.floor(Math.random()*3 + 10);
 		
 		//Name
-		planet.name = planetNames[Math.floor(Math.random()*planetNames.length)].name + " " + romanize(Math.floor(Math.random()*11));		
+		planet.name = planetNames[Math.floor(Math.random()*planetNames.length)].name + " " + romanize(Math.floor(Math.random()*11));
+
+		//Population
+		//Although it is suggested that some gas planets may support life, the player doesn't care and think we're retarded
+		planet.pop = 0;		
 		
 		planets.push($.extend(true, {}, planet));
 	}
