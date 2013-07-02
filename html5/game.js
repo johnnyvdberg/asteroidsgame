@@ -747,8 +747,8 @@ var gameRender = function(delta) {
 		  
 	}
 	gameDrawEnemyAsstroid();
-	debugLine(asstroid.ox,0,asstroid.ox,canvas.height,"green");
-	debugLine(0,asstroid.oy,canvas.width,asstroid.oy,"green");
+	//debugLine(asstroid.ox,0,asstroid.ox,canvas.height,"green");
+	//debugLine(0,asstroid.oy,canvas.width,asstroid.oy,"green");
 	// draw astroid
 	gameDrawAsstroid(); 
 	// draw indicators
