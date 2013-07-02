@@ -42,7 +42,8 @@ var planet = {
 	type: 0,
 	visible: false,
 	pop: 0,
-	name: "Undefined"
+	name: "Undefined",
+	indicator: false
 };
 
 var asstroid = {
@@ -176,9 +177,9 @@ function gameBegin(){ // TODO: init game vars only, can be called to reset
 	orbit.angle = 0; orbit.distance = 50; // reset position
 	orbit.bullettimepercentage = 0; orbit.bullettime = false; orbit.bullettimeup = true; // reset bullettime
 	orbit.velocity = 100; 
+	resetEnemyAsstroid();
     //init stars
-	for (var i=0, n; i<units; i++)
-	{
+	for (var i=0, n; i<units; i++){
 		n = {};
 		resetstar(n);
 		stars.push(n);
@@ -384,38 +385,45 @@ function gameDrawPlanet(i){
 	var size = 0;
 	if(p.alive){		
 	  drawScaled(planetImages[p.type], p.x-60,  p.y-60, planet.w,planet.h,p.calcsize); 
-	  planetIndicator(p.x+60, p.y-120, planetProperties[p.type].name, p.pop, 75, p.name, true, 2);
 	  if(p.calcsize<1){ gameDrawAsstroid(); }
 	}
 }
 
-function planetIndicator(x, y, type, population, requiredSpeed, name, left, performanceLevel)
+function planetIndicator(p, type, population, requiredSpeed, name, left, performanceLevel)
 {
+	var x = p.x;
+	var y = p.y-38;
+	if(x<0){ x = 0; }
+	if(x>canvas.width){ x = canvas.width; }
+	if(x<canvasxc){ left = true; }else{ left = false; }
 	sizeX = 225;
 	sizeY = 75;
+	var xo = 0;
+    //Draw pointing line thingie
+	ctx.beginPath();
+	if(left)
+	{
+		ctx.moveTo(x, y + sizeY);
+		ctx.lineTo(x, y + sizeY + 5);
+	}
+	else
+	{
+		xo = -sizeX;
+		ctx.moveTo(x + sizeX, y + sizeY);
+		ctx.lineTo(x + sizeX, y + sizeY + 5);
+	}
 
 	//Draw border
 	ctx.beginPath();
 	ctx.lineWidth=1;
 	ctx.strokeStyle = "green";
-	ctx.rect(x, y, sizeX, sizeY);
+	ctx.rect(x+xo, y, sizeX, sizeY);
 	ctx.fillStyle = "rgba(0, 255, 0, 0.15)";
 	ctx.fill();
 	ctx.stroke();
 	ctx.closePath();
 	
-	//Draw pointing line thingie
-	ctx.beginPath();
-	if(left)
-	{
-		ctx.moveTo(x, y + sizeY);
-		ctx.lineTo(x - 10, y + sizeY + 5);
-	}
-	else
-	{
-		ctx.moveTo(x + sizeX, y + sizeY);
-		ctx.lineTo(x + sizeX + 10, y + sizeY + 5);
-	}
+	
 	ctx.stroke();
 	ctx.closePath();
 		
@@ -424,8 +432,8 @@ function planetIndicator(x, y, type, population, requiredSpeed, name, left, perf
 	{
 		ctx.beginPath();
 		ctx.strokeStyle = "rgba(0, 255, 0, 0.04)";
-		ctx.moveTo(x, y + i*7);
-		ctx.lineTo(x + sizeX, y + i*7);
+		ctx.moveTo(x + xo, y + i*7);
+		ctx.lineTo(x + sizeX + xo, y + i*7);
 		ctx.stroke();
 		ctx.closePath();
 	}
@@ -433,21 +441,21 @@ function planetIndicator(x, y, type, population, requiredSpeed, name, left, perf
 	//Write generic stuff
 	ctx.font = 'bold 8pt Arial Black';
 	ctx.fillStyle = 'Green'
-	ctx.fillText('Name', x + 10, y + 8);
-	ctx.fillText('Type', x + 10, y + 24);
-	ctx.fillText('Pop', x + 10, y + 40);
-	ctx.fillText('Speed', x + 10, y + 56);
+	ctx.fillText('Name', x + 10 + xo, y + 8);
+	ctx.fillText('Type', x + 10 + xo, y + 24);
+	ctx.fillText('Pop', x + 10 + xo, y + 40);
+	ctx.fillText('Speed', x + 10 + xo, y + 56);
 		
 	//Write actual values
-	ctx.fillText(name, x + 100, y + 8);
-	ctx.fillText(type, x + 100, y + 24);
-	ctx.fillText(population, x + 100, y + 40);
+	ctx.fillText(name, x + 100 + xo, y + 8);
+	ctx.fillText(type, x + 100 + xo, y + 24);
+	ctx.fillText(population, x + 100 + xo, y + 40);
 	
 	//Add progressbar
 	ctx.beginPath();
 	ctx.strokeWidth=1;
 	ctx.strokeStyle = "green";
-	ctx.rect(x + 100, y + 60, (requiredSpeed/100)*(sizeX - 110), 8);
+	ctx.rect(x + 100 + xo, y + 60, (requiredSpeed/100)*(sizeX - 110), 8);
 	ctx.fill();
 	ctx.stroke();
 	ctx.closePath();
@@ -517,6 +525,10 @@ function scoreAdd(population, type, speedMult)
 	score += tempScore;
 }
 
+function resetEnemyAsstroid(){
+  asstroid.ox = (Math.random()*(canvasxc*1.2))+(canvasxc/2); asstroid.oy = (Math.random()*(canvasyc*1.5))+(canvasyc/2);	
+}
+
 /* ======================================  
            LOOPING FUNCTIONS
  ========================================*/
@@ -584,7 +596,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	  asstroid.size += (modifier*3);
 	  if(asstroid.size>2){ 
 	    asstroid.alive = false; 
-		asstroid.ox = (Math.random()*(canvasxc*1.2))+(canvasxc/2); asstroid.oy = (Math.random()*(canvasyc*1.5))+(canvasyc/2);
+		resetEnemyAsstroid();
 	  }else{
 		asstroid.x =  asstroid.ox + ((canvasxc-asstroid.ox)*asstroid.size);
 		asstroid.y =  asstroid.oy + ((canvasyc-asstroid.oy)*asstroid.size);   
@@ -598,8 +610,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		  if(powerup != 3){
 		  	orbit.velocity -= (orbit.velocity/100)*20;
 		  }
-		  
-		  asstroid.ox = (Math.random()*(canvasxc*1.2))+(canvasxc/2); asstroid.oy = (Math.random()*(canvasyc*1.5))+(canvasyc/2);
+		  resetEnemyAsstroid();
 		}
 	  }
 	}
@@ -615,18 +626,30 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	    if(
 		  (p.alive) && 
 		  (p.angle<(orbit.angle+0.5)) && 
-		  (p.angle>(orbit.angle-6)) && 
-		  (p.distance<(orbit.distance+0.7)) && 
-		  (p.distance>(orbit.distance-0.7)) 
+		  (p.angle>(orbit.angle-30)) && 
+		  (p.distance<(orbit.distance+4)) && 
+		  (p.distance>(orbit.distance-4)) 
 		){
-		  p.visible = true;	
+		  
 		  var pdist = (p.distance-orbit.distance);
 		  p.x = canvasxc+(pdist*(canvas.width/2));
-		  orbit.planetinview = true;
-		  orbit.bullettime = true;
-		  orbit.bullettimeup = true;		  
+		  p.indicator = true;
+		  if(
+			(p.alive) && 
+			(p.angle<(orbit.angle+0.5)) && 
+			(p.angle>(orbit.angle-6)) && 
+			(p.distance<(orbit.distance+0.7)) && 
+			(p.distance>(orbit.distance-0.7)) 
+		  ){
+			p.visible = true;	
+			orbit.planetinview = true;
+			orbit.bullettime = true;
+			orbit.bullettimeup = true;
+		  }else{
+			p.visible = false;  
+		  }
 		}else{
-		  p.visible = false;	
+		  p.indicator = false;	
 		}
 	  }
 	}else{ orbit.planetlastcheck += modifier; } // add time
@@ -736,11 +759,17 @@ var gameRender = function(delta) {
 	debugLine(asstroid.ox,0,asstroid.ox,canvas.height,"green");
 	debugLine(0,asstroid.oy,canvas.width,asstroid.oy,"green");
 	// draw astroid
-	gameDrawAsstroid(); 	
+	gameDrawAsstroid(); 
+	// draw indicators
+	for(var i = 0; i < planets.length; i++){ 
+	  var p = planets[i];
+	  if(p.indicator){ planetIndicator(p,planetProperties[p.type].name, p.pop, 75, p.name, false, 2); }		
+	}
 	// draw planet
 	if((orbit.planetinview) || (orbit.bullettime)){
 	  for(var i = 0; i < planets.length; i++){ 
 	    var p = planets[i];
+		// planet in line of sight, show the indicator
  	    if(p.visible){ 
 		  // draw under
 		  gameDrawPlanet(i);
@@ -917,6 +946,10 @@ function gamePlayExplosion(){
 	if(soundManager.getSoundById('explosion').playState==1){ soundManager.getSoundById('explosion').stop();	}
     soundManager.setVolume('explosion',Math.round(effectsVolume*0.3));
     soundManager.play('explosion',{ onfinish: function() { } });	
+}
+
+function checkAngleDifference(a,b,minv,maxv){ // angles from 0 to 100
+  //	
 }
 
 function slowMotionSound(enter)
