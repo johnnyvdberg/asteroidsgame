@@ -764,8 +764,8 @@ var gameRender = function(delta) {
  	    if(p.visible){ 
 		  // draw under
 		  gameDrawPlanet(i);
-		  debugLine(p.x+(60*p.calcsize),0,p.x+(60*p.calcsize),canvas.height,"blue");
-		  debugLine(p.x-(60*p.calcsize),0,p.x-(60*p.calcsize),canvas.height,"blue"); 
+		  //debugLine(p.x+(60*p.calcsize),0,p.x+(60*p.calcsize),canvas.height,"blue");
+		  //debugLine(p.x-(60*p.calcsize),0,p.x-(60*p.calcsize),canvas.height,"blue"); 
 		  debugLine(ass.x+40,0,ass.x+40,canvas.height,"red");
 		  debugLine(ass.x-40,0,ass.x-40,canvas.height,"red");
 		}
