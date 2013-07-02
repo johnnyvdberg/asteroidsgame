@@ -310,7 +310,7 @@ function minimapRender(performanceLevel){
 			 //ctx.fillStyle ="#000000";
 			 ctx.strokeStyle ="#00ff00";
 			 //Give it blip effect
-			 angleDiff = orbit.angle - planets[i].angle;
+			 angleDiff = getAngleDifference(orbit.angle,planets[i].angle);
 			 if(angleDiff < 0 && angleDiff > -10)
 			 {
 				ctx.lineWidth= 3 + Math.sin((Math.abs(angleDiff)/10)*3.14159265359)*3;
@@ -391,27 +391,20 @@ function gameDrawPlanet(i){
 
 function planetIndicator(p, type, population, requiredSpeed, name, left, performanceLevel)
 {
+    var sizeX = 225;
+	var sizeY = 75;
 	var x = p.x;
 	var y = p.y-38;
 	if(x<0){ x = 0; }
-	if(x>canvas.width){ x = canvas.width; }
+	if(x>(canvas.width-sizeX)){ x = canvas.width; }
 	if(x<canvasxc){ left = true; }else{ left = false; }
-	sizeX = 225;
-	sizeY = 75;
 	var xo = 0;
     //Draw pointing line thingie
 	ctx.beginPath();
-	if(left)
-	{
-		ctx.moveTo(x, y + sizeY);
-		ctx.lineTo(x, y + sizeY + 5);
-	}
-	else
-	{
-		xo = -sizeX;
-		ctx.moveTo(x + sizeX, y + sizeY);
-		ctx.lineTo(x + sizeX, y + sizeY + 5);
-	}
+	ctx.moveTo(x, y + sizeY);
+	ctx.lineTo(x, y + sizeY + 20);
+	ctx.stroke();
+	ctx.closePath();
 
 	//Draw border
 	ctx.beginPath();
@@ -422,10 +415,7 @@ function planetIndicator(p, type, population, requiredSpeed, name, left, perform
 	ctx.fill();
 	ctx.stroke();
 	ctx.closePath();
-	
-	
-	ctx.stroke();
-	ctx.closePath();
+
 		
 	//Draw prestige scanlines
 	for(i = 0; performanceLevel == 2 && i < sizeY/7; i++)
@@ -626,7 +616,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	    if(
 		  (p.alive) && 
 		  (p.angle<(orbit.angle+0.5)) && 
-		  (p.angle>(orbit.angle-30)) && 
+		  (p.angle>(orbit.angle-50)) && 
 		  (p.distance<(orbit.distance+4)) && 
 		  (p.distance>(orbit.distance-4)) 
 		){
@@ -649,7 +639,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 			p.visible = false;  
 		  }
 		}else{
-		  p.indicator = false;	
+		  p.indicator = false;
+		  p.visible = false;	
 		}
 	  }
 	}else{ orbit.planetlastcheck += modifier; } // add time
@@ -948,8 +939,14 @@ function gamePlayExplosion(){
     soundManager.play('explosion',{ onfinish: function() { } });	
 }
 
-function checkAngleDifference(a,b,minv,maxv){ // angles from 0 to 100
-  //	
+function checkAngleDifference(a,b,minv,maxv){ // angles from 0 to 100, returns true or false
+  var c = getAngleDifference(a,b);
+  if((c >= minv) && (c <= maxv)) return true;	
+}
+
+function getAngleDifference(a,b){ // angles from 0 to 100
+  var c = b-a; if(c>50) c -= 100; if(c<-50) c+=100;
+  return c;	
 }
 
 function slowMotionSound(enter)
@@ -1057,10 +1054,10 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 			if(x != i)
 			{
 				//Check orbit
-				angleDiff = Math.abs(planets[i].angle - planets[x].angle);
+				angleDiff = getAngleDifference(planets[i].angle,planets[x].angle);
 				distDiff = Math.abs(planets[i].distance - planets[x].distance);
 				
-				if(distDiff < 7.5 && angleDiff < 5)
+				if(distDiff < 7.5 && Math.abs(angleDiff) < 5)
 				{
 					randomLevel(gasPlanets, normalPlanets, otherPlanets);
 				}
