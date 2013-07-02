@@ -532,6 +532,9 @@ var gameMain = function () {
 }; 
 
 var gameUpdate = function (modifier) { // modier is in seconds
+    // modieifer hangt as van velocity
+	modifier = modifier*((orbit.velocity/100));
+
     // key input + ass movement
 	if (37 in keysDown) { //left
 		ass.x -= ass.speed * modifier;
@@ -701,6 +704,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 };
 
 var gameRender = function(delta) {
+	delta = delta*((orbit.velocity/100));
 	// calculate shake effect in hyperspeed and explosion
 	if(planet.exploding>-1){  //offsets x en y voor dat lekkere explosie effect
 	  ox = -10+(Math.random()*20); oy = -10+(Math.random()*20);	
@@ -869,7 +873,7 @@ function drawDebugText(){
    ctx.fillText("FPS: " + fps, 32, 64);
    ctx.fillText("Angle: " + Math.round(orbit.angle)+" AssAngle :"+Math.round(ass.angle), 32, 140);
    ctx.fillText("bullatp: " + Math.round(orbit.bullettimepercentage*100), 32, 170);
-   ctx.fillText("distance: " + Math.round(orbit.distance), 32, 200);
+   ctx.fillText("Velocity: " + Math.round(orbit.velocity), 32, 200);
    ctx.fillText("Lives: " + ass.lives, 32, 230);
    ctx.fillText("Planet x: " + Math.round(planet.x)+" Planet y: "+Math.round(planet.y), 32, 260);
    ctx.fillText("Planet in view: " + orbit.planetinview, 32, 290);
