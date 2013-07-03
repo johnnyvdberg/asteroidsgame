@@ -7,7 +7,7 @@ var gameMusic = true;
 var junkhit = 0;
 var score = 0;
 var gear = 0;
-var powerup = 2;
+var powerup = 1;
 var poweruptime = 9;
 var bullettimesound = false;
 
@@ -82,10 +82,10 @@ var particle_count = 1000;
 var loader, assImage, planetImage, starImage, bgImage, parImage, explode1Image, explode2Image, bgTiles, assFrames, smallExplodeImage, warningImage, deathImage;
 // stars
 var warpZ = 25,
-units = 20,
+units = 10,
 stars = [],
 cycle = 0,
-Z = 0.035 + (1/25 * 2);
+Z = 0.015 + (1/25 * 2);
 var Rnd = Math.random,
 Sin = Math.sin,
 Floor = Math.floor;
@@ -107,6 +107,9 @@ function gameLoad(){  // init loader
 	parIceImage = loader.addImage('images/game/ice.png');
 	explodeImage1 = loader.addImage('images/game/explode.png');
 	explodeImage2 = loader.addImage('images/game/ring.png');
+	explodeRingIceImage = loader.addImage('images/game/ring_ice.png');
+	explodeRingFireImage = loader.addImage('images/game/ring_fire.png');
+	
 	glowImage = loader.addImage('images/game/glow.png');
 	smallExplodeImage = loader.addImage('images/game/smallring.png');
 	warningImage = loader.addImage('images/game/warning.png');
@@ -207,9 +210,19 @@ function gameBegin(){ // TODO: init game vars only, can be called to reset
 function drawExplodingPlanet(p){
   var n = p.exploding;	
   var i = Math.round(n);
-  if(powerup != 2){
+  if(powerup == 0 || powerup > 2){
   	drawScaled(explodeImage2,p.x-250,p.y-250,500,500,n/3);
  	ctx.drawImage(explodeImage1,0,i*240,240,240,p.x-120,p.y-120,240,240);
+  }
+  //Fire powerup explosion
+  else if (powerup == 1)
+  {
+	ctx.drawImage(explodeRingFireImage,0,i*240,240,240,p.x-120,p.y-120,240,240);
+  }
+  //Ice powerup explosion
+  else if (powerup == 2)
+  {
+	ctx.drawImage(explodeRingIceImage,0,i*240,240,240,p.x-120,p.y-120,240,240);
   }
 }
 
@@ -293,7 +306,7 @@ function gameWarp(){ // warp star effect
 	  }
   
 	  // reset when star is out of the view field
-	  if (n.z < Z || n.px > canvas.width || n.py > canvas.height)
+	  if (n.z < Z || n.px > canvas.width/2 || n.py > canvas.height/2)
 	  {
 		  // reset star
 		  resetstar(n);
@@ -400,7 +413,7 @@ function planetIndicator(p, type, population, requiredSpeed, name, left, perform
     var sizeX = 225;
 	var sizeY = 75;
 	var x = p.x;
-	var y = p.y-80;
+	var y = p.y-150;
 	if(x<0){ x = 0; }
 	if(x>(canvas.width-sizeX)){ x = canvas.width; }
 	if(x<canvasxc){ left = true; }else{ left = false; }
@@ -561,6 +574,12 @@ var gameUpdate = function (modifier) { // modier is in seconds
         gamePlaying = true;
   		menuPlayClick();
   		switchScreen(optionLoad, false);
+    }else if (73 in keysDown) {
+        powerup = 2;
+		poweruptime = 9;
+    }else if (70 in keysDown) {
+		powerup = 1;
+		poweruptime = 9;
     }
 	// update distance, push asstroid to middle
 	if(!orbit.bullettime){
