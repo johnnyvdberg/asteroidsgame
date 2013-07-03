@@ -52,17 +52,18 @@ var soundNames = [
 	  { id: 'hover4', url:'sounds/menu/hoversound4.ogg'},
 	  // game sounds
 	  { id: 'explosion', url:'sounds/game/explosion.ogg'},
+	  { id: 'assexplosion', url:'sounds/game/assexplosion.mp3'},
 	  { id: 'intoslomo', url:'sounds/game/intoslomo.ogg'},
 	  { id: 'outofslomo', url:'sounds/game/outofslomo.ogg'},
 	  { id: 'alert', url:'sounds/game/alert.mp3'},
 	  // taunts
-	  { id: 'taunt_win_0', url: 'sounds/menu/taunt_corecrusher.ogg' },
-	  { id: 'taunt_win_1', url: 'sounds/menu/taunt_hastalaplanet.ogg' },
-	  { id: 'taunt_win_2', url: 'sounds/menu/taunt_muwhahaha.ogg' },
-	  { id: 'taunt_win_3', url: 'sounds/menu/taunt_planetcrushed.ogg' },
-	  { id: 'taunt_win_4', url: 'sounds/menu/taunt_thatwasmoonploding.ogg' },
-	  { id: 'taunt_hurt_0', url: 'sounds/menu/taunt_help.ogg' },
-	  { id: 'taunt_fail_0', url: 'sounds/menu/taunt_missionfailed.ogg' }
+	  { id: 'taunt_win_0', url: 'sounds/game/taunt_corecrusher.ogg' },
+	  { id: 'taunt_win_1', url: 'sounds/game/taunt_hastalaplanet.ogg' },
+	  { id: 'taunt_win_2', url: 'sounds/game/taunt_muwhahaha.ogg' }, // death sound :P
+	  { id: 'taunt_win_3', url: 'sounds/game/taunt_planetcrushed.ogg' },
+	  { id: 'taunt_win_4', url: 'sounds/game/taunt_thatwasmoonploding.ogg' },
+	  { id: 'taunt_hurt_0', url: 'sounds/game/taunt_help.ogg' },
+	  { id: 'taunt_fail_0', url: 'sounds/game/taunt_missionfailed.ogg' }
 	];
 	
 var soundNamesCompatibility = [
@@ -85,17 +86,18 @@ var soundNamesCompatibility = [
 	  { id: 'hover4', url:'sounds/menu/hoversound4.mp3'},
 	  // game sounds
 	  { id: 'explosion', url:'sounds/game/explosion.mp3'},
+      { id: 'assexplosion', url:'sounds/game/assexplosion.mp3'},
 	  { id: 'intoslomo', url:'sounds/game/intoslomo.mp3'},
 	  { id: 'outofslomo', url:'sounds/game/outofslomo.mp3'},
 	  { id: 'alert', url:'sounds/game/alert.mp3'},
 	  // taunts
-	  { id: 'taunt_win_0', url: 'sounds/menu/taunt_corecrusher.mp3' },
-	  { id: 'taunt_win_1', url: 'sounds/menu/taunt_hastalaplanet.mp3' },
-	  { id: 'taunt_win_2', url: 'sounds/menu/taunt_muwhahaha.mp3' },
-	  { id: 'taunt_win_3', url: 'sounds/menu/taunt_planetcrushed.mp3' },
-	  { id: 'taunt_win_4', url: 'sounds/menu/taunt_thatwasmoonploding.mp3' },
-	  { id: 'taunt_hurt_0', url: 'sounds/menu/taunt_help.mp3' },
-	  { id: 'taunt_fail_0', url: 'sounds/menu/taunt_missionfailed.mp3' }
+	  { id: 'taunt_win_0', url: 'sounds/game/taunt_corecrusher.mp3' },
+	  { id: 'taunt_win_1', url: 'sounds/game/taunt_hastalaplanet.mp3' },
+	  { id: 'taunt_win_2', url: 'sounds/game/taunt_muwhahaha.mp3' },
+	  { id: 'taunt_win_3', url: 'sounds/game/taunt_planetcrushed.mp3' },
+	  { id: 'taunt_win_4', url: 'sounds/game/taunt_thatwasmoonploding.mp3' },
+	  { id: 'taunt_hurt_0', url: 'sounds/game/taunt_help.mp3' },
+	  { id: 'taunt_fail_0', url: 'sounds/game/taunt_missionfailed.mp3' }
 	];
 	
 var planetNames = [
@@ -323,6 +325,21 @@ function playVolume(){ if(currentPlaylist[currentMusicIndex]!=undefined){current
 function stopMusic(){ if(currentPlaylist[currentMusicIndex]!=undefined){ if(currentPlaylist[currentMusicIndex].playState == 1){ currentPlaylist[currentMusicIndex].stop(); } } }
 
 function checkPlayMusic(){ if(musicType==1){  playMusic = menuMusic;  }else{ playMusic = gameMusic; } if(playMusic){ playNextItem(); }else{ stopMusic(); } } // kijk of ie mag spelen
+
+function getInternetExplorerVersion()
+// Returns the version of Internet Explorer or a -1
+// (indicating the use of another browser).
+{
+  var rv = -1; // Return value assumes failure.
+  if (navigator.appName == 'Microsoft Internet Explorer')
+  {
+    var ua = navigator.userAgent;
+    var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+    if (re.exec(ua) != null)
+      rv = parseFloat( RegExp.$1 );
+  }
+  return rv;
+}
 	
 var realLen = 0;	
 	
@@ -331,9 +348,7 @@ function loadSounds(){
 	i, len, url, n; 
 	n = 0;
 	// Queue each sound for loading
-	// if browser is IE launch compatibility
-	var val = navigator.userAgent.toLowerCase();
-	if(val.indexOf("msie") > -1){var soundList = soundNamesCompatibility;} else{var soundList = soundNames;}
+	if(getInternetExplorerVersion()>-1){ var soundList = soundNamesCompatibility; } else{var soundList = soundNames; }
 	for(i=0, len = soundList.length; i < len; i++) {
 		url = soundList[i].url;
 		if (!soundManager.canPlayURL(url)) { 

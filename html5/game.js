@@ -43,11 +43,12 @@ var planet = {
 	visible: false,
 	pop: 0,
 	name: "Undefined",
-	indicator: false
+	indicator: false,
+	indicatorside: true, // left, right
 };
 
 var asstroid = {
-  ox: 0, oy: 0, x: 0, y:0, size: 0, spawntimer: 5, alive: false, explosion: -1, xoffset: 0, yoffset: 0
+  ox: 0, oy: 0, x: 0, y:0, size: 0, spawntimer: 5, alive: false, explosion: -1, xoffset: 0
 }
 
 var planets = new Array(); 
@@ -100,7 +101,6 @@ function gameLoad(){  // init loader
 	bgTiles = Array();
 	for(var i = 0; i < 6; i++){ bgTiles[i] = loader.addImage('images/game/space_'+i+'.png'); }
 	assFrames = loader.addImage('images/game/ass_sprite.png'); 
-	planetImage = loader.addImage('images/game/planet.png'); 
 	starImage = loader.addImage('images/game/star.png');
 	bgImage = loader.addImage('images/game/bg.jpg');
 	parImage = loader.addImage('images/game/1.png');
@@ -415,9 +415,15 @@ function planetIndicator(p, type, population, requiredSpeed, name, left, perform
 	var x = p.x;
 	var y = p.y-150;
 	if(x<0){ x = 0; }
-	if(x>(canvas.width-sizeX)){ x = canvas.width; }
-	if(x<canvasxc){ left = true; }else{ left = false; }
+	if(x>(canvas.width)){ x = canvas.width; }
+	if(p.indicatorside){
+	  if(x>canvasxc+200){ left = false; }else{ left = true; }	 
+	}else{
+	  if(x<canvasxc-200){ left = true; }else{ left = false; }	
+	}
+	p.indicatorside = left;
 	var xo = 0;
+	if(!left){ xo = -sizeX; }
     //Draw pointing line thingie
 	ctx.strokeStyle = "green";
     ctx.lineWidth=1;
@@ -492,6 +498,7 @@ function gameDrawEnemyAsstroid(){
 
 function gameDead(){
 	ass.exploding = 0;
+	gamePlayDeath();
     ass.alive = false;
 }
 
@@ -506,6 +513,7 @@ function gameDeadEnd(){
 
 function gameOver(){
 	l('gameover');
+	gamePlayFail();
 	switchScreen(menuLoad,true);
 }
 
@@ -541,7 +549,9 @@ function scoreAdd(population, type, speedMult)
 }
 
 function resetEnemyAsstroid(){
-  asstroid.ox = (Math.random()*(canvasxc*1.2))+(canvasxc/2); asstroid.oy = (Math.random()*(canvasyc*1.5))+(canvasyc/2);	
+  asstroid.ox = (Math.random()*(canvasxc*1.2))+(canvasxc/2); 
+  asstroid.oy = (Math.random()*(canvasyc*1.5))+(canvasyc/2);
+  asstroid.xoffset = (Math.random()*300)-150;	
 }
 
 /* ======================================  
@@ -564,11 +574,11 @@ var gameUpdate = function (modifier) { // modier is in seconds
 
     // key input + ass movement
 	if (37 in keysDown) { //left
-		ass.x -= ass.speed * modifier*1.5;
+		ass.x -= ass.speed * speedmodifier*1.5;
 		if((ass.x-50)<0) ass.x = 0;
 	} else
 	if (39 in keysDown) { //right
-		ass.x += ass.speed * modifier;
+		ass.x += ass.speed * speedmodifier;
 		if((ass.x+50)>canvas.width) ass.x = canvas.width-50;
 	}else if (27 in keysDown) {
         gamePlaying = true;
@@ -619,13 +629,14 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	    asstroid.alive = false; 
 		resetEnemyAsstroid();
 	  }else{
-		asstroid.x =  asstroid.ox + ((canvasxc-asstroid.ox)*asstroid.size);
+		asstroid.x =  (asstroid.ox + ((canvasxc-asstroid.ox)*asstroid.size))+asstroid.xoffset;
 		asstroid.y =  asstroid.oy + ((canvasyc-asstroid.oy)*asstroid.size);   
 	  }
 	  if((asstroid.size>1)&&(asstroid.size<1.3)){
-	    if( (asstroid.x<(ass.x+80)) && asstroid.x>(ass.x-80)){
+	    if( (asstroid.x<(ass.x+60)) && asstroid.x>(ass.x-60)){
 		  asstroid.alive = false;
 		  asstroid.explosion = 0;
+		  gamePlayAsstroidExplosion();
 		  junkhit++;
 		  
 		  if(powerup != 3 || powerup != 1){
@@ -695,7 +706,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	       		p.calcsize = ((p.calcangle*2)+1);
 			}		 
 		 	if((p.calcangle<0.01) && (p.calcangle>-0.01) && (p.visible)){ // colission
-			    if ((ass.x-40) <= (p.x+(60*p.calcsize)) && (ass.x+40) >= (p.x-(60*p.calcsize)) ) { // todo, make real
+			    if ((ass.x-30) <= (p.x+(60*p.calcsize)) && (ass.x+30) >= (p.x-(60*p.calcsize)) ) { // todo, make real
 					var dx = ((p.x-ass.x)/50);
 					var dy = (((p.y+(p.h/2))-(ass.y+(ass.h/2)))/30);
 					
@@ -791,7 +802,7 @@ var gameRender = function(delta) {
 	ctx.drawImage(glowImage, glowx, 0, glowImage.width/2, canvas.height);
 	// draw enemy astroid 
 	if((asstroid.spawntimer<1) && (asstroid.spawntimer>0)){
-      ctx.drawImage(warningImage, asstroid.ox-100, asstroid.oy-50, 200, 100);
+      ctx.drawImage(warningImage, (asstroid.ox-100)+asstroid.xoffset, asstroid.oy-50, 200, 100);
 	  alertSound();
 		  
 	}
@@ -1001,6 +1012,26 @@ function gamePlayExplosion(){
     soundManager.setVolume('explosion',Math.round(effectsVolume*0.3));
     soundManager.play('explosion',{ onfinish: function() { } });	
 }
+
+function gamePlayDeath(){
+	if(soundManager.getSoundById('taunt_win_2').playState==1){ soundManager.getSoundById('taunt_win_2').stop();	}
+    soundManager.setVolume('taunt_win_2',Math.round(effectsVolume*0.3));
+    soundManager.play('taunt_win_2',{ onfinish: function() { } });	
+}
+
+function gamePlayFail(){
+	if(soundManager.getSoundById('taunt_fail_0').playState==1){ soundManager.getSoundById('taunt_fail_0').stop();	}
+    soundManager.setVolume('taunt_fail_0',Math.round(effectsVolume*0.3));
+    soundManager.play('taunt_fail_0',{ onfinish: function() { } });	
+}
+
+function gamePlayAsstroidExplosion(){
+	if(soundManager.getSoundById('assexplosion').playState==1){ soundManager.getSoundById('assexplosion').stop();	}
+    soundManager.setVolume('assexplosion',Math.round(effectsVolume*0.3));
+    soundManager.play('assexplosion',{ onfinish: function() { } });	
+}
+
+
 
 function checkAngleDifference(a,b,minv,maxv){ // angles from 0 to 100, returns true or false
   var c = getAngleDifference(a,b);
