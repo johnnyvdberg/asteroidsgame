@@ -611,10 +611,14 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		  
 		  if(powerup != 3 || powerup != 1){
 			  if(powerup == 2){
-				  	orbit.velocity -= ((orbit.velocity/100)*20)/2 + 5;
+					if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*20)/2 + 15; }else 
+					if(difficulty == 1){ orbit.velocity -= ((orbit.velocity/100)*25)/2 + 20 }else 
+					if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*30)/2 + 25; }
 				}else{
-		  			orbit.velocity -= (orbit.velocity/100)*20 + 10;
-			  	}
+					if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*20) + 15; }else 
+					if(difficulty == 1){ orbit.velocity -= ((orbit.velocity/100)*25) + 20;}else 
+					if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*30) + 25; }
+				}
 		  }
 		  resetEnemyAsstroid();
 		}
@@ -679,9 +683,13 @@ var gameUpdate = function (modifier) { // modier is in seconds
 					
 					if(powerup != 3 || powerup != 1){
 					  if(powerup == 2){
-							orbit.velocity -= ((orbit.velocity/100)*20)/2 + 5;
+							if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*20)/2;}else 
+							if(difficulty == 1){ orbit.velocity -= ((orbit.velocity/100)*25)/2;}else 
+							if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*30)/2;}
 						}else{
-							orbit.velocity -= (orbit.velocity/100)*20 + 10;
+							if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*20);}else 
+							if(difficulty == 1){ orbit.velocity -= ((orbit.velocity/100)*25);}else 
+							if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*30);}
 						}
 				  	}
 					
