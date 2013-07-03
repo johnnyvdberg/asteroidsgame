@@ -7,7 +7,7 @@ var gameMusic = true;
 var junkhit = 0;
 var score = 0;
 var gear = 0;
-var powerup = Math.floor(Math.random()*5);
+var powerup = 2;
 var poweruptime = 9;
 var bullettimesound = false;
 
@@ -104,6 +104,7 @@ function gameLoad(){  // init loader
 	starImage = loader.addImage('images/game/star.png');
 	bgImage = loader.addImage('images/game/bg.jpg');
 	parImage = loader.addImage('images/game/1.png');
+	parIceImage = loader.addImage('images/game/ice.png');
 	explodeImage1 = loader.addImage('images/game/explode.png');
 	explodeImage2 = loader.addImage('images/game/ring.png');
 	glowImage = loader.addImage('images/game/glow.png');
@@ -200,10 +201,12 @@ function gameBegin(){ // TODO: init game vars only, can be called to reset
  ========================================*/
 
 function drawExplodingPlanet(p){
-    var n = p.exploding;	
-  var i = Math.round(n);	
-  drawScaled(explodeImage2,p.x-250,p.y-250,500,500,n/3);
-  ctx.drawImage(explodeImage1,0,i*240,240,240,p.x-120,p.y-120,240,240);	
+  var n = p.exploding;	
+  var i = Math.round(n);
+  if(powerup != 2){
+  	drawScaled(explodeImage2,p.x-250,p.y-250,500,500,n/3);
+ 	ctx.drawImage(explodeImage1,0,i*240,240,240,p.x-120,p.y-120,240,240);
+  }
 }
 
 function drawExplodingEnemyAsstroid(){
@@ -269,8 +272,7 @@ function gameWarp(){ // warp star effect
   
 	  if (n.px !== 0)
 	  {
-		  ctx.strokeStyle = "rgb(200,200,200)";
-		  ctx.lineWidth = e;
+		  if(powerup == 1){ctx.lineWidth = e * 1.5; ctx.strokeStyle = "rgb(200,0,0)"; }else{ctx.lineWidth = e; ctx.strokeStyle = "rgb(200,200,200)"; }
 		  ctx.beginPath();
 		  ctx.moveTo(xx + cx, yy + cy);
 		  ctx.lineTo(xx + cx, yy + cy + 3);
@@ -281,9 +283,9 @@ function gameWarp(){ // warp star effect
 	  n.px = xx;
 	  n.py = yy;
 	  if(orbit.bullettimepercentage>0){
-		n.z -= (Z * (orbit.speed*100));	
+		n.z -= (Z * (orbit.speed*1));	
 	  }else{
-		n.z -= Z*120;
+		n.z -= Z*1.2;
 	  }
   
 	  // reset when star is out of the view field
@@ -511,7 +513,14 @@ function scoreAdd(population, type, speedMult)
 	//Randomize a bit because score system will seem more accurate, yeah right
 	tempScore = Math.floor(tempScore*(0.95 + Math.random()*0.1));
 	
-	score += tempScore;
+	
+	if(powerup == 1){
+		score += (tempScore * 1.5);
+	}else if(powerup == 4 || powerup == 2){
+		score += (tempScore * 2);
+	}else{
+		score += tempScore;
+	}
 }
 
 function resetEnemyAsstroid(){
@@ -596,8 +605,12 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		  asstroid.explosion = 0;
 		  junkhit++;
 		  
-		  if(powerup != 3){
-		  	orbit.velocity -= (orbit.velocity/100)*20;
+		  if(powerup != 3 || powerup != 1){
+			  if(powerup == 2){
+				  	orbit.velocity -= ((orbit.velocity/100)*20)/2 + 5;
+				}else{
+		  			orbit.velocity -= (orbit.velocity/100)*20 + 10;
+			  	}
 		  }
 		  resetEnemyAsstroid();
 		}
@@ -658,7 +671,15 @@ var gameUpdate = function (modifier) { // modier is in seconds
 					var dx = ((p.x-ass.x)/50);
 					var dy = (((p.y+(p.h/2))-(ass.y+(ass.h/2)))/30);
 					planetsDestroyed++;
-					orbit.velocity = orbit.velocity - 10;
+					
+					if(powerup != 3 || powerup != 1){
+					  if(powerup == 2){
+							orbit.velocity -= ((orbit.velocity/100)*20)/2 + 5;
+						}else{
+							orbit.velocity -= (orbit.velocity/100)*20 + 10;
+						}
+				  	}
+					
 					p.alive = false;
 					p.exploding = 0;
 					
@@ -674,7 +695,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		
 	}
 	// check orbit speed
-	if((orbit.velocity<50) && (ass.alive)){
+	if((orbit.velocity<5) && (ass.alive)){
 	  gameDead();		
 	}
 	
@@ -729,9 +750,7 @@ var gameRender = function(delta) {
  	// draw tiled background
 	drawTiledBackground(Math.round(orbit.angle*30.72),0);  // dat is zodat we 512*3 loopen	
 	// draw stars coming at you
-	if(orbit.bullettime){
-	  gameWarp();
-	}
+	gameWarp();
 	// draw sun glow
 	glowx = -(orbit.distance*2.5);
 	ctx.drawImage(glowImage, glowx, 0, glowImage.width/2, canvas.height);
@@ -789,7 +808,11 @@ var gameRender = function(delta) {
    			f = true;
    			p.opacity = (p.remaining_life/p.life);
 
-            ctx.drawImage(parImage,p.location.x,p.location.y); // images zijn sneller
+			if(powerup == 2){
+				ctx.drawImage(parIceImage,p.location.x,p.location.y);
+			}else{
+				ctx.drawImage(parImage,p.location.x,p.location.y); // images zijn sneller
+			}
    			
     		p.remaining_life -= (delta*70);
     		p.radius += (delta*10);
@@ -802,7 +825,9 @@ var gameRender = function(delta) {
     // draw debug text
 	drawDebugText();
 	
-	orbit.velocity = orbit.velocity + 2 * delta;
+	if(!orbit.bullettime){
+		orbit.velocity = orbit.velocity + 2 * delta;
+	}
 	
     //Draw HUD
   	ctx.drawImage(radarbgImage, 6, demHeight - 160);
@@ -864,8 +889,10 @@ var gameRender = function(delta) {
 	ctx.font = "14px Rock";
 	ctx.fillText(gear, 152, demHeight - 160);
 	ctx.fillText(Math.round(poweruptime), 263, demHeight - 20);
+	
 	poweruptime = poweruptime - 1 * delta;
-	if(poweruptime < 0){poweruptime = 9; powerup = Math.floor(Math.random()*5);}
+	if(poweruptime < 0){powerup = 0;}
+	
 	ctx.fillText("SCORE: " + score, 295, demHeight - 110);
 	ctx.fillText("PLANETS HIT: " + planetsDestroyed, 295, demHeight - 95);
 	ctx.fillText("JUNK HIT: " + junkhit, 295, demHeight - 80);
