@@ -281,9 +281,9 @@ function gameWarp(){ // warp star effect
 	  n.px = xx;
 	  n.py = yy;
 	  if(orbit.bullettimepercentage>0){
-		n.z -= (Z * (orbit.speed*100));	
+		n.z -= (Z * (orbit.speed*1));	
 	  }else{
-		n.z -= Z*120;
+		n.z -= Z*1.2;
 	  }
   
 	  // reset when star is out of the view field
@@ -729,9 +729,7 @@ var gameRender = function(delta) {
  	// draw tiled background
 	drawTiledBackground(Math.round(orbit.angle*30.72),0);  // dat is zodat we 512*3 loopen	
 	// draw stars coming at you
-	if(orbit.bullettime){
-	  gameWarp();
-	}
+	gameWarp();
 	// draw sun glow
 	glowx = -(orbit.distance*2.5);
 	ctx.drawImage(glowImage, glowx, 0, glowImage.width/2, canvas.height);
