@@ -167,6 +167,10 @@ var gameStart = function () { // TODO: get called only once
 	timer = setInterval(gameMain, 1);
 };
 
+var gameResume = function (){
+  timer = setInterval(gameMain, 1);	
+}
+
 
 function gameBegin(){ // TODO: init game vars only, can be called to reset
 	ass.x = (canvas.width /2);
@@ -396,7 +400,7 @@ function planetIndicator(p, type, population, requiredSpeed, name, left, perform
     var sizeX = 225;
 	var sizeY = 75;
 	var x = p.x;
-	var y = p.y-38;
+	var y = p.y-80;
 	if(x<0){ x = 0; }
 	if(x>(canvas.width-sizeX)){ x = canvas.width; }
 	if(x<canvasxc){ left = true; }else{ left = false; }
@@ -543,7 +547,7 @@ var gameMain = function () {
 
 var gameUpdate = function (modifier) { // modier is in seconds
     // modieifer hangt as van velocity
-	modifier = modifier*((orbit.velocity/100));
+	speedmodifier = modifier*((orbit.velocity/100));
 
     // key input + ass movement
 	if (37 in keysDown) { //left
@@ -591,7 +595,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	  }
 	  	
 	}else{
-	  asstroid.size += (modifier*3);
+	  asstroid.size += (speedmodifier*3);
 	  if(asstroid.size>2){ 
 	    asstroid.alive = false; 
 		resetEnemyAsstroid();
@@ -632,12 +636,13 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		){
 		  
 		  var pdist = (p.distance-orbit.distance);
+		  btdist = -5.8*(orbit.velocity/100);
 		  p.x = canvasxc+(pdist*(canvas.width/2));
 		  p.indicator = true;
 		  if(
 			(p.alive) && 
 			
-			checkAngleDifference(p.angle,orbit.angle,-6,0.5) && 
+			checkAngleDifference(p.angle,orbit.angle,btdist,0.5) && 
 			(p.distance<(orbit.distance+0.7)) && 
 			(p.distance>(orbit.distance-0.7)) 
 		  ){
@@ -701,8 +706,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	
 	// orbit and ass angle;
 	if(orbit.bullettime == false){
-	  ass.angle += 25*modifier; 
-      orbit.angle -= 15*modifier;
+	  ass.angle += 25*speedmodifier; 
+      orbit.angle -= 15*speedmodifier;
 	  orbit.speed = 1; 
 	}else{
 	  // dit is bullettime		
@@ -718,14 +723,14 @@ var gameUpdate = function (modifier) { // modier is in seconds
 			orbit.bullettimepercentage = 1;
 		}
 	  }else{
-		  orbit.bullettimepercentage-=1.5*modifier;
+		  orbit.bullettimepercentage-=1.5*speedmodifier;
 		  if(orbit.bullettimepercentage <= 0){ orbit.bullettimepercentage = 0; orbit.bullettime = false; bullettimesound = false; slowMotionSound(false);}		  
 	  } 
 	  orbit.speed = (1-(orbit.bullettimepercentage*0.97));
 	  
 	  if(orbit.bullettimepercentage>0){
-	    orbit.angle -= (15*modifier)*orbit.speed;
-	    ass.angle += (25*modifier)*orbit.speed; 
+	    orbit.angle -= (15*speedmodifier)*orbit.speed;
+	    ass.angle += (25*speedmodifier)*orbit.speed; 
 	  }
 	}
 	// overbound
@@ -734,7 +739,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 };
 
 var gameRender = function(delta) {
-	delta = delta*((orbit.velocity/100));
+	speeddelta = delta*((orbit.velocity/100));
+	
 	// calculate shake effect in hyperspeed and explosion
 	if(planet.exploding>-1){  //offsets x en y voor dat lekkere explosie effect
 	  ox = -10+(Math.random()*20); oy = -10+(Math.random()*20);	
@@ -765,11 +771,6 @@ var gameRender = function(delta) {
 	//debugLine(0,asstroid.oy,canvas.width,asstroid.oy,"green");
 	// draw astroid
 	gameDrawAsstroid(); 
-	// draw indicators
-	for(var i = 0; i < planets.length; i++){ 
-	  var p = planets[i];
-	  if(p.indicator){ planetIndicator(p,planetProperties[p.type].name, p.pop, 75, p.name, false, 2); }		
-	}
 	// draw planet
 	if((orbit.planetinview) || (orbit.bullettime)){
 	  for(var i = 0; i < planets.length; i++){ 
@@ -800,6 +801,12 @@ var gameRender = function(delta) {
       // draw asteroid alone
 	  gameDrawAsstroid(); //drawImageRotated(assImage,(ass.x+ox)-50,(ass.y+oy)-71,ass.w,ass.h,ass.angle*6.28318531); 
 	}
+    // draw indicators
+	for(var i = 0; i < planets.length; i++){ 
+	  var p = planets[i];
+	  if(p.indicator){ planetIndicator(p,planetProperties[p.type].name, p.pop, 75, p.name, false, 2); }		
+	}
+	
     // update and draw explosion particles
     var f = false;
  	for(var i = 0; i < particles.length;i++){

@@ -65,7 +65,7 @@ function optionUpdate(){
 			 
 	  	}else if(cmp(demHeight-140, demHeight-100, demWidth-235, demWidth) && gamePlaying == true){ 			// Resume
 			menuHover(demHeight - 140, delta); 
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; switchScreen(gameLoad, true); }
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; switchScreen(gameResume, false); }
 	
 		}else if(cmp(demHeight / 2 - 195, demHeight / 2 - 169, demWidth / 2 - 100, demWidth / 2 - 74)){ 			// Menu Music
 			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; menuMusic = !menuMusic; set("menuMusic", menuMusic); checkPlayMusic();}
