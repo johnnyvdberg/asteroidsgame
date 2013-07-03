@@ -36,8 +36,8 @@ function highscoreSubmitPopup(score){
 	
 }
 
-function highscoreSubmitScore(name, score){
-	var highscoreString = { name: name, score: score};
+function highscoreSubmitScore(name, score, mode){
+	var highscoreString = { name: name, score: score, mode: mode, difficulty: difficulty};
 	highscoreArray.push(highscoreString);	
 	/*l(highscoreArray.sort(function(a, b) {
 		var avalue = a.score,

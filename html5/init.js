@@ -14,8 +14,8 @@ var effectsVolume = Number(get("effectsVolume", 50));
 //=======================================================
 //HIGHSCORE
 //=======================================================
-var highscoreDummy; //get("highscore", "null");
-var highscoreArray = [];//JSON.parse(get("highscore", JSON.stringify("{ name: , score: }")));
+var highscoreDummy;
+var highscoreArray = [];
 //=======================================================
 var gamePlaying = false;
 var timer = null; 
@@ -409,7 +409,7 @@ function Init(){
 	
 	if(highscoreDummy != "null"){
 		$.each(JSON.parse(highscoreDummy), function(i, obj) {
-			var highscoreItem = { name: obj.name, score: obj.score};
+			var highscoreItem = { name: obj.name, score: obj.score, mode: obj.mode, difficulty: obj.difficulty};
 			highscoreArray.push(highscoreItem);
 		});
 	}
