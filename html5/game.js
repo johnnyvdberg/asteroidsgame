@@ -171,7 +171,7 @@ function gameBegin(){ // TODO: init game vars only, can be called to reset
 	ass.x = (canvas.width /2);
 	ass.y = (canvas.height /2);
 	ass.angle = 0;
-	ass.speed = 400;
+	ass.speed = 600;
 	ass.exploding = -1;
 	ass.alive = true;
 	orbit.angle = 0; orbit.distance = 50; // reset position
@@ -400,22 +400,21 @@ function planetIndicator(p, type, population, requiredSpeed, name, left, perform
 	if(x<canvasxc){ left = true; }else{ left = false; }
 	var xo = 0;
     //Draw pointing line thingie
+	ctx.strokeStyle = "green";
+    ctx.lineWidth=1;
 	ctx.beginPath();
 	ctx.moveTo(x, y + sizeY);
 	ctx.lineTo(x, y + sizeY + 20);
+    ctx.closePath();
 	ctx.stroke();
-	ctx.closePath();
 
 	//Draw border
 	ctx.beginPath();
-	ctx.lineWidth=1;
-	ctx.strokeStyle = "green";
 	ctx.rect(x+xo, y, sizeX, sizeY);
 	ctx.fillStyle = "rgba(0, 255, 0, 0.15)";
 	ctx.fill();
+    ctx.closePath();
 	ctx.stroke();
-	ctx.closePath();
-
 		
 	//Draw prestige scanlines
 	for(i = 0; performanceLevel == 2 && i < sizeY/7; i++)
@@ -539,8 +538,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 
     // key input + ass movement
 	if (37 in keysDown) { //left
-		ass.x -= ass.speed * modifier;
-		if(ass.x<0) ass.x = 0;
+		ass.x -= ass.speed * modifier*1.5;
+		if((ass.x-50)<0) ass.x = 0;
 	} else
 	if (39 in keysDown) { //right
 		ass.x += ass.speed * modifier;
@@ -615,8 +614,6 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		var p = planets[i];  
 	    if(
 		  (p.alive) && 
-		  (p.angle<(orbit.angle+0.5)) && 
-		  (p.angle>(orbit.angle-50)) && 
 		  (p.distance<(orbit.distance+4)) && 
 		  (p.distance>(orbit.distance-4)) 
 		){
@@ -626,8 +623,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		  p.indicator = true;
 		  if(
 			(p.alive) && 
-			(p.angle<(orbit.angle+0.5)) && 
-			(p.angle>(orbit.angle-6)) && 
+			
+			checkAngleDifference(p.angle,orbit.angle,-6,0.5) && 
 			(p.distance<(orbit.distance+0.7)) && 
 			(p.distance>(orbit.distance-0.7)) 
 		  ){
@@ -649,9 +646,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		for(var i=0; i<planets.length; i++){
 	    	var p = planets[i];
 		 	// get angle difference
-		 	p.calcangle = p.angle - orbit.angle;
-		 	if(p.calcangle>100) p.calcangle -= 100;
-		 	if(p.calcangle<-100) p.calcangle += 100;
+		 	p.calcangle = getAngleDifference(p.angle,orbit.angle);
 		 	if(p.calcangle<0.1){
 	        	p.calcsize = (((p.calcangle*2)+1));
 	       		if(p.calcsize<0){ p.calcsize = 0.0; }  
@@ -766,8 +761,8 @@ var gameRender = function(delta) {
 		  gameDrawPlanet(i);
 		  //debugLine(p.x+(60*p.calcsize),0,p.x+(60*p.calcsize),canvas.height,"blue");
 		  //debugLine(p.x-(60*p.calcsize),0,p.x-(60*p.calcsize),canvas.height,"blue"); 
-		  debugLine(ass.x+40,0,ass.x+40,canvas.height,"red");
-		  debugLine(ass.x-40,0,ass.x-40,canvas.height,"red");
+		  //debugLine(ass.x+40,0,ass.x+40,canvas.height,"red");
+		  //debugLine(ass.x-40,0,ass.x-40,canvas.height,"red");
 		}
 	    // chunks
         if((p.alive==false) && (p.exploding>-1) && (p.exploding<5)){
@@ -945,7 +940,7 @@ function checkAngleDifference(a,b,minv,maxv){ // angles from 0 to 100, returns t
 }
 
 function getAngleDifference(a,b){ // angles from 0 to 100
-  var c = b-a; if(c>50) c -= 100; if(c<-50) c+=100;
+  var c = a-b; if(c>50) c -= 100; if(c<-50) c+=100;
   return c;	
 }
 
