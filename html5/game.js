@@ -10,6 +10,14 @@ var gear = 0;
 var powerup = 1;
 var poweruptime = 9;
 var bullettimesound = false;
+var planetCount = 0;
+var tauntPlaying = false;
+var round = 0;
+
+//Notification
+var notifyActive = false;
+var notifyMainTitle = "Undefined";
+var notifySubTitle = "Really, there's nothing here";
 
 var ass = {
 	speed: 0,
@@ -24,7 +32,6 @@ var ass = {
 };
 
 //Enum for all types of planets
-var PlanetEnum = Object.freeze({"Arid":0, "Caldonia":1, "Cold":2, "Dead":3, "Drye":4, "PostIndustrial":5, "GasGiant":6, "Ice":7, "Earth1":8, "Earth2":9, "Fire":10, "SmallGas":11, "Waterless":12});
 var planetImages = new Array();
 
 var planet = {
@@ -224,6 +231,54 @@ function drawExplodingPlanet(p){
   {
 	ctx.drawImage(explodeRingIceImage,0,i*240,240,240,p.x-120,p.y-120,240,240);
   }
+  checkPlanetEvent();
+}
+
+function checkPlanetEvent()
+{
+	//Check if solarsystem has been eliminated
+	planetCount = 0;
+	for(i = 0; i < planets.length; i++)
+	{
+		if(planets[i].alive)
+		{
+			planetCount++;
+			break;
+		}
+	}
+	//If it is, reward player with more planets
+	if(planetCount == 0)
+	{
+		soundManager.setVolume('taunt_win_2',Math.round(effectsVolume));
+		tauntPlaying = true;
+		soundManager.play('taunt_win_2',{ onfinish: function() { tauntPlaying = false; } });
+		loadLevel1();
+		
+		//Activate level notification
+		notifyActive = true;
+		notifyMainTitle = "Solarsystem " + round;
+		notifySubTitle = "Nice going man";
+	}
+	else if(!tauntPlaying)
+	{
+		randomTaunt = Math.floor(Math.random()*4);
+		randomTauntSound = 'taunt_win_0';
+		switch(randomTaunt)
+		{
+			case 0 : 	randomTauntSound = 'taunt_win_0'; break;
+			case 1 : 	randomTauntSound = 'taunt_win_1'; break;
+			case 2 : 	randomTauntSound = 'taunt_win_2'; break;
+			case 3 : 	randomTauntSound = 'taunt_win_3'; break;
+		}
+		
+		notifyActive = true;
+		notifyMainTitle = "Planet destroyed!";
+		notifySubTitle = "Cold blooded";
+		
+		soundManager.setVolume(randomTauntSound,Math.round(effectsVolume));
+		tauntPlaying = true;
+		soundManager.play(randomTauntSound,{ onfinish: function() { tauntPlaying = false; notifyActive = false; } });
+	}
 }
 
 function drawExplodingEnemyAsstroid(){
@@ -951,7 +1006,10 @@ var gameRender = function(delta) {
 	ctx.fillText("TIME LEFT: " + "0", 295, demHeight - 65);
 	
 	//Notification test
-	notification(demWidth - 270, 20, 250, 50, "Achievement Unlocked", "Being an asshole");
+	if(notifyActive)
+	{
+		notification(demWidth - 270, 20, 250, 50, notifyMainTitle, notifySubTitle);
+	}
 }
 
 /* ======================================  
@@ -1073,7 +1131,8 @@ function alertSound()
  ========================================*/
 
 function loadLevel1(){
-	randomLevel(3,5,5);
+	randomLevel(1,2,1);
+	round++;
 }
 
 function randomLevel(gasPlanets, normalPlanets, otherPlanets)
