@@ -679,6 +679,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 			    if ((ass.x-40) <= (p.x+(60*p.calcsize)) && (ass.x+40) >= (p.x-(60*p.calcsize)) ) { // todo, make real
 					var dx = ((p.x-ass.x)/50);
 					var dy = (((p.y+(p.h/2))-(ass.y+(ass.h/2)))/30);
+					
+					
 					planetsDestroyed++;
 					
 					if(powerup != 3 || powerup != 1){
@@ -905,7 +907,12 @@ var gameRender = function(delta) {
 	ctx.fillText(gear, 152, demHeight - 160);
 	ctx.fillText(Math.round(poweruptime), 263, demHeight - 20);
 	
-	poweruptime = poweruptime - 1 * delta;
+	
+	//FIX NAAR ECHTE SECONDEN ERFAF
+	if(powerup != 0){
+		poweruptime = poweruptime - 1 * delta;
+	}
+	
 	if(poweruptime < 0){powerup = 0;}
 	
 	ctx.fillText("SCORE: " + score, 295, demHeight - 110);
