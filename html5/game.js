@@ -116,6 +116,7 @@ function gameLoad(){  // init loader
 	bgTiles = Array();
 	for(var i = 0; i < 6; i++){ bgTiles[i] = loader.addImage('images/game/space_'+i+'.png'); }
 	assFrames = loader.addImage('images/game/ass_sprite.png'); 
+	assEvilFrames = loader.addImage('images/game/enemy_ass_sprite.png'); 
 	starImage = loader.addImage('images/game/star.png');
 	bgImage = loader.addImage('images/game/bg.jpg');
 	parImage = loader.addImage('images/game/1.png');
@@ -561,7 +562,7 @@ function gameDrawAsstroid(){
 function gameDrawEnemyAsstroid(){
   if(asstroid.alive){	
     var n = Math.floor(asstroid.size*10);	
-    ctx.drawImage(assFrames,0,n*80,80,80,asstroid.x-40,asstroid.y-40,80*asstroid.size,80*asstroid.size);	
+    ctx.drawImage(assEvilFrames,0,n*80,80,80,asstroid.x-40,asstroid.y-40,80*asstroid.size,80*asstroid.size);	
   }else{
 	if(asstroid.explosion>-1){
 	  drawExplodingEnemyAsstroid();	
