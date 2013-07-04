@@ -1005,7 +1005,7 @@ var gameRender = function(delta) {
 	//drawDebugText();
 	
 	if(!orbit.bullettime){
-		orbit.velocity = orbit.velocity + 4 * delta;
+		orbit.velocity = orbit.velocity + ((100 - orbit.distance)/100 * 5) * delta;
 	}
 	
     //Draw HUD
@@ -1222,7 +1222,10 @@ function alertSound()
  ========================================*/
 
 function loadLevel1(){
-	randomLevel(1,2,1);
+	randomGas =  2 + Math.floor(Math.random()*2) + round;
+	randomNormal = 3 +  Math.floor(Math.random()*2) + round;
+	randomOther = 2 + Math.floor(Math.random()*2) + round;
+	randomLevel(randomGas,randomNormal,randomOther);
 	round++;
 }
 
@@ -1263,7 +1266,7 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.pop = Math.floor(Math.random() * 10 * planetProperties[planet.type].popMultiplier);
 		
 		//Calculate required speed
-		planet.requiredSpeed = Math.floor((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier);
+		planet.requiredSpeed = Math.floor(((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier)*(1 + round/10));
 		
 		planets.push($.extend(true, {}, planet));
 	}
@@ -1283,7 +1286,7 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.pop = Math.floor(Math.random() * 10 * planetProperties[planet.type].popMultiplier);
 		
 		//Calculate required speed
-		planet.requiredSpeed = Math.floor((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier);
+		planet.requiredSpeed = Math.floor(((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier)*(1 + round/10));
 		
 		planets.push($.extend(true, {}, planet));
 	}
@@ -1304,7 +1307,7 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.pop = 0;
 		
 		//Calculate required speed
-		planet.requiredSpeed = Math.floor((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier);
+		planet.requiredSpeed = Math.floor(((planetProperties[planet.type].speedMultiplier * (0.9+Math.random()*0.2))/difficultyModifier)*(1 + round/10));
 		
 		planets.push($.extend(true, {}, planet));
 	}
