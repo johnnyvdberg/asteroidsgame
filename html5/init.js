@@ -160,19 +160,19 @@ var planetNames = [
 	]
 	
 var planetProperties = [
-		{ name: 'Barren', popMultiplier: 0.3 },
-		{ name: 'Sulfuric', popMultiplier: 0 },
-		{ name: 'Glacial', popMultiplier: 0.5 },
-		{ name: 'Barren', popMultiplier: 0 },
-		{ name: 'Sulfuric', popMultiplier: 0 },
-		{ name: 'Molten', popMultiplier: 0 },
-		{ name: 'Barren', popMultiplier: 0.4 },
-		{ name: 'Terrestrial', popMultiplier: 500000000 },
-		{ name: 'Terrestrial', popMultiplier: 750000000 },
-		{ name: 'Terrestrial', popMultiplier: 1000000000 },
-		{ name: 'Glacial', popMultiplier: 0.2 },
-		{ name: 'Gas Giant', popMultiplier: 0 },
-		{ name: 'Gas Giant', popMultiplier: 0}
+		{ name: 'Barren', popMultiplier: 0.3, speedMultiplier:40 },
+		{ name: 'Sulfuric', popMultiplier: 0, speedMultiplier:45 },
+		{ name: 'Glacial', popMultiplier: 0.5, speedMultiplier:45 },
+		{ name: 'Barren', popMultiplier: 0, speedMultiplier: 45},
+		{ name: 'Sulfuric', popMultiplier: 0, speedMultiplier: 45},
+		{ name: 'Molten', popMultiplier: 0, speedMultiplier: 50},
+		{ name: 'Barren', popMultiplier: 0.4, speedMultiplier: 55},
+		{ name: 'Terrestrial', popMultiplier: 500000000, speedMultiplier: 70},
+		{ name: 'Terrestrial', popMultiplier: 750000000, speedMultiplier: 75},
+		{ name: 'Terrestrial', popMultiplier: 1000000000, speedMultiplier: 80},
+		{ name: 'Glacial', popMultiplier: 0.2, speedMultiplier: 80},
+		{ name: 'Gas Giant', popMultiplier: 0, speedMultiplier: 100},
+		{ name: 'Gas Giant', popMultiplier: 0, speedMultiplier: 100}
 	]
 
 function canvasHide(){ showLoader(); canvas.style.display = 'none'; }

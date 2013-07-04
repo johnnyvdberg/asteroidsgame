@@ -7,8 +7,8 @@ var gameMusic = true;
 var junkhit = 0;
 var score = 0;
 var gear = 0;
-var powerup = 1;
-var poweruptime = 9;
+var powerup = 0;
+var poweruptime = 0;
 var bullettimesound = false;
 var planetCount = 0;
 var tauntPlaying = false;
@@ -49,6 +49,7 @@ var planet = {
 	type: 0,
 	visible: false,
 	pop: 0,
+	requiredSpeed: 0,
 	name: "Undefined",
 	indicator: false,
 	indicatorside: true, // left, right
@@ -463,7 +464,7 @@ function gameDrawPlanet(i){
 	}
 }
 
-function planetIndicator(p, type, population, requiredSpeed, name, left, performanceLevel)
+function planetIndicator(p, type, population, requiredSpeedPerc, name, left, performanceLevel)
 {
     var sizeX = 225;
 	var sizeY = 75;
@@ -521,10 +522,18 @@ function planetIndicator(p, type, population, requiredSpeed, name, left, perform
 	ctx.fillText(population, x + 100 + xo, y + 40);
 	
 	//Add progressbar
+	
+	if (requiredSpeedPerc > 95)
+	{
+		ctx.strokeStyle = "GreenYellow";
+	}
+	else
+	{
+		ctx.strokeStyle = "green";
+	}
 	ctx.beginPath();
 	ctx.strokeWidth=1;
-	ctx.strokeStyle = "green";
-	ctx.rect(x + 100 + xo, y + 60, (requiredSpeed/100)*(sizeX - 110), 8);
+	ctx.rect(x + 100 + xo, y + 60, (requiredSpeedPerc/100)*(sizeX - 110), 8);
 	ctx.fill();
 	ctx.stroke();
 	ctx.closePath();
@@ -768,17 +777,48 @@ var gameUpdate = function (modifier) { // modier is in seconds
 					
 					planetsDestroyed++;
 					
-					if(powerup != 3 || powerup != 1){
-					  if(powerup == 2){
-							if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*20)/2;}else 
-							if(difficulty == 1){ orbit.velocity -= ((orbit.velocity/100)*25)/2;}else 
-							if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*30)/2;}
-						}else{
-							if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*20);}else 
-							if(difficulty == 1){ orbit.velocity -= ((orbit.velocity/100)*25);}else 
-							if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*30);}
+					// if(powerup != 3 || powerup != 1){
+					  // if(powerup == 2){
+							// if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*30)/2;}else 
+							// if(difficulty == 1){ orbit.velocity -= ((orbit.velocity/100)*35)/2;}else 
+							// if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*40)/2;}
+						// }else{
+							// if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*30);}else 
+							// if(difficulty == 1){ orbit.velocity -= ((orbit.velocity/100)*35);}else 
+							// if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*40);}
+						// }
+				  	// }
+					if(p.alive){
+						if(powerup != 3 || powerup != 1){
+						  if(powerup == 2){
+								orbit.velocity -= p.requiredSpeed/2;
+							}else{
+								orbit.velocity -= p.requiredSpeed;
+							}
 						}
-				  	}
+					}
+					
+					switch(p.type){
+					case 2:
+					case 10:
+					powerup = 2; poweruptime = 9;
+					break;
+					
+					case 5:
+					powerup = 1; poweruptime = 9;
+					break;
+					
+					case 7:
+					case 8:
+					case 9:
+					powerup = 4; poweruptime = 9;
+					break;
+
+					case 11:
+					case 12:
+					powerup = 3; poweruptime = 9;
+					break;	
+					}
 					
 					p.alive = false;
 					p.exploding = 0;
@@ -862,7 +902,9 @@ var gameRender = function(delta) {
 	  alertSound();
 		  
 	}
-	gameDrawEnemyAsstroid();
+	if(asstroid.size<1){
+	  gameDrawEnemyAsstroid();
+	}
 	//debugLine(asstroid.ox,0,asstroid.ox,canvas.height,"green");
 	//debugLine(0,asstroid.oy,canvas.width,asstroid.oy,"green");
 	// draw astroid
@@ -897,10 +939,25 @@ var gameRender = function(delta) {
       // draw asteroid alone
 	  gameDrawAsstroid(); //drawImageRotated(assImage,(ass.x+ox)-50,(ass.y+oy)-71,ass.w,ass.h,ass.angle*6.28318531); 
 	}
+	// overlap enemy asstroid
+	if(asstroid.size>=1){
+	  gameDrawEnemyAsstroid();
+	}
     // draw indicators
 	for(var i = 0; i < planets.length; i++){ 
 	  var p = planets[i];
-	  if(p.indicator){ planetIndicator(p,planetProperties[p.type].name, p.pop, 75, p.name, false, 2); }		
+	  //Calc required speed percentage
+	  speedPercentage = ((orbit.velocity - 30)/p.requiredSpeed)*100;
+	  if(speedPercentage > 100)
+	  {
+		speedPercentage = 100;
+	  }
+	  else if (speedPercentage < 0)
+	  {
+		speedPercentage = 0;
+	  }
+	  //Show indicator
+	  if(p.indicator){ planetIndicator(p,planetProperties[p.type].name, p.pop, speedPercentage, p.name, false, 2); }		
 	}
 	
     // update and draw explosion particles
@@ -929,7 +986,7 @@ var gameRender = function(delta) {
 	//drawDebugText();
 	
 	if(!orbit.bullettime){
-		orbit.velocity = orbit.velocity + 2 * delta;
+		orbit.velocity = orbit.velocity + 4 * delta;
 	}
 	
     //Draw HUD
@@ -1146,6 +1203,16 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
     planet.y = canvasyc;
     planet.x = canvasxc;
 	
+	difficultyModifier = 1;
+	
+	switch(difficulty)
+	{
+		case 0: 	difficultyModifier = 2; break;
+		case 1: 	difficultyModifier = 1.5; break;
+		case 2: 	difficultyModifier = 1; break;
+		default:	difficultyModifier = 0.5;break;
+	}
+	
 	//Dead or lifeless planets
 	for(i = 0; i < otherPlanets; i++)
 	{
@@ -1161,6 +1228,9 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		//Population
 		//Because most civilizations in our game are capable of limited space travel, some uninhabitable planets may have some people
 		planet.pop = Math.floor(Math.random() * 10 * planetProperties[planet.type].popMultiplier);
+		
+		//Calculate required speed
+		planet.requiredSpeed = Math.floor((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier);
 		
 		planets.push($.extend(true, {}, planet));
 	}
@@ -1179,6 +1249,9 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		//Population
 		planet.pop = Math.floor(Math.random() * 10 * planetProperties[planet.type].popMultiplier);
 		
+		//Calculate required speed
+		planet.requiredSpeed = planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4);
+		
 		planets.push($.extend(true, {}, planet));
 	}
 	
@@ -1195,7 +1268,10 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 
 		//Population
 		//Although it is suggested that some gas planets may support life, the player doesn't care and think we're retarded
-		planet.pop = 0;		
+		planet.pop = 0;
+		
+		//Calculate required speed
+		planet.requiredSpeed = planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4);
 		
 		planets.push($.extend(true, {}, planet));
 	}
