@@ -32,24 +32,19 @@ function highscorePlayHoverSound(i){
 	}
 }
 
-function highscoreSubmitPopup(score){
-	
+// Roep deze functie aan om de popup in beeld te krijgen (werkt alleen als je in highscore-scherm bent)
+function highscoreSubmitPopup(score, mode){
+	var person = prompt("Please enter your name","");
+	if (person!=null)
+	{
+		highscoreSubmitScore(person, score, mode);
+	}
 }
 
+// Deze functie slaat de score daadwerkelijk op in de localstorage
 function highscoreSubmitScore(name, score, mode){
 	var highscoreString = { name: name, score: score, mode: mode, difficulty: difficulty};
 	highscoreArray.push(highscoreString);	
-	/*l(highscoreArray.sort(function(a, b) {
-		var avalue = a.score,
-			bvalue = b.score;
-		if (avalue > bvalue) {
-			return -1;
-		}
-		if (avalue < bvalue) {
-			return 1;
-		}
-		return 0;
-	}));*/
 	set("highscore", JSON.stringify(highscoreArray));
 }
 
@@ -59,8 +54,19 @@ function highscoreUpdate(){
 	//Cursor
 	if(mousePos!=undefined){
 	  	if(cmp(demHeight-100, demHeight-60, demWidth-235, demWidth)){					//quit
-			 menuHover(demHeight - 100, delta); 
-			 if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; switchScreen(menuLoad, false); }
+			menuHover(demHeight - 100, delta); 
+			if(mouseDown && mouseDownAble){
+				menuPlayClick(); 
+				mouseDownAble = false; 
+				switchScreen(menuLoad, false);
+				if(popupElementsDrawn){
+					showHighscorePopup = false;
+					popupElementsDrawn = false;
+					$('#txtName').remove();
+					$('#btnSubmitScore').remove();
+					$('#divScorePopup').remove();
+				}
+			}
 		}else{menuHoverOut(delta);}
 		menuMove(delta);
 	}

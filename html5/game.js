@@ -523,7 +523,7 @@ function planetIndicator(p, type, population, requiredSpeedPerc, name, left, per
 	
 	//Add progressbar
 	
-	if (requiredSpeedPerc > 95)
+	if (requiredSpeedPerc > 97)
 	{
 		ctx.strokeStyle = "GreenYellow";
 	}
@@ -1250,7 +1250,7 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.pop = Math.floor(Math.random() * 10 * planetProperties[planet.type].popMultiplier);
 		
 		//Calculate required speed
-		planet.requiredSpeed = planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4);
+		planet.requiredSpeed = Math.floor((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier);
 		
 		planets.push($.extend(true, {}, planet));
 	}
@@ -1271,7 +1271,7 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.pop = 0;
 		
 		//Calculate required speed
-		planet.requiredSpeed = planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4);
+		planet.requiredSpeed = Math.floor((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier);
 		
 		planets.push($.extend(true, {}, planet));
 	}
