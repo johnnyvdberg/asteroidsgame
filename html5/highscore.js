@@ -1,8 +1,3 @@
-var showHighscorePopup = false;
-var popupElementsDrawn = false;
-var currentScore;
-var currentMode;
-
 function highscoreLoad() {
 	var loader = new PxLoader();
 	
@@ -39,9 +34,11 @@ function highscorePlayHoverSound(i){
 
 // Roep deze functie aan om de popup in beeld te krijgen (werkt alleen als je in highscore-scherm bent)
 function highscoreSubmitPopup(score, mode){
-	currentScore = score;
-	currentMode = mode;
-	showHighscorePopup = true;
+	var person = prompt("Please enter your name","");
+	if (person!=null)
+	{
+		highscoreSubmitScore(person, score, mode);
+	}
 }
 
 // Deze functie slaat de score daadwerkelijk op in de localstorage
@@ -51,61 +48,25 @@ function highscoreSubmitScore(name, score, mode){
 	set("highscore", JSON.stringify(highscoreArray));
 }
 
-// Deze functie tekent de popup
-function highscoreDrawPopup(){
-	xSize = 200;
-	ySize = 100;
-	x = (canvas.width / 2) - (xSize / 2);
-	y = (canvas.height / 2) - (ySize / 2);
-
-	// Draw border
-	ctx.beginPath();
-	ctx.lineWidth=1;
-	ctx.strokeStyle = "green";
-	ctx.rect(x, y, xSize, ySize);
-	ctx.fillStyle = "rgba(0, 255, 0, 0.15)";
-	ctx.fill();
-	ctx.stroke();
-	ctx.closePath();
-		
-	// Write generic stuff
-	ctx.font = 'bold 12pt Arial Black';
-	ctx.fillStyle = 'Green';
-	ctx.fillText("Submit score", x + 10, y + 25);
-	ctx.font = 'bold italic 10pt Arial Black';
-	ctx.fillText("Score: " + currentScore, x + 10, y + 45);
-	ctx.fillText("Name: ", x + 10, y + 65);
-	
-	// Add html elements
-	if(popupElementsDrawn == false){
-		var txtName = "<div id='divScorePopup' style='position:fixed;top:"+(y + 51)+"px;left:"+(x + 60)+"px;z-index:30;'><input type='text' id='txtName'></input>";
-		var btnSubmitScore = "<br /><input id='btnSubmitScore' type='button' value='Submit' onclick='saveScore();'></div>";
-		var appendString = txtName + btnSubmitScore;
-		$("#scorePopup").append(appendString);
-		popupElementsDrawn = true;
-	}
-}
-
-// Click event van submit knop
-function saveScore(){
-	if($('#txtName').val() != ""){
-		highscoreSubmitScore($('#txtName').val(), currentScore, currentMode);
-		showHighscorePopup = false;
-		popupElementsDrawn = false;
-		$('#txtName').remove();
-		$('#btnSubmitScore').remove();
-		$('#divScorePopup').remove();
-	}
-}
-
 function highscoreUpdate(){
 	getDelta();
 	
 	//Cursor
 	if(mousePos!=undefined){
 	  	if(cmp(demHeight-100, demHeight-60, demWidth-235, demWidth)){					//quit
-			 menuHover(demHeight - 100, delta); 
-			 if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; switchScreen(menuLoad, false); }
+			menuHover(demHeight - 100, delta); 
+			if(mouseDown && mouseDownAble){
+				menuPlayClick(); 
+				mouseDownAble = false; 
+				switchScreen(menuLoad, false);
+				if(popupElementsDrawn){
+					showHighscorePopup = false;
+					popupElementsDrawn = false;
+					$('#txtName').remove();
+					$('#btnSubmitScore').remove();
+					$('#divScorePopup').remove();
+				}
+			}
 		}else{menuHoverOut(delta);}
 		menuMove(delta);
 	}
@@ -179,10 +140,6 @@ function highscoreUpdate(){
 				ctx.fillText("0", xPos + (distanceFromMid * 2) + (16 * ii), yPos + (28 * (i + 1)));
 			}
 		}
-	}
-	
-	if(showHighscorePopup){
-		highscoreDrawPopup();
 	}
 	
 	// Draw menu hover effect
