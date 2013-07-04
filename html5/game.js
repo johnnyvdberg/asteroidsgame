@@ -835,6 +835,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 
 var gameRender = function(delta) {
 	speeddelta = delta*((orbit.velocity/100));
+	ctx.textBaseline = "top";
 	
 	// calculate shake effect in hyperspeed and explosion
 	if(planet.exploding>-1){  //offsets x en y voor dat lekkere explosie effect
@@ -925,7 +926,7 @@ var gameRender = function(delta) {
  	}
     if((f!=true) && (particles.length>0)){ particles = Array(); }
     // draw debug text
-	drawDebugText();
+	//drawDebugText();
 	
 	if(!orbit.bullettime){
 		orbit.velocity = orbit.velocity + 2 * delta;
