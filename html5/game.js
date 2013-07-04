@@ -819,8 +819,16 @@ var gameUpdate = function (modifier) { // modier is in seconds
 								orbit.velocity -= p.requiredSpeed;
 							}
 						}
-					
-					
+						
+						p.alive = false;
+						p.exploding = 0;
+						
+						//Add score
+						scoreAdd(p.pop, p.type, ass.speed);
+						
+						for(var i = 0; i< particle_count;i++){ particles.push(new particle(p.x,p.y,dx,dy)); }
+						gamePlayExplosion();
+						
 						switch(p.type){
 						case 2:
 						case 10:
@@ -842,15 +850,6 @@ var gameUpdate = function (modifier) { // modier is in seconds
 						powerup = 3; poweruptime = 19;
 						break;	
 						}
-						
-						p.alive = false;
-						p.exploding = 0;
-						
-						//Add score
-						scoreAdd(p.pop, p.type, ass.speed);
-						
-						for(var i = 0; i< particle_count;i++){ particles.push(new particle(p.x,p.y,dx,dy)); }
-						gamePlayExplosion();
 					
 					}
 			
@@ -1210,12 +1209,12 @@ function slowMotionSound(enter)
     
 	if(enter && soundManager.getSoundById('intoslomo').playState==0)
 	{
-		soundManager.setVolume('intoslomo',Math.round(effectsVolume));
+		soundManager.setVolume('intoslomo',Math.round(effectsVolume * 0.5));
 		soundManager.play('intoslomo',{ onfinish: function() { } });
 	}
 	else if(soundManager.getSoundById('outofslomo').playState==0)
 	{
-		soundManager.setVolume('outofslomo',Math.round(effectsVolume));
+		soundManager.setVolume('outofslomo',Math.round(effectsVolume * 0.5));
 		soundManager.play('outofslomo',{ onfinish: function() { } });
 	}
 }
@@ -1225,7 +1224,7 @@ function alertSound()
     
 	if(soundManager.getSoundById('alert').playState==0)
 	{
-		soundManager.setVolume('alert',Math.round(effectsVolume));
+		soundManager.setVolume('alert',Math.round(effectsVolume*0.3));
 		soundManager.play('alert',{ onfinish: function() { } });
 	}
 }
