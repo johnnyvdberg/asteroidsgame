@@ -7,8 +7,8 @@ var gameMusic = true;
 var junkhit = 0;
 var score = 0;
 var gear = 0;
-var powerup = 1;
-var poweruptime = 9;
+var powerup = 0;
+var poweruptime = 0;
 var bullettimesound = false;
 var planetCount = 0;
 var tauntPlaying = false;
@@ -788,14 +788,37 @@ var gameUpdate = function (modifier) { // modier is in seconds
 							// if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*40);}
 						// }
 				  	// }
-					
-					if(powerup != 3 || powerup != 1){
-					  if(powerup == 2){
-							orbit.velocity -= p.requiredSpeed/2;
-						}else{
-							orbit.velocity -= p.requiredSpeed;
+					if(p.alive){
+						if(powerup != 3 || powerup != 1){
+						  if(powerup == 2){
+								orbit.velocity -= p.requiredSpeed/2;
+							}else{
+								orbit.velocity -= p.requiredSpeed;
+							}
 						}
-				  	}
+					}
+					
+					switch(p.type){
+					case 2:
+					case 10:
+					powerup = 2; poweruptime = 9;
+					break;
+					
+					case 5:
+					powerup = 1; poweruptime = 9;
+					break;
+					
+					case 7:
+					case 8:
+					case 9:
+					powerup = 4; poweruptime = 9;
+					break;
+
+					case 11:
+					case 12:
+					powerup = 3; poweruptime = 9;
+					break;	
+					}
 					
 					p.alive = false;
 					p.exploding = 0;
@@ -963,7 +986,7 @@ var gameRender = function(delta) {
 	//drawDebugText();
 	
 	if(!orbit.bullettime){
-		orbit.velocity = orbit.velocity + 2 * delta;
+		orbit.velocity = orbit.velocity + 4 * delta;
 	}
 	
     //Draw HUD
