@@ -48,6 +48,8 @@ function highscoreSubmitScore(name, score, mode){
 	set("highscore", JSON.stringify(highscoreArray));
 }
 
+var popupElementsDrawn = true;
+
 function highscoreUpdate(){
 	getDelta();
 	

@@ -578,7 +578,8 @@ function gameDeadEnd(){
 function gameOver(){
 	l('gameover');
 	gamePlayFail();
-	switchScreen(menuLoad,true);
+	switchScreen(highscoreLoad,true);
+	highscoreSubmitPopup(score, 1);
 }
 
 function scoreAdd(population, type, speedMult)
