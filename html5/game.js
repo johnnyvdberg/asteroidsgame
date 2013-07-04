@@ -464,9 +464,8 @@ function gameDrawPlanet(i){
 	}
 }
 
-function planetIndicator(p, type, population, requiredSpeed, name, left, performanceLevel)
+function planetIndicator(p, type, population, requiredSpeedPerc, name, left, performanceLevel)
 {
-	l(requiredSpeed + "," + orbit.velocity + " = " + ((orbit.velocity-30)/p.requiredSpeed)*100 + "%");
     var sizeX = 225;
 	var sizeY = 75;
 	var x = p.x;
@@ -523,10 +522,18 @@ function planetIndicator(p, type, population, requiredSpeed, name, left, perform
 	ctx.fillText(population, x + 100 + xo, y + 40);
 	
 	//Add progressbar
+	
+	if (requiredSpeedPerc > 95)
+	{
+		ctx.strokeStyle = "GreenYellow";
+	}
+	else
+	{
+		ctx.strokeStyle = "green";
+	}
 	ctx.beginPath();
 	ctx.strokeWidth=1;
-	ctx.strokeStyle = "green";
-	ctx.rect(x + 100 + xo, y + 60, (requiredSpeed/100)*(sizeX - 110), 8);
+	ctx.rect(x + 100 + xo, y + 60, (requiredSpeedPerc/100)*(sizeX - 110), 8);
 	ctx.fill();
 	ctx.stroke();
 	ctx.closePath();
@@ -917,14 +924,14 @@ var gameRender = function(delta) {
 	for(var i = 0; i < planets.length; i++){ 
 	  var p = planets[i];
 	  //Calc required speed percentage
-	  speedPercentage = 0;
-	  if(p.requiredSpeed - orbit.velocity < 0)
+	  speedPercentage = ((orbit.velocity - 30)/p.requiredSpeed)*100;
+	  if(speedPercentage > 100)
 	  {
 		speedPercentage = 100;
 	  }
-	  else
+	  else if (speedPercentage < 0)
 	  {
-		speedPercentage = ((orbit.velocity - 30)/p.requiredSpeed)*100;
+		speedPercentage = 0;
 	  }
 	  //Show indicator
 	  if(p.indicator){ planetIndicator(p,planetProperties[p.type].name, p.pop, speedPercentage, p.name, false, 2); }		
