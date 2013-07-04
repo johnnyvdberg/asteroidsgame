@@ -588,7 +588,8 @@ function gameDeadEnd(){
 function gameOver(){
 	l('gameover');
 	gamePlayFail();
-	highscoreSubmitPopup(score, 1);
+	l(score);
+	highscoreSubmitPopup(String(score), 1);
 	switchScreen(highscoreLoad,true);
 }
 

@@ -65,7 +65,6 @@ function menuLoad(){
 	var loader = new PxLoader();
 	
 	menuBgImg = loader.addImage('images/menu/bg.png');
-	menuBg2Img = loader.addImage('images/menu/bg2.png');
 	menuTitleImg = loader.addImage('images/menu/title.png');
 	menuArcadeImg = loader.addImage('images/menu/arcade.png');
 	menuTimeattackImg = loader.addImage('images/menu/timeattack.png');
