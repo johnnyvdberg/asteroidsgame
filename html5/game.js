@@ -862,7 +862,9 @@ var gameRender = function(delta) {
 	  alertSound();
 		  
 	}
-	gameDrawEnemyAsstroid();
+	if(asstroid.size<1){
+	  gameDrawEnemyAsstroid();
+	}
 	//debugLine(asstroid.ox,0,asstroid.ox,canvas.height,"green");
 	//debugLine(0,asstroid.oy,canvas.width,asstroid.oy,"green");
 	// draw astroid
@@ -896,6 +898,10 @@ var gameRender = function(delta) {
 	}else{
       // draw asteroid alone
 	  gameDrawAsstroid(); //drawImageRotated(assImage,(ass.x+ox)-50,(ass.y+oy)-71,ass.w,ass.h,ass.angle*6.28318531); 
+	}
+	// overlap enemy asstroid
+	if(asstroid.size>=1){
+	  gameDrawEnemyAsstroid();
 	}
     // draw indicators
 	for(var i = 0; i < planets.length; i++){ 
