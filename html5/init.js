@@ -25,6 +25,7 @@ var currentMusicIndex = -1;
 var currentPlaylist = Array();
 var playMusic = true;
 var musicType; // 1 = menu, 2 = game
+var timeattack = false;
 
 var mouseDown;
 var mouseDownAble = true;

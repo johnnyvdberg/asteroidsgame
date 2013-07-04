@@ -97,10 +97,10 @@ function menuUpdate(){
 	//Cursor
 	if(mousePos!=undefined){
 	  	if(cmp(demHeight-300, demHeight-260, demWidth-235, demWidth)){ 					// arcade mode
-			 menuHover(demHeight - 300, delta);  if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(insLoad, true); }	
+			 menuHover(demHeight - 300, delta);  if(mouseDown && mouseDownAble){mouseDownAble = false; timeattack = false; switchScreen(insLoad, true); }	
 		
 	  	}else if(cmp(demHeight-260, demHeight-220, demWidth-235, demWidth)){ 			// time attack
-			menuHover(demHeight - 260, delta);
+			menuHover(demHeight - 260, delta); 	if(mouseDown && mouseDownAble){mouseDownAble = false; timeattack = true; switchScreen(insLoad, true); }
 		
 		}else if(cmp(demHeight-220, demHeight-180, demWidth-235, demWidth)){ 			// highscore
 			menuHover(demHeight - 220, delta);	if(mouseDown && mouseDownAble){mouseDownAble = false; switchScreen(highscoreLoad, false); }

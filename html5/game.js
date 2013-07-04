@@ -13,6 +13,7 @@ var bullettimesound = false;
 var planetCount = 0;
 var tauntPlaying = false;
 var round = 0;
+var timeleft = 120;
 
 //Notification
 var notifyActive = false;
@@ -169,6 +170,7 @@ var gameStart = function () { // TODO: get called only once
 	ass.lives = 3; // extra lives
 	junkhit = 0;
 	score = 0;
+	timeleft = 120;
 	
 	addEventListener("keydown", function (e) { keysDown[e.keyCode] = true; }, false);
 	addEventListener("keyup", function (e) { delete keysDown[e.keyCode]; }, false);
@@ -778,6 +780,10 @@ var gameUpdate = function (modifier) { // modier is in seconds
 					
 					planetsDestroyed++;
 					
+					if(difficulty == 0){ timeleft += 30; }
+					if(difficulty == 1){ timeleft += 20; }
+					if(difficulty == 2){ timeleft += 10; }
+					
 					// if(powerup != 3 || powerup != 1){
 					  // if(powerup == 2){
 							// if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*30)/2;}else 
@@ -988,6 +994,10 @@ var gameRender = function(delta) {
 	
 	if(!orbit.bullettime){
 		orbit.velocity = orbit.velocity + 4 * delta;
+		timeleft -= delta;
+		if(timeleft < 0){ gameDead(); }
+		if(powerup != 0){ poweruptime -= delta; }
+		if(poweruptime < 0){powerup = 0;}
 	}
 	
     //Draw HUD
@@ -1051,18 +1061,12 @@ var gameRender = function(delta) {
 	ctx.fillText(gear, 152, demHeight - 160);
 	ctx.fillText(Math.round(poweruptime), 263, demHeight - 20);
 	
-	
-	//FIX NAAR ECHTE SECONDEN ERFAF
-	if(powerup != 0){
-		poweruptime = poweruptime - 1 * delta;
-	}
-	
-	if(poweruptime < 0){powerup = 0;}
-	
 	ctx.fillText("SCORE: " + score, 295, demHeight - 110);
 	ctx.fillText("PLANETS HIT: " + planetsDestroyed, 295, demHeight - 95);
 	ctx.fillText("JUNK HIT: " + junkhit, 295, demHeight - 80);
-	ctx.fillText("TIME LEFT: " + "0", 295, demHeight - 65);
+	if(timeattack){
+	ctx.fillText("TIME LEFT: " + Math.floor(timeleft), 295, demHeight - 65);
+	}
 	
 	//Notification test
 	if(notifyActive)
