@@ -14,6 +14,7 @@ var bullettimesound = false;
 var planetCount = 0;
 var tauntPlaying = false;
 var round = 0;
+var timeleft = 120;
 
 //Notification
 var notifyActive = false;
@@ -115,6 +116,7 @@ function gameLoad(){  // init loader
 	bgTiles = Array();
 	for(var i = 0; i < 6; i++){ bgTiles[i] = loader.addImage('images/game/space_'+i+'.png'); }
 	assFrames = loader.addImage('images/game/ass_sprite.png'); 
+	assEvilFrames = loader.addImage('images/game/enemy_ass_sprite.png'); 
 	starImage = loader.addImage('images/game/star.png');
 	bgImage = loader.addImage('images/game/bg.jpg');
 	parImage = loader.addImage('images/game/1.png');
@@ -176,6 +178,7 @@ var gameStart = function () { // TODO: get called only once
 	junkhit = 0;
 	score = 0;
 	outscore = "0";
+	timeleft = 120;
 	
 	addEventListener("keydown", function (e) { keysDown[e.keyCode] = true; }, false);
 	addEventListener("keyup", function (e) { delete keysDown[e.keyCode]; }, false);
@@ -559,7 +562,7 @@ function gameDrawAsstroid(){
 function gameDrawEnemyAsstroid(){
   if(asstroid.alive){	
     var n = Math.floor(asstroid.size*10);	
-    ctx.drawImage(assFrames,0,n*80,80,80,asstroid.x-40,asstroid.y-40,80*asstroid.size,80*asstroid.size);	
+    ctx.drawImage(assEvilFrames,0,n*80,80,80,asstroid.x-40,asstroid.y-40,80*asstroid.size,80*asstroid.size);	
   }else{
 	if(asstroid.explosion>-1){
 	  drawExplodingEnemyAsstroid();	
@@ -757,8 +760,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 			(p.alive) && 
 			
 			checkAngleDifference(p.angle,orbit.angle,btdist,0.5) && 
-			(p.distance<((orbit.distance)+0.8)) && 
-			(p.distance>((orbit.distance)-0.8)) 
+			(p.distance<((orbit.distance)+1.2)) && 
+			(p.distance>((orbit.distance)-1.2)) 
 		  ){
 			//l(txoffset);  
 			p.visible = true;	
@@ -793,6 +796,10 @@ var gameUpdate = function (modifier) { // modier is in seconds
 					
 					
 					planetsDestroyed++;
+                    if(difficulty == 0){ timeleft += 30; }
+                    if(difficulty == 1){ timeleft += 20; }
+					if(difficulty == 2){ timeleft += 10; }				
+
 					
 					// if(powerup != 3 || powerup != 1){
 					  // if(powerup == 2){
@@ -813,8 +820,16 @@ var gameUpdate = function (modifier) { // modier is in seconds
 								orbit.velocity -= p.requiredSpeed;
 							}
 						}
-					
-					
+						
+						p.alive = false;
+						p.exploding = 0;
+						
+						//Add score
+						scoreAdd(p.pop, p.type, ass.speed);
+						
+						for(var i = 0; i< particle_count;i++){ particles.push(new particle(p.x,p.y,dx,dy)); }
+						gamePlayExplosion();
+						
 						switch(p.type){
 						case 2:
 						case 10:
@@ -836,15 +851,6 @@ var gameUpdate = function (modifier) { // modier is in seconds
 						powerup = 3; poweruptime = 19;
 						break;	
 						}
-						
-						p.alive = false;
-						p.exploding = 0;
-						
-						//Add score
-						scoreAdd(p.pop, p.type, ass.speed);
-						
-						for(var i = 0; i< particle_count;i++){ particles.push(new particle(p.x,p.y,dx,dy)); }
-						gamePlayExplosion();
 					
 					}
 			
@@ -1005,7 +1011,11 @@ var gameRender = function(delta) {
 	//drawDebugText();
 	
 	if(!orbit.bullettime){
-		orbit.velocity = orbit.velocity + 4 * delta;
+		orbit.velocity = orbit.velocity + ((100 - orbit.distance)/100 * 5) * delta;
+        timeleft -= delta;
+        if(timeleft < 0){ gameDead(); }
+        if(powerup != 0){ poweruptime -= delta; }
+        if(poweruptime < 0){powerup = 0;}
 	}
 	
     //Draw HUD
@@ -1080,7 +1090,10 @@ var gameRender = function(delta) {
 	ctx.fillText("SCORE: " + outscore, 295, demHeight - 110);
 	ctx.fillText("PLANETS HIT: " + planetsDestroyed, 295, demHeight - 95);
 	ctx.fillText("JUNK HIT: " + junkhit, 295, demHeight - 80);
-	ctx.fillText("TIME LEFT: " + "0", 295, demHeight - 65);
+	if(timeattack){
+      ctx.fillText("TIME LEFT: " + Math.floor(timeleft), 295, demHeight - 65);
+    }
+
 	
 	// score notification
 	if(scoreobj.time>-1){
@@ -1197,12 +1210,12 @@ function slowMotionSound(enter)
     
 	if(enter && soundManager.getSoundById('intoslomo').playState==0)
 	{
-		soundManager.setVolume('intoslomo',Math.round(effectsVolume));
+		soundManager.setVolume('intoslomo',Math.round(effectsVolume * 0.5));
 		soundManager.play('intoslomo',{ onfinish: function() { } });
 	}
 	else if(soundManager.getSoundById('outofslomo').playState==0)
 	{
-		soundManager.setVolume('outofslomo',Math.round(effectsVolume));
+		soundManager.setVolume('outofslomo',Math.round(effectsVolume * 0.5));
 		soundManager.play('outofslomo',{ onfinish: function() { } });
 	}
 }
@@ -1212,7 +1225,7 @@ function alertSound()
     
 	if(soundManager.getSoundById('alert').playState==0)
 	{
-		soundManager.setVolume('alert',Math.round(effectsVolume));
+		soundManager.setVolume('alert',Math.round(effectsVolume*0.3));
 		soundManager.play('alert',{ onfinish: function() { } });
 	}
 }
@@ -1222,7 +1235,10 @@ function alertSound()
  ========================================*/
 
 function loadLevel1(){
-	randomLevel(1,2,1);
+	randomGas =  2 + Math.floor(Math.random()*2) + round;
+	randomNormal = 3 +  Math.floor(Math.random()*2) + round;
+	randomOther = 2 + Math.floor(Math.random()*2) + round;
+	randomLevel(randomGas,randomNormal,randomOther);
 	round++;
 }
 
@@ -1263,7 +1279,7 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.pop = Math.floor(Math.random() * 10 * planetProperties[planet.type].popMultiplier);
 		
 		//Calculate required speed
-		planet.requiredSpeed = Math.floor((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier);
+		planet.requiredSpeed = Math.floor(((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier)*(1 + round/10));
 		
 		planets.push($.extend(true, {}, planet));
 	}
@@ -1283,7 +1299,7 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.pop = Math.floor(Math.random() * 10 * planetProperties[planet.type].popMultiplier);
 		
 		//Calculate required speed
-		planet.requiredSpeed = Math.floor((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier);
+		planet.requiredSpeed = Math.floor(((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier)*(1 + round/10));
 		
 		planets.push($.extend(true, {}, planet));
 	}
@@ -1304,7 +1320,7 @@ function randomLevel(gasPlanets, normalPlanets, otherPlanets)
 		planet.pop = 0;
 		
 		//Calculate required speed
-		planet.requiredSpeed = Math.floor((planetProperties[planet.type].speedMultiplier * (0.8+Math.random()*0.4))/difficultyModifier);
+		planet.requiredSpeed = Math.floor(((planetProperties[planet.type].speedMultiplier * (0.9+Math.random()*0.2))/difficultyModifier)*(1 + round/10));
 		
 		planets.push($.extend(true, {}, planet));
 	}
