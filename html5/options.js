@@ -74,7 +74,7 @@ function optionUpdate(){
 			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; menuAnimate = !menuAnimate; set("menuAnimate", menuAnimate);}
 		
 		}else if(cmp(demHeight / 2 - 115, demHeight / 2 - 79, demWidth / 2 - 100, demWidth / 2 - 74)){ 			// Fullscreen
-			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; fullscreen = !fullscreen; set("fullscreen", fullscreen);}
+			if(mouseDown && mouseDownAble){menuPlayClick(); mouseDownAble = false; fullscreen = !fullscreen; set("fullscreen", fullscreen); }
 		
 		}else if(cmp(demHeight / 2 - 30, demHeight / 2 + 5, demWidth / 2 - 100, demWidth / 2 - 66)){ 			// Graphics up
 			if(mouseDown && mouseDownAble){mouseDownAble = false; if(graphicsQuality<2){ menuPlayClick(); graphicsQuality++; set("graphicsQuality", graphicsQuality);}}

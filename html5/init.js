@@ -290,6 +290,15 @@ function backgroundPanning(){
 	}
 }
 
+$(window).resize(function() {
+  demWidth = window.innerWidth
+  demHeight = window.innerHeight	
+  canvas.width = demWidth; 
+  canvas.height = demHeight;
+  canvasxc = demWidth/2; 
+  canvasyc = demHeight/2;
+});
+
 function getDelta(){ now = Date.now(); delta = (now - then); then = now; } // tijdverschil berkenen tussen nu en laatste keer
 
 /////////////////////////////////
