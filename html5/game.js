@@ -6,6 +6,7 @@ var canvas; var ctx;
 var gameMusic = true;
 var junkhit = 0;
 var score = 0;
+var outscore = "0";
 var gear = 0;
 var powerup = 0;
 var poweruptime = 0;
@@ -54,6 +55,11 @@ var planet = {
 	indicator: false,
 	indicatorside: true, // left, right
 };
+
+var scoreobj ={
+  amount: "",
+  time: -1	
+}
 
 var asstroid = {
   ox: 0, oy: 0, x: 0, y:0, size: 0, spawntimer: 5, alive: false, explosion: -1, xoffset: 0
@@ -169,6 +175,7 @@ var gameStart = function () { // TODO: get called only once
 	ass.lives = 3; // extra lives
 	junkhit = 0;
 	score = 0;
+	outscore = "0";
 	
 	addEventListener("keydown", function (e) { keysDown[e.keyCode] = true; }, false);
 	addEventListener("keyup", function (e) { delete keysDown[e.keyCode]; }, false);
@@ -585,6 +592,7 @@ function gameOver(){
 function scoreAdd(population, type, speedMult)
 {
 	//Calculate type bonus
+	var oldscore = score;
 	typeBonus = 0;
 	if(type < 7)
 	{
@@ -611,6 +619,11 @@ function scoreAdd(population, type, speedMult)
 	}else{
 		score += tempScore;
 	}
+	scoreobj.amount = "+"+numberWithCommas(score-oldscore);
+	scoreobj.size = (score-oldscore)/500000;
+	scoreobj.time = 2;
+	
+	outscore = numberWithCommas(score);
 }
 
 function resetEnemyAsstroid(){
@@ -658,7 +671,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
     }
 	// update distance, push asstroid to middle
 	if(!orbit.bullettime){
-	  orbit.distance += ((ass.x-canvasxc)/30000); 
+	  orbit.distance += ((ass.x-canvasxc)/100)*speedmodifier; 
 	  if(orbit.distance<0){ orbit.distance = 0; if(ass.alive){ gameDead(); } } 
 	  if((orbit.distance>100) && (ass.alive)){ gameDead(); }
 	
@@ -681,7 +694,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		asstroid.explosion += (modifier*5);
 		if(asstroid.explosion>1.5){ asstroid.explosion = -1; }  
 	  }
-	  asstroid.spawntimer -= modifier;
+	  if(!orbit.bullettime){ asstroid.spawntimer -= modifier; }
 	  if(asstroid.spawntimer<0){
 		asstroid.spawntimer = (Math.random()*8)+4; 
 		asstroid.alive = true;
@@ -736,15 +749,18 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		  
 		  var pdist = (p.distance-orbit.distance);
 		  btdist = -5.8*(orbit.velocity/100);
-		  p.x = canvasxc+(pdist*(canvas.width/2));
+		  
+		  p.x = canvasxc+(pdist*300);
+		  var txoffset = ((ass.x-p.x)/300);
 		  p.indicator = true;
 		  if(
 			(p.alive) && 
 			
 			checkAngleDifference(p.angle,orbit.angle,btdist,0.5) && 
-			(p.distance<(orbit.distance+0.7)) && 
-			(p.distance>(orbit.distance-0.7)) 
+			(p.distance<((orbit.distance)+0.8)) && 
+			(p.distance>((orbit.distance)-0.8)) 
 		  ){
+			//l(txoffset);  
 			p.visible = true;	
 			orbit.planetinview = true;
 			orbit.bullettime = true;
@@ -797,38 +813,40 @@ var gameUpdate = function (modifier) { // modier is in seconds
 								orbit.velocity -= p.requiredSpeed;
 							}
 						}
+					
+					
+						switch(p.type){
+						case 2:
+						case 10:
+						powerup = 2; poweruptime = 19;
+						break;
+						
+						case 5:
+						powerup = 1; poweruptime = 19;
+						break;
+						
+						case 7:
+						case 8:
+						case 9:
+						powerup = 4; poweruptime = 19;
+						break;
+	
+						case 11:
+						case 12:
+						powerup = 3; poweruptime = 19;
+						break;	
+						}
+						
+						p.alive = false;
+						p.exploding = 0;
+						
+						//Add score
+						scoreAdd(p.pop, p.type, ass.speed);
+						
+						for(var i = 0; i< particle_count;i++){ particles.push(new particle(p.x,p.y,dx,dy)); }
+						gamePlayExplosion();
+					
 					}
-					
-					switch(p.type){
-					case 2:
-					case 10:
-					powerup = 2; poweruptime = 9;
-					break;
-					
-					case 5:
-					powerup = 1; poweruptime = 9;
-					break;
-					
-					case 7:
-					case 8:
-					case 9:
-					powerup = 4; poweruptime = 9;
-					break;
-
-					case 11:
-					case 12:
-					powerup = 3; poweruptime = 9;
-					break;	
-					}
-					
-					p.alive = false;
-					p.exploding = 0;
-					
-					//Add score
-					scoreAdd(p.pop, p.type, ass.speed);
-					
-					for(var i = 0; i< particle_count;i++){ particles.push(new particle(p.x,p.y,dx,dy)); }
-					gamePlayExplosion();
 			
 		  		}
 			}
@@ -1059,10 +1077,20 @@ var gameRender = function(delta) {
 	
 	if(poweruptime < 0){powerup = 0;}
 	
-	ctx.fillText("SCORE: " + score, 295, demHeight - 110);
+	ctx.fillText("SCORE: " + outscore, 295, demHeight - 110);
 	ctx.fillText("PLANETS HIT: " + planetsDestroyed, 295, demHeight - 95);
 	ctx.fillText("JUNK HIT: " + junkhit, 295, demHeight - 80);
 	ctx.fillText("TIME LEFT: " + "0", 295, demHeight - 65);
+	
+	// score notification
+	if(scoreobj.time>-1){
+	  scoreobj.time -= delta;
+	  if(scoreobj.time<0){ scoreobj.time = -1; }
+	  ctx.font = Math.round(scoreobj.size)+"px Rock";
+	  ctx.textAlign = 'center';
+	  ctx.fillText(scoreobj.amount, canvasxc, 20);
+	  ctx.textAlign = 'left';
+	}
 	
 	//Notification test
 	if(notifyActive)
@@ -1101,6 +1129,10 @@ function debugLine(x1,y1,x2,y2,color){
   ctx.strokeStyle = color;
   ctx.lineWidth = 1;
   ctx.stroke(); 	
+}
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 	
 function particle(x,y,dx,dy){
