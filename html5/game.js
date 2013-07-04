@@ -759,8 +759,8 @@ var gameUpdate = function (modifier) { // modier is in seconds
 			(p.alive) && 
 			
 			checkAngleDifference(p.angle,orbit.angle,btdist,0.5) && 
-			(p.distance<((orbit.distance)+0.8)) && 
-			(p.distance>((orbit.distance)-0.8)) 
+			(p.distance<((orbit.distance)+1.2)) && 
+			(p.distance>((orbit.distance)-1.2)) 
 		  ){
 			//l(txoffset);  
 			p.visible = true;	
