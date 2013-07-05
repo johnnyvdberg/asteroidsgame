@@ -401,11 +401,11 @@ function Init(){
 	ctx = canvas.getContext("2d");
 	document.body.appendChild(canvas);
 	
-	canvas.addEventListener('mousemove', function(evt) { mousePos = getMousePos(canvas, evt); }, false);
+	$(document).bind('touchmove mousemove', function(evt) { mousePos = getMousePos(canvas, evt); });
 	
-	canvas.addEventListener('mousedown', function(e) { if(mouseDownAble){ mouseDown = true; } },false);
+	$(document).bind('touchstart mousedown', function(e) { if(mouseDownAble){ mouseDown = true; } });
 	
-	canvas.addEventListener('mouseup', function(e) { mouseDownAble = true; mouseDown = false;},false); 
+	$(document).bind('touchend mouseup', function(e) { mouseDownAble = true; mouseDown = false;}); 
 	
 	// initialize the sound manager 
 	soundManager.url = 'soundmanager2/'; 
