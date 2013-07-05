@@ -1011,7 +1011,7 @@ var gameRender = function(delta) {
  	}
     if((f!=true) && (particles.length>0)){ particles = Array(); }
     // draw debug text
-	//drawDebugText();
+	drawDebugText();
 	
 	if(!orbit.bullettime){
 		orbit.velocity = orbit.velocity + ((100 - orbit.distance)/100 * 20) * delta;
@@ -1121,21 +1121,21 @@ var gameRender = function(delta) {
 
 function drawDebugText(){
    ctx.fillStyle = "rgb(250, 250, 250)";
-   ctx.font = "24px Arial";
+   ctx.font = "14px Arial";
    ctx.textAlign = "left";
    ctx.textBaseline = "top";
-   ctx.fillText("Planets annihilated: " + planetsDestroyed, 32, 32);
-   ctx.fillText("FPS: " + fps, 32, 64);
-   ctx.fillText("Angle: " + Math.round(orbit.angle)+" AssAngle :"+Math.round(ass.angle), 32, 140);
-   ctx.fillText("bullatp: " + Math.round(orbit.bullettimepercentage*100), 32, 170);
-   ctx.fillText("Velocity: " + Math.round(orbit.velocity), 32, 200);
-   ctx.fillText("Lives: " + ass.lives, 32, 230);
-   ctx.fillText("Planet x: " + Math.round(planet.x)+" Planet y: "+Math.round(planet.y), 32, 260);
-   ctx.fillText("Planet in view: " + orbit.planetinview, 32, 290);
+   //ctx.fillText("Planets annihilated: " + planetsDestroyed, 32, 32);
+   ctx.fillText("FPS: " + fps, 10, 10);
+   //ctx.fillText("Angle: " + Math.round(orbit.angle)+" AssAngle :"+Math.round(ass.angle), 32, 140);
+   //ctx.fillText("bullatp: " + Math.round(orbit.bullettimepercentage*100), 32, 170);
+   //ctx.fillText("Velocity: " + Math.round(orbit.velocity), 32, 200);
+   //ctx.fillText("Lives: " + ass.lives, 32, 230);
+   //ctx.fillText("Planet x: " + Math.round(planet.x)+" Planet y: "+Math.round(planet.y), 32, 260);
+   //ctx.fillText("Planet in view: " + orbit.planetinview, 32, 290);
    //ctx.fillText("p dist: " + Math.round(planets[0].distance)+" p angle: "+planets[0].angle+' p alive: '+planets[0].alive+' calcangle: '+Math.round(planets[0].calcangle)+' P.exp:'+Math.round(planets[0].exploding), 32, 320);
-   if(orbit.bullettime){
-	 ctx.fillText("FUCKING BULLETTIME", 36-(Math.random()*8), 100-(Math.random()*8));	 
-   }	
+   //if(orbit.bullettime){
+	// ctx.fillText("FUCKING BULLETTIME", 36-(Math.random()*8), 100-(Math.random()*8));	 
+   //}	
 }
 
 function debugLine(x1,y1,x2,y2,color){
