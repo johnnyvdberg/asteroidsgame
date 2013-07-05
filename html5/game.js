@@ -571,9 +571,9 @@ function gameDrawEnemyAsstroid(){
 }
 
 function gameDead(){
+	ass.alive = false;
 	ass.exploding = 0;
 	gamePlayDeath();
-    ass.alive = false;
 }
 
 function gameDeadEnd(){
@@ -655,11 +655,13 @@ var gameUpdate = function (modifier) { // modier is in seconds
 	speedmodifier = modifier*((orbit.velocity/100));
 
     // key input + ass movement
-	if (37 in keysDown) { //left
+	//l(mouseDown);
+	if ((37 in keysDown) || (mouseDown && (mousePos.x<canvasxc))) { //left
+	    
 		ass.x -= ass.speed * speedmodifier*1.5;
 		if((ass.x-50)<0) ass.x = 0;
 	} else
-	if (39 in keysDown) { //right
+	if ((39 in keysDown) || (mouseDown && (mousePos.x>canvasxc))) { //right
 		ass.x += ass.speed * speedmodifier;
 		if((ass.x+50)>canvas.width) ass.x = canvas.width-50;
 	}else if (27 in keysDown) {
@@ -861,7 +863,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		
 	}
 	// check orbit speed
-	if( ((orbit.velocity<10) && (ass.alive)) || ((orbit.velocity>500) && ass.alive)){
+	if( ((orbit.velocity<10) && (ass.alive)) || ((orbit.velocity>500) && (ass.alive))){
 	  gameDead();		
 	}
 	
