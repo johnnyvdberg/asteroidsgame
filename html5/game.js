@@ -1038,7 +1038,7 @@ var gameRender = function(delta) {
 	//SPEEDBAR
 	ctx.beginPath();
 	ctx.strokeWidth=1;
-	if(orbit.velocity < 50){
+	if(orbit.velocity < 50 || orbit.velocity > 450){
 	ctx.fillStyle = "rgba(180, 0, 0, 0.5)";
 	}else{
 	ctx.fillStyle = "rgba(6, 64, 2, 0.5)";
