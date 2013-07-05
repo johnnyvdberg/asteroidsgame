@@ -610,7 +610,7 @@ function scoreAdd(population, type, speedMult)
 	{
 		typeBonus = 50000;
 	}
-	tempScore = ((population/10000000) + typeBonus)*speedMult;
+	tempScore = ((population/100000) + typeBonus)*speedMult;
 	
 	//Randomize a bit because score system will seem more accurate, yeah right
 	tempScore = Math.floor(tempScore*(0.95 + Math.random()*0.1));
@@ -723,13 +723,13 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		  
 		  if(powerup != 3 || powerup != 1){
 			  if(powerup == 2){
-					if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*20)/2 + 15; }else 
-					if(difficulty == 1){ orbit.velocity -= ((orbit.velocity/100)*25)/2 + 20 }else 
-					if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*30)/2 + 25; }
+					if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*20)/2 + 25; }else 
+					if(difficulty == 1){ orbit.velocity -= ((orbit.velocity/100)*25)/2 + 30 }else 
+					if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*30)/2 + 35; }
 				}else{
-					if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*20) + 15; }else 
-					if(difficulty == 1){ orbit.velocity -= ((orbit.velocity/100)*25) + 20;}else 
-					if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*30) + 25; }
+					if(difficulty == 0){ orbit.velocity -= ((orbit.velocity/100)*20) + 25; }else 
+					if(difficulty == 1){ orbit.velocity -= ((orbit.velocity/100)*25) + 30;}else 
+					if(difficulty == 2){ orbit.velocity -= ((orbit.velocity/100)*30) + 35; }
 				}
 		  }
 		  resetEnemyAsstroid();
@@ -861,7 +861,7 @@ var gameUpdate = function (modifier) { // modier is in seconds
 		
 	}
 	// check orbit speed
-	if((orbit.velocity<5) && (ass.alive)){
+	if( ((orbit.velocity<10) && (ass.alive)) || ((orbit.velocity>500) && ass.alive)){
 	  gameDead();		
 	}
 	
@@ -1012,7 +1012,7 @@ var gameRender = function(delta) {
 	//drawDebugText();
 	
 	if(!orbit.bullettime){
-		orbit.velocity = orbit.velocity + ((100 - orbit.distance)/100 * 5) * delta;
+		orbit.velocity = orbit.velocity + ((100 - orbit.distance)/100 * 20) * delta;
         timeleft -= delta;
         if(timeleft < 0){ gameDead(); }
         if(powerup != 0){ poweruptime -= delta; }
